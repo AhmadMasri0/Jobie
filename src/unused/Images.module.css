@@ -1,0 +1,55 @@
+
+    .container {
+        position: relative;
+        /*margin-left: 15%;*/
+        /*margin-top: 3%;*/
+        /*margin-bottom: 30px;*/
+        /*width: 70%;*/
+        /*height: 100%;*/
+        margin-bottom: 10px !important;
+        margin-top: 30px !important;
+        border-radius: 2%;
+        /*background-image: linear-gradient(#d7d7ec, rgba(14, 40, 130, 0.85));*/
+        background-color: rgba(164, 181, 215, 0.89);
+        /*align-items: center;*/
+        /*align-content: center;*/
+
+    }
+
+.img {
+    position: absolute;
+    border-radius: 2%;
+
+    max-width: 100%;
+    /*height: 100;*/
+    object-fit: contain;
+    /*opacity: 0.7;*/
+}
+
+.mainImageContainer {
+    /*opacity: 0.7;*/
+
+    /*background-image: url("../images/cover.jpg");*/
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    /*background-attachment: scroll;*/
+    /*background-color: #082868;*/
+    /*position: absolute;*/
+    /*align-content: center;*/
+    /*align-self: center;*/
+    text-align: center;
+    /*vertical-align: center;*/
+    width: 250px;
+    height: 250px;
+    /*margin-top: 40px;*/
+    /*margin-left: 30px;*/
+    border-radius: 250px;
+    /*border: #082868  solid;*/
+    /*z-index: 9;*/
+}
+
+.gradientDiv {
+    /*background-image: linear-gradient(#d7d7ec, rgba(14, 40, 130, 0.85));*/
+    width: 100%;
+    height: 500px;
+}
