@@ -1,15 +1,34 @@
 import classes from "../Modal/modal.module.css";
 import {Button} from "react-bootstrap";
-import {useRef} from "react";
+import {useEffect, useRef} from "react";
+import {DatePicker} from "antd";
+import moment from "moment";
+import 'moment-precise-range-plugin'
 
+const dateFormat = 'YYYY/MM/DD';
 const EditJob = (props) => {
+
+
+    const duration = props.job.duration;
+
+
+    const y1 = duration ? duration.split('-')[0].split('/')[0] : '2022';
+    const m1 = duration ? duration.split('-')[0].split('/')[1] : '3';
+    const y2 = duration ? duration.split('-')[1].split('(')[0].split('/')[0] : '2021';
+    const m2 = duration ? duration.split('-')[1].split('(')[0].split('/')[1] : '5';
+
 
     const enteredNam = useRef();
     const enteredPlace = useRef();
     const enteredPosition = useRef();
     const enteredDuration = useRef();
 
+    useEffect(() => {
+        enteredDuration.current.value = props.job.duration;
+
+    }, [])
     const editJobs = () => {
+        console.log(enteredDuration.current.value.length);
         const job = {
             id: props.job.id,
             companyName: enteredNam.current.value,
@@ -18,16 +37,14 @@ const EditJob = (props) => {
             duration: enteredDuration.current.value
         }
         props.onEditJob(job);
-        if (!props.editing) {
-            props.overlay(false);
-        }
+        props.overlay(false);
     }
     const deleteJob = () => {
         props.onDeleteJob(props.job.id);
         props.overlay(false);
     }
     return <div>
-        <div key={props.job.id} className={`row ${classes.customRow}`}>
+        <div className={`row ${classes.customRow}`}>
             <div className={`${classes.customCol}`}>
                 <label>Business name</label>
                 <input ref={enteredNam} className={classes.customInput} type='text' placeholder={'Business name'}
@@ -45,8 +62,23 @@ const EditJob = (props) => {
             </div>
             <div className={`${classes.customCol}`}>
                 <label>Duration</label>
-                <input ref={enteredDuration} className={classes.customInput} type='text' placeholder={'Duration'}
-                       defaultValue={props.job.duration}/>
+                <DatePicker.RangePicker
+                    ref={enteredDuration}
+                    className={classes.customInput}
+                    defaultPickerValue={[moment(`${y1}-${m1}-1`, dateFormat), moment(`${y2}-${m2}-1`, dateFormat)]}
+                    defaultValue={[moment(`${y1}-${m1}-1`, dateFormat), moment(`${y2}-${m2}-1`, dateFormat)]}
+                    onCalendarChange={(e) => {
+                        const s = moment(e[0]);
+                        const end = moment(e[1]);
+                        const years = moment.preciseDiff(s, end, true).years;
+                        const months = moment.preciseDiff(s, end, true).months;
+                        const ye1 = s.year() + '/' + s.month();
+                        const ye2 = end.year() + '/' + end.month();
+                        console.log(ye1 + '-' + ye2 + '(' + years + 'years & ' + months + 'months)')
+                        enteredDuration.current.value = ye1 + '-' + ye2 + '(' + years + 'years & ' + months + 'months)';
+                    }}
+                    format={dateFormat}
+                />
             </div>
         </div>
         <div className={`${classes.customCol}`}>

@@ -6,23 +6,38 @@ const DUMMY_USER_PROFILE = {
     username: 'Ahmad Masri',
     email: "ahmad.masri@stu.najah.edu",//
     skills: [
-        'Work under '
+        {id: '1', skill: 'Work under pressure'},
+        {id: '2', skill: 'Work '},
+        {id: '3', skill: 'Work under '},
+        {id: '4', skill: 'Work under lorem pressure'},
+
     ],
     gender: 'male',//
-    phone: '0598828113',//
+    phones: [
+        {
+            id: '1',
+            type: 'Mobile',
+            value: '+972-0598828113',
+            visible: false
+        }, {
+            id: '3',
+            type: 'Home',
+            value: '+972-092235856',
+            visible: true
+        }],//
     city: 'Nablus',//
     country: 'Palestine',//
     prevJobs: [{
         id: '1',
         companyName: 'Some companycompanycompany',
         position: 'whatever',
-        duration: 3,
+        duration: '2020/2-2021/1(0years & 1months)',
         place: 'Nablus'
     }, {
         id: '2',
         companyName: 'Some company',
         position: 'whatever',
-        duration: 3,
+        duration: '2018/1-2022/4(0years & 1months)',
         place: 'Ramallah'
     }],
     bio: 'A nice bio, HEHEA nice bio, HEHEA nice bio, HEHEA nice bio, HEHEA nice bio, HEHEA nice bio, HEHEA nice bio, HEHE',//
@@ -38,7 +53,17 @@ const UserContext = createContext({
     removePrevJob: (id) => {
     },
     editUserInfo: (info) => {
-    }
+    },
+    deletePhone: (id) => {
+    },
+    editPhone: (id) => {
+    },
+    editPhones: (phones) => {
+    },
+    removeSkill: (id) => {
+    },
+    editSkill: (info) => {
+    },
 });
 
 export const UserContextProvider = props => {
@@ -67,30 +92,78 @@ export const UserContextProvider = props => {
     const removePrevJobHandler = (id) => {
         let temp_user = {...user};
 
-        let updatedJobs = temp_user.prevJobs.filter(job => job.id.toString() !== id);
-        temp_user.prevJobs = updatedJobs;
+        temp_user.prevJobs = temp_user.prevJobs.filter(job => job.id.toString() !== id);
         setUser(temp_user);
         console.log(temp_user);
     }
     const editUserInfoHandler = (info) => {
         let temp_user = {...user};
-        // temp_user.firstName = info.firstName;
         temp_user.username = info.username;
         temp_user.bio = info.bio;
-        // temp_user.email = info.email;
         temp_user.city = info.city;
         temp_user.country = info.country;
-        // temp_user.birthday = info.birthday;
-        // temp_user.phone = info.phone;
         temp_user.profession = info.profession;
         temp_user.gender = info.gender;
         setUser(temp_user);
+    }
+    const deletePhoneHandler = (id) => {
+        let temp_user = {...user};
+        const updatedPhones = temp_user.phones.filter(phone => phone.id.toString() !== id.toString());
+        console.log(updatedPhones)
+        temp_user.phones = updatedPhones;
+        setUser(temp_user);
+    }
+    const editPhonesHandler = (p) => {
+        let temp_user = {...user};
+        temp_user.phones = p;
+        setUser(temp_user);
+
+    }
+    const editPhoneHandler = (p) => {
+        let temp_user = {...user};
+
+        const updatedPhoneIndex = temp_user.phones.findIndex(phone => phone.id.toString() === p.id);
+        temp_user.phones[updatedPhoneIndex] = p;
+        setUser(temp_user);
+    }
+
+    const editSkillHandler = (skill) => {
+        const id = skill.id;
+        let temp_user = {...user};
+        if (id) {
+            const existingSkillIndex = temp_user.skills.findIndex(skill => skill.id.toString() === id.toString());
+            const updatedSkills = [...user.skills];
+            updatedSkills[existingSkillIndex] = skill;
+            temp_user.skills = updatedSkills;
+            setUser(temp_user);
+            console.log(user);
+
+        } else {
+            const newId = new Date().getTime();
+            const newSkill = {...skill, id: newId};
+            temp_user.skills = [...temp_user.skills, newSkill];
+            setUser(temp_user)
+            console.log(user.skills);
+        }
+    }
+    const removeSkillHandler = (id) => {
+        let temp_user = {...user};
+
+
+        temp_user.skills = temp_user.skills.filter(skill => skill.id.toString() !== id.toString());
+        setUser(temp_user);
+        console.log(temp_user.skills);
     }
     const userContextValue = {
         user: user,
         addPrevJob: addPrevJobHandler,
         removePrevJob: removePrevJobHandler,
-        editUserInfo: editUserInfoHandler
+        editUserInfo: editUserInfoHandler,
+        deletePhone: deletePhoneHandler,
+        editPhone: editPhoneHandler,
+        editPhones: editPhonesHandler,
+        editSkill: editSkillHandler,
+        removeSkill: removeSkillHandler
     }
     return <UserContext.Provider value={userContextValue}>{props.children} </UserContext.Provider>
 

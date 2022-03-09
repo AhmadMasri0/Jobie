@@ -1,10 +1,10 @@
 import classes from './signup.module.css';
 import {Link, useHistory} from "react-router-dom";
-import {useContext, useState} from "react";
+import {useContext} from "react";
 import AuthContext from "../../store/auth-context";
-import {Container, Image} from "react-bootstrap";
+import {Image} from "react-bootstrap";
 import {Button, Checkbox, Input} from "antd";
-import {EyeInvisibleOutlined, EyeTwoTone, MailOutlined} from '@ant-design/icons';
+import {EyeInvisibleOutlined, EyeTwoTone, LockOutlined, MailOutlined} from '@ant-design/icons';
 
 const Login = () => {
 
@@ -38,6 +38,8 @@ const Login = () => {
                 <div className={classes.control}>
                     <label htmlFor='password'>Password</label>
                     <Input.Password name='password' id='password'
+                                    placeholder={'***'}
+                                    prefix={<LockOutlined className="site-form-item-icon"/>}
                                     className={classes.customInput}
                                     iconRender={visible => (visible ? <EyeTwoTone/> : <EyeInvisibleOutlined/>)}
                     />

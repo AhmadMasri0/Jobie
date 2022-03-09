@@ -4,7 +4,7 @@ import {useContext, useState} from "react";
 import EditJob from "../Profile/editJobs";
 import UserContext from "../../store/user-context";
 
-const Modal = (props) => {
+const EditingJobsModal = (props) => {
 
     const userCtx = useContext(UserContext);
     const user = userCtx.user;
@@ -40,6 +40,7 @@ const Modal = (props) => {
 
             <div className={`row `}>
                 {user.prevJobs.map(job => <EditJob overlay={props.overlay} editing={true}
+                                                   key={job.id}
                                                    onDeleteJob={deleteJobHandler}
                                                    onEditJob={editJobHandler}
                                                    job={job}/>)}
@@ -48,4 +49,4 @@ const Modal = (props) => {
         </div>
     </div>;
 }
-export default Modal;
+export default EditingJobsModal;

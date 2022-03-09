@@ -9,31 +9,27 @@ import {SearchOutlined} from "@ant-design/icons";
 import 'antd/dist/antd.css';
 
 const Navigation = () => {
-    const history = useHistory();
     const authCtx = useContext(AuthContext);
     const userCtx = useContext(UserContext);
     const location = useLocation().pathname;
     const isLoggedIn = authCtx.isLoggedIn;
     const logoutHandler = () => {
         authCtx.logout();
-        // history.push('/login');
     }
     const isSearchVisible = !((location === '/login') || (location === '/signup'));
 
-    const menu = (
-        <Menu>
-            <Menu.Item key={'2'}>
-                <NavLink className='nav-link' to='/profile/edit-profile'>
-                    Edit profile
-                </NavLink>
-            </Menu.Item>
-            <Menu.Item key={'3'}>
-                <NavLink className='nav-link' to='/settings'>
-                    Settings
-                </NavLink>
-            </Menu.Item>
-        </Menu>
-    )
+    const menu = (<Menu>
+        <Menu.Item key={'2'}>
+            <NavLink className='nav-link' to='/profile/edit-profile'>
+                Edit profile
+            </NavLink>
+        </Menu.Item>
+        <Menu.Item key={'3'}>
+            <NavLink className='nav-link' to='/settings'>
+                Settings
+            </NavLink>
+        </Menu.Item>
+    </Menu>);
     return <Navbar className={classes.navBar} collapseOnSelect expand="lg" variant="dark" sticky='top'>
         <Container className=''>
             <Navbar.Brand>

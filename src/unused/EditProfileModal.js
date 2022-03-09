@@ -1,5 +1,5 @@
 import classes from "../Components/Modal/modal.module.css";
-import classes2 from '../pages/Profile.module.css';
+import classes2 from '../Components/Profile/Profile.module.css';
 import me from "../images/me.jpg";
 import {Button} from "react-bootstrap";
 

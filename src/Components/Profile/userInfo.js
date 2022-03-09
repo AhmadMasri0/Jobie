@@ -1,30 +1,25 @@
-import classes from "../../pages/Profile.module.css";
-import {useHistory} from 'react-router-dom';
-import {useContext} from "react";
+import classes from "./Profile.module.css";
+import {useContext, useState} from "react";
 import UserContext from "../../store/user-context";
 
 const UserInfo = () => {
-    const history = useHistory();
     const userCtx = useContext(UserContext);
     const user = userCtx.user;
-
-    const editProfileHandler = () => {
-        history.push('/profile/edit-profile');
-    }
+    const [visible, setVisible] = useState(false);
 
     return <section>
         <div className={`container  ${classes.profile}`} style={{marginBottom: '20px', marginTop: '20px'}}>
             <div className='row align-items-center flex-row'>
                 <div className="col-lg-6">
                     <div className={classes['about-avatar']}>
-                        <img src={require(`../../images/${user.image}`)} title="" alt=""/>
+                        <img src={require(`../../images/${user.image}`)} onClick={() => setVisible(true)} title=""
+                             alt=""/>
                     </div>
-                    <h3 className={classes.darkColor} style={{marginLeft: '30%'}}>{user.username}</h3>
+                    <h3 style={{marginLeft: '30%'}}>{user.username}</h3>
                     <h6 className={`${classes['theme-color']} lead`} style={{marginLeft: '33%'}}>{user.profession}</h6>
                 </div>
                 <div className="col-lg-6">
                     <div className={classes['about-text']}>
-
                         <p><b>{user.bio}</b></p>
                         <div className={`row ${classes['about-list']}`}>
                             <div className="col-lg-6 col-md-6 col-sm-3">
@@ -64,26 +59,21 @@ const UserInfo = () => {
                                         </span>
                                 </div>
                             </div>
-                            <div className="col-lg-6 col-md-6 col-sm-4">
-                                <div className={classes.media}>
-                                    <label htmlFor="phone">Phone</label>
-                                    <span><a href={`tel:${user.phone}`}>{user.phone}</a>
+                            {user.phones.map(phone =>
+                                <div key={phone.id} className="col-lg-6 col-md-6 col-sm-4">
+                                    <div className={classes.media}>
+                                        <label htmlFor="phone">{phone.type} number</label>
+                                        <span>
+                                            <a href={`tel:${phone.value}`}>{phone.value}</a>
                                         </span>
+                                    </div>
                                 </div>
-                            </div>
-                            {/*<div className="col-lg-6 col-md-6 col-sm-4">*/}
-                            {/*    <div className={classes.media}>*/}
-                            {/*        /!*<Link to='edit-profile'> edit</Link>*!/*/}
-                            {/*        <Button className={classes['custom-btn']} onClick={editProfileHandler}>Edit*/}
-                            {/*            Profile</Button>*/}
-                            {/*    </div>*/}
-                            {/*</div>*/}
-
+                            )}
                         </div>
                     </div>
                 </div>
             </div>
-            <br/>
+            {/*<br/>*/}
         </div>
     </section>;
 }

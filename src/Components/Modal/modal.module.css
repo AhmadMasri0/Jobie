@@ -3,6 +3,7 @@
     width: 60% !important;
     top: 18%;
     left: 20% !important;
+    height: 80%;
     background-color: #cbd3e7;
     border-radius: 20px;
     background-image: linear-gradient( #E0E1DD, rgba(34, 67, 177, 0.65));
@@ -11,7 +12,14 @@
     z-index: 200;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
     padding: 7px;
+    overflow-y: hidden;
+    overflow-x: hidden;
 }
+
+.modal:hover{
+overflow-y: scroll;
+}
+
 
 .customInput {
     padding: 3px;
@@ -73,6 +81,23 @@ label{
     .modal {
         width: 40rem;
         left: calc((100% - 40rem) / 2);
+    }
+}
+
+
+
+@media (max-width: 576px) {
+.title h3{
+    /*font-size: 12px;*/
+    /*border: solid;*/
+    width: 50%;
+    /*margin-left: 10%!important;*/
+}
+    .icons{
+        margin-left: 20%;
+        width: 10%!important;
+        /*padding-right: 0;*/
+        /*border: solid;*/
     }
 }
 

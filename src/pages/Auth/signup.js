@@ -1,9 +1,10 @@
 import classes from './signup.module.css';
 import {Link} from "react-router-dom";
 import {Image} from "react-bootstrap";
-import {Button, Cascader, Input, Radio, Space} from "antd";
-import {EyeInvisibleOutlined, EyeTwoTone, MailOutlined, UserOutlined} from "@ant-design/icons";
+import {Button, Input, Radio, Select, Space} from "antd";
+import {EyeInvisibleOutlined, EyeTwoTone, LockOutlined, MailOutlined, UserOutlined} from "@ant-design/icons";
 import {useState} from "react";
+import {Option} from "antd/es/mentions";
 
 const Signup = () => {
 
@@ -71,6 +72,7 @@ const Signup = () => {
                 <div className={classes.control}>
                     <label htmlFor='password'>Password</label>
                     <Input.Password placeholder={'***'} name='password' id='password'
+                                    prefix={<LockOutlined className="site-form-item-icon"/>}
                                     className={classes.customInput}
                                     iconRender={visible => (visible ? <EyeTwoTone/> : <EyeInvisibleOutlined/>)}
                     />
@@ -78,16 +80,21 @@ const Signup = () => {
                 <div className={classes.control}>
                     <label htmlFor='confirmPassword'>Confirm Password</label>
                     <Input.Password placeholder={'***'} name='confirmPassword' id='confirmPassword'
+                                    prefix={<LockOutlined className="site-form-item-icon"/>}
                                     className={classes.customInput}
                                     iconRender={visible => (visible ? <EyeTwoTone/> : <EyeInvisibleOutlined/>)}
                     />
                 </div>
                 <div className={classes.control}>
-                    <Space direction="horizontal">                        <label htmlFor='userType'>Register as:</label>
-                        <Cascader options={userTypeOptions} placement={'topRight'}
-                                  className={classes.customInput}
-                                  onChange={userTypeHandler}
-                                  placeholder="User type"/>
+                    <Space direction="horizontal"> <label htmlFor='userType'>Register as:</label>
+                        <Select className={classes.customInput} style={{width: '100%'}}
+                                onChange={userTypeHandler} placeholder="User types">
+                            <Select.OptGroup label={'User types'}>
+                                <Option value="businessOwner">Business owner</Option>
+                                <Option value="applicant">Applicant</Option>
+                                <Option value="freelancer">Freelancer</Option>
+                            </Select.OptGroup>
+                        </Select>
                     </Space>
                 </div>
                 <div className={classes.action}>

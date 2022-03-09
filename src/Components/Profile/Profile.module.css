@@ -1,43 +1,42 @@
-
 img {
     max-width: 100%;
-}
-
-img {
     vertical-align: middle;
     border-style: none;
 }
 
-.section {
-    padding: 100px 0;
-    position: relative;
-    margin-top: 20px !important;
-    margin-bottom: 10px !important;
-}
-
- h3 {
+h3 {
     font-size: 45px;
     font-weight: 700;
     margin: 10px 0 6px;
 }
 
 @media (max-width: 767px) {
-     h3 {
+    h3 {
         margin-left: 120px;
         margin-top: 20px;
         font-size: 35px;
     }
 
-     h6 {
+    h6 {
         font-size: 18px;
     }
 
     .custom-btn {
         width: 100% !important;
     }
+
+    .about-list .icon {
+        margin-left: 55%;
+    }
+    .about-list  .business{
+
+        width: 80%;
+        margin-left: 0% !important;
+    }
+
 }
 
- h6 {
+h6 {
     font-weight: 600;
     margin-bottom: 15px;
 }
@@ -46,6 +45,12 @@ img {
 
     .custom-btn {
         width: 50% !important;
+    }
+    span  {
+        font-weight: bold;
+    }
+    .about-text .about-list {
+        margin-left: 30% !important;
     }
 }
 
@@ -67,7 +72,6 @@ img {
     font-size: 16px;
     max-width: 450px;
     text-align: center;
-    /*margin-top: -20px !important;*/
     margin-left: 20px !important;
 }
 
@@ -75,9 +79,7 @@ img {
     font-weight: 600;
     color: #20247b;
 }
-span {
-    /*font-weight: 400;*/
-}
+
 
 .about-list {
     padding-top: 10px;
@@ -121,9 +123,6 @@ span {
 }
 
 @media (max-width: 991px) {
-    .section {
-        text-align-all: center;
-    }
 
     h3 {
         margin-left: 30%;
@@ -131,15 +130,13 @@ span {
         font-size: 35px;
     }
 
-     h6 {
+    h6 {
         margin-left: 40%;
         font-size: 16px;
 
     }
 
-    .about-text p:nth-child(3) {
-        /*align-content: center;*/
-        /*text-align: center;*/
+    .about-text p {
         margin-left: 20%;
     }
 
@@ -147,8 +144,9 @@ span {
         margin-top: 30px;
     }
 
-    .about-list {
-        padding-left: 22%;
+    .about-list  .business{
+
+        margin-left: 17% !important;
     }
 
 }
@@ -159,28 +157,21 @@ span {
     color: #505979;
 }
 
-.dark-color {
-    color: #000000;
-}
-
 span a {
     text-decoration: none;
     color: #000000;
 }
 
 span a:hover {
-    color: rgba(18, 170, 147, 0.76);
+    color: rgba(18, 79, 170, 0.76);
 }
 
 .profile {
-    /*border: 0 solid;*/
-
     border-radius: 20px;
     background-color: rgba(255, 255, 255, 0.73);
     margin-bottom: 20px;
-    /*background-image: linear-gradient(#d7d7ec, rgba(14, 40, 130, 0.85));*/
-    /*background-repeat: no-repeat;*/
-    /*background-size: 100% 100%;*/
+    padding: 19px !important;
+
 }
 
 .custom-btn {
@@ -197,18 +188,11 @@ span a:hover {
     background-color: #15275c !important;
 }
 
-.cont2 {
-    padding: 19px !important;
-}
-
 
 .icons {
-    /*text-align: center;*/
     font-size: 30px;
     font-weight: bold;
     padding-right: 1.5rem;
-    /*align-self: center;*/
-    /*width: 2rem;*/
 }
 
 .title {
@@ -216,7 +200,6 @@ span a:hover {
     padding-left: 1.5rem;
     padding-top: 1rem;
     font-size: 30px;
-    /*font-weight: 1000;*/
 }
 
 .jobs {
@@ -225,31 +208,29 @@ span a:hover {
     font-size: 20px;
 }
 
-.idk {
-    /*overflow-x: auto;*/
+/*.jobs p {*/
+/*    font-size: medium;*/
 
-}
+/*}*/
 
 .business {
 
     padding: 10px;
-    border: rgba(203, 211, 243, 0.34) solid;
+    border: rgba(203, 211, 243, 0.81) solid;
     margin-left: -11px;
     width: 100%;
     font-family: "Courier New";
     background-color: rgba(216, 227, 255, 0.09);
     border-radius: 10px;
-    /*max-width: 100%;*/
     overflow: hidden;
-    /*margin-top: -3px;*/
+    /*border: #15275c;*/
+    margin-bottom: 15px!important;
 }
 
 
-.icon{
-
-    /*padding: 15px;*/
-    /*margin-top: -5px;*/
-    margin: 30px 20px 30px 15px ;
-    /*border: rgba(203, 211, 243, 0.34) solid;*/
+.icon {
+    /**/
+    margin-left: 50%;
+    /*margin: 30px 20px 30px 15px;*/
 
 }

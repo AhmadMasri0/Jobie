@@ -1,23 +1,23 @@
 import classes from "./edit-profile.module.css";
 import {Button, Container} from "react-bootstrap";
-import {useContext, useEffect, useRef} from "react";
+import {useContext, useEffect, useRef, useState} from "react";
 import UserContext from "../store/user-context";
 import {useHistory} from 'react-router-dom';
-import {Radio, Space} from "antd";
+import {Radio, Space, Upload} from "antd";
+import storage from "../firebase/index";
+import {getDownloadURL, ref, uploadBytesResumable} from "firebase/storage";
+import TextArea from "antd/es/input/TextArea";
 
 const EditProfile = () => {
 
     const history = useHistory();
+    const [visible, setVisible] = useState(false);
     const userCtx = useContext(UserContext);
     const user = userCtx.user;
-
     const usernameRef = useRef();
-    const birthdayRef = useRef();
     const bioRef = useRef();
     const professionRef = useRef();
     const genderRef = useRef();
-    const emailRef = useRef();
-    const phoneRef = useRef();
     const cityRef = useRef();
     const countryRef = useRef();
     const submitHandler = () => {
@@ -25,12 +25,9 @@ const EditProfile = () => {
             username: usernameRef.current.value,
             bio: bioRef.current.value,
             profession: professionRef.current.value,
-            // phone: phoneRef.current.value,
             city: cityRef.current.value,
             country: countryRef.current.value,
-            // email: emailRef.current.value,
             gender: genderRef.current.value,
-            // birthday: birthdayRef.current.value,
         }
         userCtx.editUserInfo(info);
         history.push('/profile');
@@ -43,13 +40,48 @@ const EditProfile = () => {
     const cancelHandler = () => {
         history.push('/profile');
     }
+
+    const uploadImageHandler = (event) => {
+        const file = event.target.value;
+        console.log(event.target.value);
+        handlerUpload(file);
+    }
+
+    const handlerUpload = (file) => {
+        const metadata = {
+            contentType: 'image/png'
+        };
+        if (!file)
+            return;
+        const storageRef = ref(storage, 'images/' + file.name);
+        const uploadTask = uploadBytesResumable(storageRef, file, metadata);
+        uploadTask.on('state_changed', (snapshot => {
+            const prog = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+            console.log(prog);
+        }, err => {
+            console.log(err)
+        }, () => {
+            getDownloadURL(uploadTask.snapshot.ref)
+                .then(url => console.log(url))
+        }))
+    }
     return <div className='container'>
         <div className={`row ${classes.firstRow}`}>
             <div className="col-lg-12 col-md-12 col-sm-12">
                 <div className={classes['about-avatar']}>
-                    <img src={require(`../images/${user.image}`)} title="" alt={user.username}/>
+                    <img src={require(`../images/${user.image}`)} onClick={() => setVisible(true)} title=""
+                         alt={user.username}/>
                 </div>
-                <span className={classes.span}><a>Edit profile picture</a></span>
+                <Upload
+                    action={'http://localhost:3000/'}
+                    listType={'picture'}
+                    className={classes.span}
+                    accept={'image/*'}
+                    beforeUpload={() => false}
+                    onChange={uploadImageHandler}
+                >
+                    Edit profile picture
+                </Upload>
             </div>
         </div>
         <Container className={`container-fluid ${classes.group}`}>
@@ -59,7 +91,6 @@ const EditProfile = () => {
                     <input ref={usernameRef} type="text" defaultValue={user.username}/>
                 </div>
                 <div className="col-lg-6 col-md-6 col-sm-6 justify-content col-xs-12">
-                    {/*<label htmlFor="gender">Gender</label>*/}
                     <label htmlFor='gender'>Gender:</label>
                     <Space direction="horizontal" className={''}>
                         <Radio.Group onChange={(e) => genderRef.current.value = e.target.value} name={'gender'}
@@ -71,43 +102,9 @@ const EditProfile = () => {
                         </Radio.Group>
 
                     </Space>
-                    {/*<input type="text" ref={genderRef} defaultValue={user.gender}/>*/}
                 </div>
             </div>
             <hr/>
-            {/*<div className='row'>*/}
-            {/*<div className="col-lg-6 col-md-6 col-sm-6 justify-content col-xs-12">*/}
-            {/*    <label htmlFor="birthday">Birthday</label>*/}
-            {/*    <input ref={birthdayRef} type="date" defaultValue={user.birthday}/>*/}
-            {/*</div>*/}
-            {/*<div className="col-lg-6 col-md-6 col-sm-6 justify-content col-xs-12">*/}
-            {/*    /!*<label htmlFor="gender">Gender</label>*!/*/}
-            {/*    <label htmlFor='gender'>Gender:</label>*/}
-            {/*    <Space direction="horizontal" className={''}>*/}
-            {/*        <Radio.Group onChange={(e) => genderRef.current.value = e.target.value} name={'gender'}*/}
-            {/*                     ref={genderRef} defaultValue={user.gender}>*/}
-            {/*            <Space direction="horizontal">*/}
-            {/*                <Radio value={'male'}>Male</Radio>*/}
-            {/*                <Radio value={'female'}>Female</Radio>*/}
-            {/*            </Space>*/}
-            {/*        </Radio.Group>*/}
-
-            {/*    </Space>*/}
-            {/*    /!*<input type="text" ref={genderRef} defaultValue={user.gender}/>*!/*/}
-            {/*</div>*/}
-            {/*</div>*/}
-            {/*<hr/>*/}
-            {/*<div className='row'>*/}
-            {/*    <div className="col-lg-6 col-md-6 col-sm-6 justify-content col-xs-12">*/}
-            {/*        <label htmlFor="email">E-mail</label>*/}
-            {/*        <input type="email" ref={emailRef} defaultValue={user.email}/>*/}
-            {/*    </div>*/}
-            {/*    <div className="col-lg-6 col-md-6 col-sm-6 justify-content col-xs-12">*/}
-            {/*        <label htmlFor="phone">Mobile</label>*/}
-            {/*        <input type="tel" pattern={'[0-9]{10}'} ref={phoneRef} defaultValue={user.phone}/>*/}
-            {/*    </div>*/}
-            {/*</div>*/}
-            {/*<hr/>*/}
             <div className='row'>
                 <div className="col-lg-6 col-md-6 col-sm-6 justify-content col-xs-12">
                     <label htmlFor="city">City</label>
@@ -126,10 +123,10 @@ const EditProfile = () => {
                 </div>
                 <div className="col-lg-6 col-md-6 col-sm-6 justify-content col-xs-12">
                     <label htmlFor="bio">Bio</label>
-                    <textarea className={'float-end '} ref={bioRef} name="bio" id="" defaultValue={user.bio}/>
+                    <TextArea showCount maxLength={200} style={{height: 120, width: '90%'}} className={'float-end '}
+                              ref={bioRef} name="bio" id="" defaultValue={user.bio}/>
                 </div>
             </div>
-            {/*<hr/>*/}
             <div className='row '>
                 <div className="col-lg-6 col-md-6 col-sm-6 justify-content col-xs-12">
                     <Button className={classes['custom-btn']} type='button' onClick={submitHandler}>Save</Button>

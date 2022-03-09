@@ -10,7 +10,19 @@ body, html {
     background-repeat: no-repeat;
     background-size: 100% 100%;
     overflow-x: hidden;
+    /*overflow-y: hidden;*/
+
 }
+::-webkit-scrollbar{
+    background: transparent;
+
+    width: 15px;
+}
+::-webkit-scrollbar-thumb{
+    background: #99ade8;
+    border-radius: 10px;
+}
+
 
 
 code {
