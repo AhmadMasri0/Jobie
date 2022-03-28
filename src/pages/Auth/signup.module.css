@@ -1,13 +1,9 @@
 .form {
     width: 95%;
     max-width: 25rem;
-    /*margin: 2rem auto;*/
     margin-left: 29%;
     margin-top: 15%;
     margin-bottom: 10px;
-    /*background-image: linear-gradient(#d7d7ec, rgba(14, 40, 130, 0.85));*/
-    /*background-repeat: no-repeat;*/
-    /*background-size: 100% 100%;*/
 }
 
 .control {
@@ -20,9 +16,8 @@
     margin-bottom: 0.5rem;
     margin-left: 3rem;
     text-align: center;
-    /*color: #353336;*/
     color: rgba(14, 40, 130, 0.85);;
-    display: block;
+    /*display: block;*/
 }
 
 .control input{
@@ -32,13 +27,12 @@
     border-radius: 4px;
     border-color: #082868;
     padding: 0.25rem;
-    /*background-color: rgba(231, 233, 236, 0.53);*/
 }
 input::placeholder{
     color: rgba(0, 0, 0, 0.42);
 }
 .customInput {
-    /*display: block;*/
+
     font: inherit;
     width: 90%;
     border-radius: 4px;
@@ -49,7 +43,6 @@ input::placeholder{
     margin-top: 1rem!important;
     margin-left: 5rem!important;
     text-align: center;
-    /*color: #353336;*/
     color: rgba(14, 40, 130, 0.85);;
     display: flex!important;
 }
@@ -62,45 +55,24 @@ input::placeholder{
 
 .action button, .btn {
     font: inherit;
-    /*cursor: pointer;*/
     padding: 0.2rem 1.5rem;
-    /*border-radius: 4px;*/
-    /*background-color: rgb(196, 167, 86);*/
-    /*background-color: rgba(14, 40, 130, 0.85);*/
-    /*background-color: rgba(14, 40, 130, 0.85);*/
-            /*rgba(34, 67, 177, 0.34);*/
-    /*color: rgb(255, 255, 255);*/
-    /*color: rgb(0, 0, 0);*/
-    /*border-color: #082868;*/
-    /*border-color: rgb(196, 167, 86);*/
     color: #15275c !important;
     background-color: #ffffff !important;
-    /*border: 0 solid !important;*/
-    /*border-radius: 12% !important;*/
-
 }
 
 .action button:hover, .btn {
     color: rgba(14, 40, 130, 0.85);
-    /*background-color: rgba(19, 59, 194, 0.71);*/
-    /*border-color: #082868;*/
-    /*color: white;*/
-    /*background-color: rgba(19, 54, 175, 0.29);*/
-            /*rgb(196, 167, 86);*/
     color: #ffffff !important;
     background-color: #15275c !important;
 }
 
 span a {
     text-decoration: none;
-    /*font-weight: bold;*/
-    /*color: rgba(255, 255, 255, 0.85);*/
     color: rgb(93, 96, 104);
 }
 
 span a:hover {
     color: rgb(2, 14, 45);
-    /*color: rgba(85, 111, 203, 0.85);*/
 }
 
 
@@ -120,35 +92,19 @@ input:disabled {
 
 
 .leftSide {
-    /*background-color: rgb(7, 22, 71);;*/
-    /*background-color: rgba(34, 67, 177, 0.34);;*/
-    /*background-color: #A3DCEF;*/
-    /*background-color: rgba(119, 141, 169, 0.57);*/
-    /*background-color: rgba(35, 75, 141, 0.5);*/
+
     min-height: 100% !important;
-    /*min-width: 100%;*/
-    /*position: ;*/
     align-content: center;
-    /*padding-bottom: 15%;*/
-    /*padding-bottom: 35%;*/
 }
 
 .rightSide {
-    /*min-width: 100%;*/
     min-height: 100% !important;
     align-content: center;
 
-
-    /*position: absolute;*/
-    /*background-color: rgba(19, 27, 76, 0.27);*/
-    /*background-color:#E0E1DD;*/
-    /*background-color: rgb(196, 167, 86);*/
 }
 
 .main {
-    /*position:relative;*/
     height: 100% !important;
-    /*min-height: 100% !important;*/
 }
 
 .img {
@@ -160,7 +116,6 @@ input:disabled {
 
 @media (max-width: 996px) {
     .form {
-        /*width: 40%;*/
         margin-left: 10%;
         margin-top: 15%;
     }
@@ -171,14 +126,7 @@ input:disabled {
         margin-left: 15%;
         margin-top: 12%;
     }
-    /*.leftSide {*/
-    /*    !*padding-bottom: 22%;*!*/
-    /*    !*min-height: 50%;*!*/
-    /*}*/
-    /*.rightSide{*/
-    /*    width: 40%;*/
-    /*    min-height: 50%;*/
-    /*}*/
+
 }
 @media (max-width: 768px) {
     .form {
@@ -194,27 +142,20 @@ input:disabled {
         margin-top: 4%;
     }
 
-    .leftSide {
-        /*padding-bottom: 4%;*/
-        /*min-height: 50%;*/
-    }
-
     .rightSide {
         width: 40%;
         min-height: 50%;
     }
 
     .action button, .btn {
-        /*width: 40%;*/
         margin-left: 10px;
         margin-top: -20px;
     }
 }
 @media (max-width: 575px) {
     .form {
-        width: 50%;
-        margin-left: 25%;
-        /*margin-top: 5%;*/
+        /*width: 50%;*/
+        /*margin-left: 25%;*/
     }
 
     .img {
@@ -224,38 +165,36 @@ input:disabled {
         margin-top: 8%;
     }
 
-    .leftSide {
-        /*padding-bottom: 4%;*/
-        /*min-height: 50%;*/
+    .customInput{
+        width: 100%;
     }
-
-    .rightSide {
-        width: 40%;
-        min-height: 50%;
-    }
+    /*.rightSide {*/
+    /*    width: 40%;*/
+    /*    min-height: 50%;*/
+    /*}*/
 
     .action button, .btn {
-        width: 40%;
-        /*height: 15% !important;*/
-        /*font-size: 12px;*/
-        /*padding: 0.5rem;*/
-        margin-left: 19%;
-        /*pa    dding-left: -10px !important;*/
-        /*margin-top: -20px;*/
+        /*width: 40%;*/
+        /*margin-left: 19%;*/
     }
 
     input {
-        font-size: 12px!important;
-        width: 100% !important;
+        /*font-size: 12px!important;*/
+        /*width: 100% !important;*/
 
     }
 
-    input[type=checkbox]{
-        font-size: 10px!important;
-        margin-left: -20px!important;
-        width: 50% !important;
+    /*input[type=checkbox]{*/
+    /*    font-size: 10px!important;*/
+    /*    margin-left: -20px!important;*/
+    /*    width: 50% !important;*/
 
+    /*}*/
+    .control{
+        margin-bottom: 0rem;
+        margin-left: 0rem;
     }
+
     .control label {
         font-size: 12px;
         margin-left: 1.5rem;

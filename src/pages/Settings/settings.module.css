@@ -7,8 +7,12 @@
     }
 
     .customPhone{
+        /*border: solid;*/
+        /*border-radius: 10px!important;*/
         width: 100% !important;
-        height: 10px;
+        padding: 0!important;
+        max-width: 80% !important;
+        /*height: 60% !important;*/
         font-size: 10px!important;
         font-weight: normal;
     }
@@ -16,7 +20,7 @@
         font-size: 12px;
     }
     .custom-btn {
-        width: 75% !important;
+        width: 30% !important;
     }
 
     textarea{
@@ -33,7 +37,9 @@
     }
 
     .customPhone{
+        /*border: solid;*/
         width: 40% !important;
+        max-width: 80% !important;
         font-size: 10px!important;
     }
     span {
@@ -72,11 +78,11 @@
 .custom-btn {
     color: #15275c !important;
     background-color: #ffffff !important;
-    width: 50%;
+    width: 20%;
     border: 0 solid !important;
-    margin-bottom: -20px !important;
-    margin-top: 5%;
-    margin-left: 19%;
+    /*margin-bottom: -20px !important;*/
+    /*margin-top: 5%;*/
+    /*margin-left: 19%;*/
     border-radius: 13px !important;
 }
 
@@ -113,9 +119,11 @@ textarea {
 
 .customPhone {
 
+    border-radius: 5px;
     padding-bottom: -10px!important;
     width: 40%;
     max-width: 60%;
+    height: 30px;
 }
 
 .group {
@@ -123,4 +131,26 @@ textarea {
     border-radius: 20px;
     background-color: rgba(255, 255, 255, 0.73);
     margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+
+.addPhone:hover{
+    color: #0744f1;
+    cursor: pointer;
+}
+
+.btn {
+    font: inherit;
+    padding: 0.2rem 1.5rem;
+    width: 20%;
+    font-size: 70%;
+    color: #15275c !important;
+    background-color: #ffffff !important;
+}
+
+.btn:hover {
+    color: rgba(14, 40, 130, 0.85);
+    color: #ffffff !important;
+    background-color: #15275c !important;
 }

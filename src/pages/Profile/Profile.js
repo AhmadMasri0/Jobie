@@ -1,10 +1,10 @@
-import Overlay from '../Components/overlay/overlay';
-import UserInfo from "../Components/Profile/userInfo";
-import PreJobs from "../Components/Profile/preJobs";
+import Overlay from '../../Components/overlay/overlay';
+import UserInfo from "../../Components/Profile/userInfo";
+import PreJobs from "../../Components/Profile/preJobs";
 import React, {useState} from "react";
-import EditingJobsModal from "../Components/Modal/editingJobsModal";
-import Skills from "../Components/Profile/Skills";
-import SkillsModal from "../Components/Modal/slillsModal";
+import EditingJobsModal from "../../Components/Modal/editingJobsModal";
+import Skills from "../../Components/Profile/Skills";
+import SkillsModal from "../../Components/Modal/slillsModal";
 
 const Profile = () => {
 

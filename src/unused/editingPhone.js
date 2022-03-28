@@ -1,5 +1,5 @@
 import {Divider, Input, Modal, Select, Space, Typography} from "antd";
-import classes from "../pages/settings.module.css";
+import classes from "../pages/Settings/settings.module.css";
 
 const EditingPhone = props => {
     return <Modal

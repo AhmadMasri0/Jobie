@@ -13,17 +13,20 @@ body, html {
     /*overflow-y: hidden;*/
 
 }
+
+.ant-select .ant-select-selector{
+    /*border-radius: 0 5px 5px 0!important;*/
+    border-radius: 10px!important;
+}
+
 ::-webkit-scrollbar{
     background: transparent;
-
     width: 15px;
 }
 ::-webkit-scrollbar-thumb{
     background: #99ade8;
     border-radius: 10px;
 }
-
-
 
 code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',

@@ -23,7 +23,7 @@ const DUMMY_USER_PROFILE = {
             id: '3',
             type: 'Home',
             value: '+972-092235856',
-            visible: true
+            visible: false
         }],//
     city: 'Nablus',//
     country: 'Palestine',//
@@ -42,7 +42,8 @@ const DUMMY_USER_PROFILE = {
     }],
     bio: 'A nice bio, HEHEA nice bio, HEHEA nice bio, HEHEA nice bio, HEHEA nice bio, HEHEA nice bio, HEHEA nice bio, HEHE',//
     birthday: '2000-07-13',
-    password: ''
+    password: 'cccccccc',
+    userType: 'applicant'
 
 };
 
@@ -56,9 +57,11 @@ const UserContext = createContext({
     },
     deletePhone: (id) => {
     },
-    editPhone: (id) => {
-    },
     editPhones: (phones) => {
+    },
+    addPhone: (phone) => {
+    },
+    setPhonesVisibility: (isVisible) => {
     },
     removeSkill: (id) => {
     },
@@ -97,6 +100,7 @@ export const UserContextProvider = props => {
         console.log(temp_user);
     }
     const editUserInfoHandler = (info) => {
+        console.log(info);
         let temp_user = {...user};
         temp_user.username = info.username;
         temp_user.bio = info.bio;
@@ -119,14 +123,18 @@ export const UserContextProvider = props => {
         setUser(temp_user);
 
     }
-    const editPhoneHandler = (p) => {
+    const addPhoneHandler = (p) => {
         let temp_user = {...user};
-
-        const updatedPhoneIndex = temp_user.phones.findIndex(phone => phone.id.toString() === p.id);
-        temp_user.phones[updatedPhoneIndex] = p;
+        // if(p.id){
+        //     const updatedPhoneIndex = temp_user.phones.findIndex(phone => phone.id.toString() === p.id);
+        //     temp_user.phones[updatedPhoneIndex] = p;
+        // }else{
+        const newId = new Date().getTime();
+        const newPhone = {...p, id: newId};
+        temp_user.phones = [...temp_user.phones, newPhone];
+        // }
         setUser(temp_user);
     }
-
     const editSkillHandler = (skill) => {
         const id = skill.id;
         let temp_user = {...user};
@@ -154,16 +162,23 @@ export const UserContextProvider = props => {
         setUser(temp_user);
         console.log(temp_user.skills);
     }
+    const setPhonesVisibilityHandler = (isVisible) => {
+        let temp_user = {...user};
+        temp_user.phones.forEach((phone) => phone.visible = isVisible);
+        setUser(temp_user);
+        console.log(temp_user.phones)
+    }
     const userContextValue = {
         user: user,
         addPrevJob: addPrevJobHandler,
         removePrevJob: removePrevJobHandler,
         editUserInfo: editUserInfoHandler,
         deletePhone: deletePhoneHandler,
-        editPhone: editPhoneHandler,
+        addPhone: addPhoneHandler,
         editPhones: editPhonesHandler,
         editSkill: editSkillHandler,
-        removeSkill: removeSkillHandler
+        removeSkill: removeSkillHandler,
+        setPhonesVisibility: setPhonesVisibilityHandler
     }
     return <UserContext.Provider value={userContextValue}>{props.children} </UserContext.Provider>
 

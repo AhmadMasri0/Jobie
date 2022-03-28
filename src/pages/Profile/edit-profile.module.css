@@ -19,6 +19,12 @@ img {
     textarea {
         width: 60% !important;
     }
+    .group {
+        text-align: center;
+    }
+    label {
+        text-align: center!important;
+    }
 }
 
 @media (max-width: 575px) {

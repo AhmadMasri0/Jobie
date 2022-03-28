@@ -34,12 +34,12 @@ const UserInfo = () => {
                                     <span>{user.gender}</span>
                                 </div>
                             </div>
-                            <div className="col-lg-6 col-md-6 col-sm-3">
-                                <div className={classes.media}>
-                                    <label htmlFor="age">age</label>
-                                    <span>22</span>
-                                </div>
-                            </div>
+                            {/*<div className="col-lg-6 col-md-6 col-sm-3">*/}
+                            {/*    <div className={classes.media}>*/}
+                            {/*        <label htmlFor="age">age</label>*/}
+                            {/*        <span>22</span>*/}
+                            {/*    </div>*/}
+                            {/*</div>*/}
                             <div className="col-lg-6 col-md-6 col-sm-3">
                                 <div className={classes.media}>
                                     <label htmlFor="country">Country</label>

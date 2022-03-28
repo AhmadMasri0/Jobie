@@ -1,0 +1,42 @@
+.cardsGroup {
+    border-radius: 20px;
+    /*background-color: rgba(255, 255, 255, 0.73);*/
+    margin-bottom: 20px!important;
+    margin-top: 20px;
+    padding: 19px !important;
+}
+
+
+.hr {
+    margin-top: -3px!important;
+}
+
+.temp .ant-select-selector {
+    border-radius: 20px!important;
+}
+
+.custom-btn {
+    color: #15275c !important;
+    background-color: #ffffff !important;
+    width: 20%;
+    border: 0 solid !important;
+    /*margin-bottom: -20px !important;*/
+    /*margin-top: 5%;*/
+    /*margin-left: 19%;*/
+    border-radius: 13px !important;
+}
+
+.custom-btn:hover {
+    color: #ffffff !important;
+    background-color: #15275c !important;
+}
+
+p a{
+    color: rgba(16, 15, 15, 0.78);
+    text-decoration: none;
+    margin-left: 10px;
+}
+
+p a:hover{
+    color: #4022ea;
+}

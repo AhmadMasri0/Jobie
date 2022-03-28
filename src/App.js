@@ -1,18 +1,24 @@
 import Navigation from "./Components/layout/navigation";
 import Signup from "./pages/Auth/signup";
 import React from 'react';
-import {Route, Redirect, Switch} from 'react-router-dom';
+import {Redirect, Route, Switch} from 'react-router-dom';
 import Login from "./pages/Auth/login";
-import Profile from "./pages/Profile";
-import EditProfile from "./pages/edit-profile";
-import Applications from "./pages/applications";
-import Settings from "./pages/Settings";
+import Profile from "./pages/Profile/Profile";
+import EditProfile from "./pages/Profile/edit-profile";
+import Applications from "./pages/Applications/applications";
+import Settings from "./pages/Settings/Settings";
+import Application from "./pages/Applications/application";
+import Notifications from "./pages/Notifications/Notifications";
+import Home from "./pages/Home/home";
 
 function App() {
     return (
         <React.Fragment>
             <Navigation/>
             <Switch>
+                <Route path='/' exact>
+                    <Home/>
+                </Route>
                 <Route path='/signup'>
                     <Signup/>
                 </Route>
@@ -28,11 +34,17 @@ function App() {
                 <Route path='/profile/edit-profile'>
                     <EditProfile/>
                 </Route>
-                <Route path='/applications'>
+                <Route path='/applications' exact>
                     <Applications/>
+                </Route>
+                <Route path='/applications/:appId'>
+                    <Application/>
                 </Route>
                 <Route path='/settings'>
                     <Settings/>
+                </Route>
+                <Route path='/notifications'>
+                    <Notifications/>
                 </Route>
             </Switch>
         </React.Fragment>

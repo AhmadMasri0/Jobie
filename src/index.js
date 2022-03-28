@@ -7,13 +7,16 @@ import {BrowserRouter} from "react-router-dom";
 import {AuthContextProvider} from "./store/auth-context";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {UserContextProvider} from "./store/user-context";
+import {ApplicationContextProvider} from "./store/application-context";
 
 ReactDOM.render(
     <UserContextProvider>
         <AuthContextProvider>
-            <BrowserRouter>
-                <App/>
-            </BrowserRouter>
+            <ApplicationContextProvider>
+                <BrowserRouter>
+                    <App/>
+                </BrowserRouter>
+            </ApplicationContextProvider>
         </AuthContextProvider>
     </UserContextProvider>,
     document.getElementById('root')

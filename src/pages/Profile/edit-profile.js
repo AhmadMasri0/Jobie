@@ -1,10 +1,10 @@
 import classes from "./edit-profile.module.css";
 import {Button, Container} from "react-bootstrap";
 import {useContext, useEffect, useRef, useState} from "react";
-import UserContext from "../store/user-context";
+import UserContext from "../../store/user-context";
 import {useHistory} from 'react-router-dom';
 import {Radio, Space, Upload} from "antd";
-import storage from "../firebase/index";
+import storage from "../../firebase";
 import {getDownloadURL, ref, uploadBytesResumable} from "firebase/storage";
 import TextArea from "antd/es/input/TextArea";
 
@@ -34,6 +34,7 @@ const EditProfile = () => {
     }
     useEffect(() => {
         genderRef.current.value = user.gender;
+        bioRef.current.value = user.bio;
 
     }, [])
 
@@ -66,10 +67,10 @@ const EditProfile = () => {
         }))
     }
     return <div className='container'>
-        <div className={`row ${classes.firstRow}`}>
+        <div className={`row ${classes.firstRow} justify-content-md-center`}>
             <div className="col-lg-12 col-md-12 col-sm-12">
                 <div className={classes['about-avatar']}>
-                    <img src={require(`../images/${user.image}`)} onClick={() => setVisible(true)} title=""
+                    <img src={require(`../../images/${user.image}`)} onClick={() => setVisible(true)} title=""
                          alt={user.username}/>
                 </div>
                 <Upload
@@ -86,11 +87,11 @@ const EditProfile = () => {
         </div>
         <Container className={`container-fluid ${classes.group}`}>
             <div className='row'>
-                <div className="col-lg-6 col-md-6 col-sm-6 justify-content col-xs-12">
+                <div className="col-lg-6 col-md-6 col-sm-12 justify-content col-xs-12">
                     <label htmlFor="username">Username</label>
                     <input ref={usernameRef} type="text" defaultValue={user.username}/>
                 </div>
-                <div className="col-lg-6 col-md-6 col-sm-6 justify-content col-xs-12">
+                <div className="col-lg-6 col-md-6 col-sm-12 justify-content col-xs-12">
                     <label htmlFor='gender'>Gender:</label>
                     <Space direction="horizontal" className={''}>
                         <Radio.Group onChange={(e) => genderRef.current.value = e.target.value} name={'gender'}
@@ -106,32 +107,32 @@ const EditProfile = () => {
             </div>
             <hr/>
             <div className='row'>
-                <div className="col-lg-6 col-md-6 col-sm-6 justify-content col-xs-12">
+                <div className="col-lg-6 col-md-6 col-sm-12 justify-content col-xs-12">
                     <label htmlFor="city">City</label>
                     <input type="text" ref={cityRef} defaultValue={user.city}/>
                 </div>
-                <div className="col-lg-6 col-md-6 col-sm-6 justify-content col-xs-12">
+                <div className="col-lg-6 col-md-6 col-sm-12 justify-content col-xs-12">
                     <label htmlFor="country">Country</label>
                     <input type="text" ref={countryRef} defaultValue={user.country}/>
                 </div>
             </div>
             <hr/>
             <div className='row'>
-                <div className="col-lg-6 col-md-6 col-sm-6 justify-content col-xs-12">
+                <div className="col-lg-6 col-md-6 col-sm-12 justify-content col-xs-12">
                     <label htmlFor="profession">Profession</label>
                     <input type="text" ref={professionRef} defaultValue={user.profession}/>
                 </div>
-                <div className="col-lg-6 col-md-6 col-sm-6 justify-content col-xs-12">
+                <div className="col-lg-6 col-md-6 col-sm-12 justify-content col-xs-12">
                     <label htmlFor="bio">Bio</label>
                     <TextArea showCount maxLength={200} style={{height: 120, width: '90%'}} className={'float-end '}
                               ref={bioRef} name="bio" id="" defaultValue={user.bio}/>
                 </div>
             </div>
             <div className='row '>
-                <div className="col-lg-6 col-md-6 col-sm-6 justify-content col-xs-12">
+                <div className="col-lg-6 col-md-6 col-sm-12 justify-content col-xs-12">
                     <Button className={classes['custom-btn']} type='button' onClick={submitHandler}>Save</Button>
                 </div>
-                <div className="col-lg-6 col-md-6 col-sm-6 justify-content col-xs-12">
+                <div className="col-lg-6 col-md-6 col-sm-12 justify-content col-xs-12">
                     <Button className={`float-md-none ${classes['custom-btn']}`} onClick={cancelHandler}
                             type='button'>Cancel</Button>
                 </div>

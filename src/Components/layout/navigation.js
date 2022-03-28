@@ -1,5 +1,5 @@
 import classes from './navigation.module.css';
-import {NavLink, useHistory, useLocation} from "react-router-dom";
+import {NavLink, useLocation} from "react-router-dom";
 import AuthContext from "../../store/auth-context";
 import {useContext} from "react";
 import {Container, Image, Nav, Navbar} from "react-bootstrap";
@@ -7,6 +7,7 @@ import UserContext from "../../store/user-context";
 import {Dropdown, Input, Menu} from "antd";
 import {SearchOutlined} from "@ant-design/icons";
 import 'antd/dist/antd.css';
+import NotificationCard from "../notifications/notificationCard";
 
 const Navigation = () => {
     const authCtx = useContext(AuthContext);
@@ -30,6 +31,14 @@ const Navigation = () => {
             </NavLink>
         </Menu.Item>
     </Menu>);
+
+    const notifications = (
+        <Menu style={{backgroundColor: '#a3b4e0'}}>
+            <Menu.Item>
+                <NotificationCard/>
+            </Menu.Item>
+        </Menu>
+    );
     return <Navbar className={classes.navBar} collapseOnSelect expand="lg" variant="dark" sticky='top'>
         <Container className=''>
             <Navbar.Brand>
@@ -41,7 +50,8 @@ const Navigation = () => {
             <Navbar.Collapse id="responsive-navbar-nav">
                 <Nav className="me-auto">
                     {isSearchVisible &&
-                    <Input prefix={<SearchOutlined/>} placeholder={'Search'} size="small"/>}
+                    <Input prefix={<SearchOutlined/>} style={{borderRadius: '20px'}} placeholder={'Search'}
+                           size="small"/>}
                 </Nav>
                 <Nav>
                     {isLoggedIn &&
@@ -54,12 +64,21 @@ const Navigation = () => {
                     </NavLink>
                     }
                     {isLoggedIn && <NavLink className='nav-link' to='/applications'>Applications</NavLink>}
+                    {isLoggedIn &&
+                    <NavLink to='/notifications' style={{textDecoration: 'none'}}>
+                        <Dropdown trigger={['click']} overlay={notifications} className="nav-link ant-dropdown-link"
+                                  overlayStyle={{width: '20%'}}>
+                            <a>
+                                Notifications
+                            </a>
+                        </Dropdown>
+                    </NavLink>}
                     {!isLoggedIn && <NavLink className='nav-link' to='/login'>Sign in</NavLink>}
                     {isLoggedIn && <NavLink className='nav-link' to='/logout' onClick={logoutHandler}>Logout</NavLink>}
                 </Nav>
             </Navbar.Collapse>
         </Container>
     </Navbar>
-}
+};
 
 export default Navigation;
