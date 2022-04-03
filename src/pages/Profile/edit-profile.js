@@ -1,40 +1,45 @@
 import classes from "./edit-profile.module.css";
-import {Button, Container} from "react-bootstrap";
-import {useContext, useEffect, useRef, useState} from "react";
+import { Button, Container } from "react-bootstrap";
+import { useContext, useEffect, useRef, useState } from "react";
 import UserContext from "../../store/user-context";
-import {useHistory} from 'react-router-dom';
-import {Radio, Space, Upload} from "antd";
+import { useHistory } from 'react-router-dom';
+import { Radio, Space, Upload, Spin } from "antd";
 import storage from "../../firebase";
-import {getDownloadURL, ref, uploadBytesResumable} from "firebase/storage";
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import TextArea from "antd/es/input/TextArea";
 
 const EditProfile = () => {
 
     const history = useHistory();
     const [visible, setVisible] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const userCtx = useContext(UserContext);
     const user = userCtx.user;
+    const [gender, setGender] = useState(user.gender);
+    const [bio, setBio] = useState(user.bio);
     const usernameRef = useRef();
-    const bioRef = useRef();
     const professionRef = useRef();
-    const genderRef = useRef();
     const cityRef = useRef();
     const countryRef = useRef();
     const submitHandler = () => {
+        setIsLoading(true);
         const info = {
             username: usernameRef.current.value,
-            bio: bioRef.current.value,
+            bio: bio,
             profession: professionRef.current.value,
             city: cityRef.current.value,
             country: countryRef.current.value,
-            gender: genderRef.current.value,
+            gender: gender
         }
         userCtx.editUserInfo(info);
+        setIsLoading(false)
         history.push('/profile');
     }
     useEffect(() => {
-        genderRef.current.value = user.gender;
-        bioRef.current.value = user.bio;
+        setGender(user.gender);
+        setBio(user.bio);
+        // genderRef.current.value = user.gender;
+        // bioRef.current.value = user.bio;
 
     }, [])
 
@@ -71,7 +76,7 @@ const EditProfile = () => {
             <div className="col-lg-12 col-md-12 col-sm-12">
                 <div className={classes['about-avatar']}>
                     <img src={require(`../../images/${user.image}`)} onClick={() => setVisible(true)} title=""
-                         alt={user.username}/>
+                        alt={user.username} />
                 </div>
                 <Upload
                     action={'http://localhost:3000/'}
@@ -85,47 +90,47 @@ const EditProfile = () => {
                 </Upload>
             </div>
         </div>
-        <Container className={`container-fluid ${classes.group}`}>
+        <Spin spinning={isLoading}>
+             <Container className={`container-fluid ${classes.group}`}>
             <div className='row'>
                 <div className="col-lg-6 col-md-6 col-sm-12 justify-content col-xs-12">
                     <label htmlFor="username">Username</label>
-                    <input ref={usernameRef} type="text" defaultValue={user.username}/>
+                    <input ref={usernameRef} type="text" defaultValue={user.username} />
                 </div>
                 <div className="col-lg-6 col-md-6 col-sm-12 justify-content col-xs-12">
                     <label htmlFor='gender'>Gender:</label>
                     <Space direction="horizontal" className={''}>
-                        <Radio.Group onChange={(e) => genderRef.current.value = e.target.value} name={'gender'}
-                                     ref={genderRef} defaultValue={user.gender}>
+                        <Radio.Group onChange={(e) => setGender(e.target.value)} name={'gender'}
+                            defaultValue={gender}>
                             <Space direction="horizontal">
                                 <Radio value={'male'}>Male</Radio>
                                 <Radio value={'female'}>Female</Radio>
                             </Space>
                         </Radio.Group>
-
                     </Space>
                 </div>
             </div>
-            <hr/>
+            <hr />
             <div className='row'>
                 <div className="col-lg-6 col-md-6 col-sm-12 justify-content col-xs-12">
                     <label htmlFor="city">City</label>
-                    <input type="text" ref={cityRef} defaultValue={user.city}/>
+                    <input type="text" ref={cityRef} defaultValue={user.city} />
                 </div>
                 <div className="col-lg-6 col-md-6 col-sm-12 justify-content col-xs-12">
                     <label htmlFor="country">Country</label>
-                    <input type="text" ref={countryRef} defaultValue={user.country}/>
+                    <input type="text" ref={countryRef} defaultValue={user.country} />
                 </div>
             </div>
-            <hr/>
+            <hr />
             <div className='row'>
                 <div className="col-lg-6 col-md-6 col-sm-12 justify-content col-xs-12">
                     <label htmlFor="profession">Profession</label>
-                    <input type="text" ref={professionRef} defaultValue={user.profession}/>
+                    <input type="text" ref={professionRef} defaultValue={user.profession} />
                 </div>
                 <div className="col-lg-6 col-md-6 col-sm-12 justify-content col-xs-12">
                     <label htmlFor="bio">Bio</label>
-                    <TextArea showCount maxLength={200} style={{height: 120, width: '90%'}} className={'float-end '}
-                              ref={bioRef} name="bio" id="" defaultValue={user.bio}/>
+                    <TextArea showCount maxLength={200} style={{ height: 120, width: '90%' }} onChange={(e) => setBio(e.currentTarget.value)} className={'float-end '}
+                        name="bio" id="" defaultValue={bio} />
                 </div>
             </div>
             <div className='row '>
@@ -134,10 +139,11 @@ const EditProfile = () => {
                 </div>
                 <div className="col-lg-6 col-md-6 col-sm-12 justify-content col-xs-12">
                     <Button className={`float-md-none ${classes['custom-btn']}`} onClick={cancelHandler}
-                            type='button'>Cancel</Button>
+                        type='button'>Cancel</Button>
                 </div>
             </div>
         </Container>
+        </Spin>
     </div>;
 }
 

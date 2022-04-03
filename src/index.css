@@ -19,6 +19,10 @@ body, html {
     border-radius: 10px!important;
 }
 
+/* .ant-space-item .ant-input{
+    border-radius: 10px!important;
+
+} */
 ::-webkit-scrollbar{
     background: transparent;
     width: 15px;

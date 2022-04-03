@@ -1,6 +1,6 @@
 import classes from "./Profile.module.css";
-import {AiFillEdit, FaBusinessTime, GiPositionMarker, MdBusiness, TiBusinessCard} from "react-icons/all";
-import {useContext} from "react";
+import { AiFillEdit, FaBusinessTime, GiPositionMarker, MdBusiness, TiBusinessCard } from "react-icons/all";
+import { useContext } from "react";
 import UserContext from "../../store/user-context";
 
 const PreJobs = (props) => {
@@ -16,40 +16,42 @@ const PreJobs = (props) => {
                 </div>
                 <div className={`col-lg-4 col-md-6 col-sm-4 text-end ${classes.icons}`}>
 
-                    <AiFillEdit onClick={props.showOverlay} style={{cursor: 'pointer'}}/>
+                    <AiFillEdit onClick={props.showOverlay} style={{ cursor: 'pointer' }} />
 
                 </div>
-                <div className={`row ${classes['about-list']}`}>
+                {user.prevJobs.length === 0 && <p><b>There are no previous works, add a new one now!</b></p>}
+                {user.prevJobs.length > 0 && <div className={`row ${classes['about-list']}`}>
                     {user.prevJobs.map(job =>
                         <div className={`row ${classes.jobs} `} key={job.id}>
                             <div className={`col-lg-3 col-md-12 col-sm-12`}>
-                                <MdBusiness className={classes.icon}/>
+                                <MdBusiness className={classes.icon} />
                                 <p className={classes.business}>
                                     {job.companyName}
                                 </p>
                             </div>
                             <div className='col-lg-3 col-md-12 col-sm-12'>
-                                <GiPositionMarker className={classes.icon}/>
+                                <GiPositionMarker className={classes.icon} />
                                 <p className={classes.business}>
                                     {job.place}
                                 </p>
                             </div>
                             <div className='col-lg-3 col-md-12 col-sm-12'>
-                                <FaBusinessTime className={classes.icon}/>
+                                <FaBusinessTime className={classes.icon} />
                                 <p className={classes.business}>
                                     {job.duration}
                                 </p>
                             </div>
                             <div className='col-lg-3 col-md-12 col-sm-12'>
-                                <TiBusinessCard className={classes.icon}/>
+                                <TiBusinessCard className={classes.icon} />
                                 <p className={classes.business}>
                                     {job.position}
                                 </p>
                             </div>
-                            <hr/>
+                            <hr />
                         </div>
                     )}
                 </div>
+                }
             </div>
         </div>
     </section>

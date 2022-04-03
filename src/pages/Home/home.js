@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import ApplicationContext from "../../store/application-context";
 import AppCard from "../../Components/Application/AppCard";
 import classes from "../Applications/applications.module.css";
@@ -8,6 +8,31 @@ const Home = props => {
 
     const [filter, setFilter] = useState('applications');
     const [value, setValue] = useState('');
+    const [shownData, setShownData] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+
+    useEffect(() => {
+        const loadApps = async () => {
+            setIsLoading(true);
+            const response = await fetch();
+            if (!response.ok)
+                throw new Error('Something wrong happened!');
+            const data = await response.json();
+
+            const applications = [];
+
+            for (const obj of data) {
+                applications.push(obj);
+            }
+            setShownData(applications);
+            setIsLoading(false);
+        }
+
+        loadApps().catch(() => {
+            setIsLoading(false)
+            // error message    
+        });
+    }, []);
 
     const appCtx = useContext(ApplicationContext);
 

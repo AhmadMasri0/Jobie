@@ -5,7 +5,7 @@ import UserContext from "../../store/user-context";
 import Phones from "../../Components/Settings/Phones";
 import Password from "../../Components/Settings/Password";
 import ChangingMail from "../../Components/Settings/ChangingMail";
-import Birthdate from "../../Components/Settings/Birthdate";
+import BirthDate from "../../Components/Settings/Birthdate";
 
 const Settings = (props) => {
         const userCtx = useContext(UserContext);
@@ -17,7 +17,7 @@ const Settings = (props) => {
             <Phones/>
             <Password/>
             <ChangingMail/>
-            <Birthdate/>
+            <BirthDate/>
         </div>
     }
 ;
