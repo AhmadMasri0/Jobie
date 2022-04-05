@@ -1,7 +1,7 @@
 import Navigation from "./Components/layout/navigation";
 import Signup from "./pages/Auth/signup";
-import React from 'react';
-import {Redirect, Route, Switch} from 'react-router-dom';
+import React, { useContext } from 'react';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import Login from "./pages/Auth/login";
 import Profile from "./pages/Profile/Profile";
 import EditProfile from "./pages/Profile/edit-profile";
@@ -10,41 +10,54 @@ import Settings from "./pages/Settings/Settings";
 import Application from "./pages/Applications/application";
 import Notifications from "./pages/Notifications/Notifications";
 import Home from "./pages/Home/home";
+import AuthContext from "./store/auth-context";
 
 function App() {
+    const authCxt = useContext(AuthContext);
+
     return (
         <React.Fragment>
-            <Navigation/>
+            <Navigation />
             <Switch>
                 <Route path='/' exact>
-                    <Home/>
+                    <Home />
                 </Route>
-                <Route path='/signup'>
-                    <Signup/>
+                {!authCxt.isLoggedIn && <Route path='/signup'>
+                    <Signup />
                 </Route>
-                <Route path='/logout'>
+                }
+                {/* <Route path='/logout'>
                     <Redirect to='/login'/>
-                </Route>
-                <Route path='/login'>
-                    <Login/>
-                </Route>
+                </Route> */}
+                {!authCxt.isLoggedIn && <Route path='/login'>
+                    <Login />
+                </Route>}
                 <Route path='/profile' exact>
-                    <Profile/>
+                    {authCxt.isLoggedIn && <Profile />}
+                    {!authCxt.isLoggedIn && <Redirect to={'/login'} />}
                 </Route>
-                <Route path='/profile/edit-profile'>
-                    <EditProfile/>
+                {authCxt.isLoggedIn && <Route path='/profile/edit-profile'>
+                    <EditProfile />
                 </Route>
-                <Route path='/applications' exact>
-                    <Applications/>
+                }
+                {authCxt.isLoggedIn && <Route path='/applications' exact>
+                    <Applications />
                 </Route>
-                <Route path='/applications/:appId'>
-                    <Application/>
+                }
+                {/* {authCxt.isLoggedIn && */}
+                 <Route path='/applications/:appId'>
+                    <Application />
                 </Route>
-                <Route path='/settings'>
-                    <Settings/>
+                {/* } */}
+                {authCxt.isLoggedIn && <Route path='/settings'>
+                    <Settings />
                 </Route>
-                <Route path='/notifications'>
-                    <Notifications/>
+                }
+                {authCxt.isLoggedIn && <Route path='/notifications'>
+                    <Notifications />
+                </Route>}
+                <Route path='*'>
+                    <Redirect to={'/'} />
                 </Route>
             </Switch>
         </React.Fragment>

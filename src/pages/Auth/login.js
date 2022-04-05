@@ -22,7 +22,7 @@ const Login = () => {
 
     useEffect(() => {
         setIsFormValid(email.includes('@') && password.trim() !== '')
-        console.log(isFormValid);
+        // console.log(isFormValid);
     }, [email, password])
 
     const loginHandler = () => {
@@ -50,7 +50,6 @@ const Login = () => {
         if (email === userCxt.user.email && password === userCxt.user.password) {
             setIsLoading(false);
             authCxt.login();
-            history.push('/');
         } else {
             setIsLoading(false);
             alert('E-mail or password was wrong, try again.')

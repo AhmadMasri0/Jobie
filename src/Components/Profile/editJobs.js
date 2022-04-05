@@ -28,7 +28,7 @@ const EditJob = (props) => {
 
     }, [])
     const editJobs = () => {
-        console.log(enteredDuration.current.value.length);
+        // console.log(enteredDuration.current.value.length);
         const job = {
             id: props.job.id,
             companyName: enteredNam.current.value,
@@ -74,7 +74,7 @@ const EditJob = (props) => {
                         const months = moment.preciseDiff(s, end, true).months;
                         const ye1 = s.year() + '/' + s.month();
                         const ye2 = end.year() + '/' + end.month();
-                        console.log(ye1 + '-' + ye2 + '(' + years + 'years & ' + months + 'months)')
+                        // console.log(ye1 + '-' + ye2 + '(' + years + 'years & ' + months + 'months)')
                         enteredDuration.current.value = ye1 + '-' + ye2 + '(' + years + 'years & ' + months + 'months)';
                     }}
                     format={dateFormat}
@@ -85,7 +85,7 @@ const EditJob = (props) => {
             <Button className={` ${classes['custom-btn']}`} onClick={editJobs}
                     style={!props.editing ? {marginLeft: '38%'} : {}}>
                 {!props.editing ? 'Add' : 'Edit'}</Button>
-            {props.editing && <Button className={` ${classes['custom-btn']}`} onClick={deleteJob}>Delete job</Button>}
+            {props.editing && <Button className={` ${classes['custom-btn']}`} loading={props.isLoading} onClick={deleteJob}>Delete job</Button>}
         </div>
         <hr/>
     </div>

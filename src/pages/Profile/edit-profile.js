@@ -49,7 +49,7 @@ const EditProfile = () => {
 
     const uploadImageHandler = (event) => {
         const file = event.target.value;
-        console.log(event.target.value);
+        // console.log(event.target.value);
         handlerUpload(file);
     }
 
@@ -63,9 +63,9 @@ const EditProfile = () => {
         const uploadTask = uploadBytesResumable(storageRef, file, metadata);
         uploadTask.on('state_changed', (snapshot => {
             const prog = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-            console.log(prog);
+            // console.log(prog);
         }, err => {
-            console.log(err)
+            // console.log(err)
         }, () => {
             getDownloadURL(uploadTask.snapshot.ref)
                 .then(url => console.log(url))

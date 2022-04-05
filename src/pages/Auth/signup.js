@@ -5,11 +5,11 @@ import { Button, Input, Radio, Space } from "antd";
 import { EyeInvisibleOutlined, EyeTwoTone, LockOutlined, MailOutlined, UserOutlined } from "@ant-design/icons";
 import { useEffect, useRef, useState } from "react";
 import { useHistory } from 'react-router-dom';
-
+import axios from 'axios'
 const Signup = () => {
 
     const history = useHistory()
-    const [userType, setUserType] = useState('businessOwner');//
+    const [userType, setUserType] = useState('Business');//
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [email, setEmail] = useState('');
@@ -20,7 +20,7 @@ const Signup = () => {
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
-        console.log('f')
+        // console.log('f')
         setIsConfirmed((password === confirmPassword) && password.trim() !== '');
         const isValid = email.includes('@') && username.trim() !== '' && isConfirmed;
         setIsFormValid(isValid)
@@ -34,28 +34,37 @@ const Signup = () => {
         }
 
         const sentData = {
-            email,
-            password,
-            userType,
-            username
+            email: email,
+            password: password,
+            userType: userType,
+            name: username
         };
         setIsLoading(true);
-        fetch('', {
-            method: 'post',
-            headers: {
-                'content-type': 'application/json'
-            },
-            body: JSON.stringify(sentData)
-        }).then(res => {
 
+        axios.post("http://localhost:2000/users", {sentData})
+        // fetch("http://localhost:2000/users", {
+        //     method: "POST",
+        //     mode: "cors",
+        //     headers: {
+        //         'Access-Control-Allow-Origin': 'http://localhost:3000',
+        //         "Content-Type": "application/json",
+        //         // "x-Trigger": 'CORS'
+        //     },
+        //     body: JSON.stringify(sentData)
+        // })
+        .then(res => {
+
+            console.log(res)
             if (res.ok) {
-                history.push('/');
+                setIsLoading(false);
+                history.replace('/');
             } else {
                 throw new Error('wrong');
             }
-
         }).catch(err => {
             setIsLoading(false);
+
+            console.log(err)
         });
 
         // const data = await response.json();
@@ -117,13 +126,14 @@ const Signup = () => {
                     <Input.Password placeholder={'***'} name='password' id='password'
                         prefix={<LockOutlined className="site-form-item-icon" />}
                         className={classes.customInput}
+                        minLength={7}
                         onChange={(e) => setPassword(e.target.value)}
                         iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
                     />
                 </div>
                 <div className={classes.control}>
                     <label htmlFor='confirmPassword'>Confirm Password</label>
-                    <Input.Password placeholder={'***'} name='confirmPassword' id='confirmPassword'
+                    <Input.Password placeholder={'***'} minLength={7} name='confirmPassword' id='confirmPassword'
                         prefix={<LockOutlined className="site-form-item-icon" />}
                         onKeyPress={(e) => {
                             setIsTouched(true)
@@ -141,11 +151,11 @@ const Signup = () => {
                     <Space direction="horizontal">
                         <label htmlFor='userType'>Register as:</label>
                         <Radio.Group className={`${classes.gender}  ${classes.customInput}`}
-                            onChange={userTypeHandler} defaultValue={'businessOwner'}
+                            onChange={userTypeHandler} defaultValue={'Business'}
                             name={'userType'}>
-                            <Radio value={'businessOwner'}>Business owner</Radio>
-                            <Radio value={'applicant'}>Applicant</Radio>
-                            <Radio value={'freelancer'}>Freelancer</Radio>
+                            <Radio value={'Business'}>Business owner</Radio>
+                            <Radio value={'Employee'}>Applicant</Radio>
+                            <Radio value={'FreeLancer'}>Freelancer</Radio>
                         </Radio.Group>
                     </Space>
                 </div>

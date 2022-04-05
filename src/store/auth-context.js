@@ -1,4 +1,5 @@
 import { createContext, useState } from "react";
+import { useHistory } from "react-router-dom";
 
 const AuthContext = createContext({
     token: '',
@@ -8,23 +9,39 @@ const AuthContext = createContext({
     logout: () => {
     }
 });
+
+const calculateRemainingTime = (expTime) => {
+    const currTime = new Date().getTime();
+    const expirationTime = new Date().getTime();
+    return expirationTime - currTime;
+}
 export const AuthContextProvider = (props) => {
-    const [token, setToken] = useState(null);
-    const [isLoggedIn, setIsLoggedIn] = useState(null);
+    const initialState = localStorage.getItem('userToken');
+    const [token, setToken] = useState(initialState);
+    const isLoggedIn = !!token;
+    const history = useHistory();
+
 
     const loginHandler = (token) => {
         setToken(true);
-        setIsLoggedIn(true);
+        localStorage.setItem('userToken', true);
+        // setIsLoggedIn(true);
+        // history.replace('/');
+
     }
     const logoutHandler = () => {
         setToken(false);
-        setIsLoggedIn(false);
+        localStorage.removeItem('userToken');
+        // setIsLoggedIn(false);
+        // history.replace('/login');
+
     }
 
     const contextValue = {
         isLoggedIn,
         login: loginHandler,
-        logout: logoutHandler
+        logout: logoutHandler, 
+        token
     };
 
     return <AuthContext.Provider value={contextValue}>{props.children}</AuthContext.Provider>

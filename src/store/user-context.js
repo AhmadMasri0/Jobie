@@ -82,14 +82,14 @@ export const UserContextProvider = props => {
             updatedJobs[existingJobIndex] = job;
             temp_user.prevJobs = updatedJobs;
             setUser(temp_user);
-            console.log(user);
+            // console.log(user);
 
         } else {
             const newId = new Date().getTime();
             const newJob = {...job, id: newId};
             temp_user.prevJobs = [...temp_user.prevJobs, newJob];
             setUser(temp_user)
-            console.log(user);
+            // console.log(user);
         }
     }
     const removePrevJobHandler = (id) => {
@@ -97,10 +97,10 @@ export const UserContextProvider = props => {
 
         temp_user.prevJobs = temp_user.prevJobs.filter(job => job.id.toString() !== id);
         setUser(temp_user);
-        console.log(temp_user);
+        // console.log(temp_user);
     }
     const editUserInfoHandler = (info) => {
-        console.log(info);
+        // console.log(info);
         let temp_user = {...user};
         temp_user.username = info.username;
         temp_user.bio = info.bio;
@@ -113,7 +113,7 @@ export const UserContextProvider = props => {
     const deletePhoneHandler = (id) => {
         let temp_user = {...user};
         const updatedPhones = temp_user.phones.filter(phone => phone.id.toString() !== id.toString());
-        console.log(updatedPhones)
+        // console.log(updatedPhones)
         temp_user.phones = updatedPhones;
         setUser(temp_user);
     }
@@ -144,14 +144,14 @@ export const UserContextProvider = props => {
             updatedSkills[existingSkillIndex] = skill;
             temp_user.skills = updatedSkills;
             setUser(temp_user);
-            console.log(user);
+            // console.log(user);
 
         } else {
             const newId = new Date().getTime();
             const newSkill = {...skill, id: newId};
             temp_user.skills = [...temp_user.skills, newSkill];
             setUser(temp_user)
-            console.log(user.skills);
+            // console.log(user.skills);
         }
     }
     const removeSkillHandler = (id) => {
@@ -160,13 +160,13 @@ export const UserContextProvider = props => {
 
         temp_user.skills = temp_user.skills.filter(skill => skill.id.toString() !== id.toString());
         setUser(temp_user);
-        console.log(temp_user.skills);
+        // console.log(temp_user.skills);
     }
     const setPhonesVisibilityHandler = (isVisible) => {
         let temp_user = {...user};
         temp_user.phones.forEach((phone) => phone.visible = isVisible);
         setUser(temp_user);
-        console.log(temp_user.phones)
+        // console.log(temp_user.phones)
     }
     const userContextValue = {
         user: user,

@@ -34,7 +34,7 @@ const Phones = props => {
 
     useEffect(() => {
         const p = user.phones;
-        console.log(Phones[0].visible)
+        // console.log(Phones[0].visible)
         dispatch({ type: 'setPhones', p });
     }, [user.phones]);
 
@@ -84,7 +84,7 @@ const Phones = props => {
                 placeholder="Choose a type"
                 onChange={(e, d) => {
                     setNewPhoneType(e);
-                    console.log(d)
+                    // console.log(d)
                 }}
                 dropdownRender={menu => (
                     <>

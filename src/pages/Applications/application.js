@@ -4,12 +4,16 @@ import {useContext} from "react";
 import ApplicationContext from "../../store/application-context";
 import {Divider} from "antd";
 import {Button} from "react-bootstrap";
+import AuthContext from '../../store/auth-context';
 
 const Application = () => {
 
+    const authCxt = useContext(AuthContext);
     const param = useParams()
     const appCtx = useContext(ApplicationContext);
     const application = appCtx.find(app => app.id.toString() === param.appId);
+
+    // console.log(authCxt.token)
 
     return <div className={`container ${classes.cardsGroup}`} style={{backgroundColor: '#FFFFFFBA'}}>
         <div className={'d-flex justify-content-lg-center justify-content-md-start ms-md-4 me-sm-5 justify-content-sm-center'}>
@@ -72,10 +76,10 @@ const Application = () => {
                 </div>
             </div>
         </div>
-        <div className={'d-flex justify-content-center'}>
+    {!authCxt.token &&    <div className={'d-flex justify-content-center'}>
             <Button className={`float-md-none ${classes['custom-btn']}`}
                     type='button'>Apply</Button>
-        </div>
+        </div>}
     </div>
 }
 
