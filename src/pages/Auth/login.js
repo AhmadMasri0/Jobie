@@ -6,6 +6,7 @@ import { Image } from "react-bootstrap";
 import { Button, Checkbox, Input } from "antd";
 import { EyeInvisibleOutlined, EyeTwoTone, LockOutlined, MailOutlined } from '@ant-design/icons';
 import UserContext from "../../store/user-context";
+import axios from 'axios';
 
 const Login = () => {
 
@@ -30,35 +31,33 @@ const Login = () => {
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
 
-        // fetch('', {
-        //     method: 'post',
-        //     headers: {
-        //         'content-type': 'application/json'
-        //     },
-        //     body: JSON.stringify({ email, password })
-        // }).then(res => {
-        //     setIsLoading(false);
-        //     if (res.ok) {
-        //         // authCxt.login(res.token);
+        setIsLoading(true);
 
-        //     } else {
-        //         throw new Error('wrong');
-        //     }
-        // }).catch(err => {
-        //     console.log(err);
-        // });
-        if (email === userCxt.user.email && password === userCxt.user.password) {
-            setIsLoading(false);
-            authCxt.login();
-        } else {
-            setIsLoading(false);
-            alert('E-mail or password was wrong, try again.')
-        }
+        axios.post("http://localhost:2000/users/login", {email, password})
+
+            .then(res => {
+
+                console.log(res.data.user)
+                if (res.status === 200) 
+                {
+                    authCxt.login(res.data.token);
+                    userCxt.setCurrentUser(res.data.user)
+                    setIsLoading(false);
+                    history.replace('/');
+                } else {
+                    throw new Error('wrong');
+                }
+            }).catch(err => {
+                setIsLoading(false);
+
+                console.log(err)
+            });
+     
     }
     const checkEmailHandler = (e) => {
         const checkedEmail = e.target.value;
         setEmail(checkedEmail);
-        console.log(isEmailValid)
+        // console.log(isEmailValid)
         if (checkedEmail.includes('@'))
             setIsEmailValid('')
         else setIsEmailValid('error')

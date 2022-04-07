@@ -1,4 +1,5 @@
-import {createContext, useState} from "react";
+import axios from "axios";
+import { createContext, useEffect, useState } from "react";
 
 const DUMMY_USER_PROFILE = {
     image: 'me.jpg',
@@ -6,10 +7,10 @@ const DUMMY_USER_PROFILE = {
     username: 'Ahmad Masri',
     email: "ahmad.masri@stu.najah.edu",//
     skills: [
-        {id: '1', skill: 'Work under pressure'},
-        {id: '2', skill: 'Work '},
-        {id: '3', skill: 'Work under '},
-        {id: '4', skill: 'Work under lorem pressure'},
+        { id: '1', skill: 'Work under pressure' },
+        { id: '2', skill: 'Work ' },
+        { id: '3', skill: 'Work under ' },
+        { id: '4', skill: 'Work under lorem pressure' },
 
     ],
     gender: 'male',//
@@ -47,7 +48,15 @@ const DUMMY_USER_PROFILE = {
 
 };
 
+// const UserContext = createContext({
+//     value: {},
+//     token: '',
+//     setCurrentUser: () => { }
+// })
 const UserContext = createContext({
+    value: {},
+    token: '',
+    setCurrentUser: () => { },
     user: DUMMY_USER_PROFILE,
     addPrevJob: (job) => {
     },
@@ -71,11 +80,49 @@ const UserContext = createContext({
 
 export const UserContextProvider = props => {
 
-    const [user, setUser] = useState(DUMMY_USER_PROFILE);
+    const initToken = localStorage.getItem('userToken');
+    const initUser = JSON.parse(localStorage.getItem('user'));
+    const [user, setUser] = useState(initUser);
+    const [token, setToken] = useState(initToken);
 
+    useEffect(() => {
+        const id = JSON.parse(localStorage.getItem('user'))._id;
+        axios.get(`http://localhost:2000/users/${id}`).then(data => {
+            if (!data)
+                throw new Error('Wrong')
+            setUser(data.data);
+            // setToken(userCtx.token);
+            // setName(data.data ? data.data.name : null);
+            // setGender(data.data ? data.data.gender : 'male');
+            // setCity(data.data && data.data.location ? data.data.location.city : null)
+            // setCountry(data.data && data.data.location ? data.data.location.country : null)
+            // setProfession(data.data ? data.data.specialization : null);
+            // console.log(token)
+            // setBio(data.data ? data.data.bio : null);
+            // console.log(data.data);
+        }).catch(err => console.log(err))
+        // user = userCtx.user;
+
+    }, [])
+
+    useEffect(() => {
+
+        if (initUser) {
+            setUser(initUser)
+        } else setUser({})
+        if (initToken)
+            setToken(initToken)
+
+    }, [])
+    const setCurrentUserHandler = (value, token) => {
+        localStorage.setItem('user', JSON.stringify(value));
+
+        setUser(value);
+        if (token) setToken(token);
+    }
     const addPrevJobHandler = (job) => {
         const id = job.id;
-        let temp_user = {...user};
+        let temp_user = { ...user };
         if (id) {
             const existingJobIndex = temp_user.prevJobs.findIndex(job => job.id.toString() === id.toString());
             const updatedJobs = [...user.prevJobs];
@@ -86,14 +133,14 @@ export const UserContextProvider = props => {
 
         } else {
             const newId = new Date().getTime();
-            const newJob = {...job, id: newId};
+            const newJob = { ...job, id: newId };
             temp_user.prevJobs = [...temp_user.prevJobs, newJob];
             setUser(temp_user)
             // console.log(user);
         }
     }
     const removePrevJobHandler = (id) => {
-        let temp_user = {...user};
+        let temp_user = { ...user };
 
         temp_user.prevJobs = temp_user.prevJobs.filter(job => job.id.toString() !== id);
         setUser(temp_user);
@@ -101,7 +148,7 @@ export const UserContextProvider = props => {
     }
     const editUserInfoHandler = (info) => {
         // console.log(info);
-        let temp_user = {...user};
+        let temp_user = { ...user };
         temp_user.username = info.username;
         temp_user.bio = info.bio;
         temp_user.city = info.city;
@@ -111,33 +158,33 @@ export const UserContextProvider = props => {
         setUser(temp_user);
     }
     const deletePhoneHandler = (id) => {
-        let temp_user = {...user};
+        let temp_user = { ...user };
         const updatedPhones = temp_user.phones.filter(phone => phone.id.toString() !== id.toString());
         // console.log(updatedPhones)
         temp_user.phones = updatedPhones;
         setUser(temp_user);
     }
     const editPhonesHandler = (p) => {
-        let temp_user = {...user};
+        let temp_user = { ...user };
         temp_user.phones = p;
         setUser(temp_user);
 
     }
     const addPhoneHandler = (p) => {
-        let temp_user = {...user};
+        let temp_user = { ...user };
         // if(p.id){
         //     const updatedPhoneIndex = temp_user.phones.findIndex(phone => phone.id.toString() === p.id);
         //     temp_user.phones[updatedPhoneIndex] = p;
         // }else{
         const newId = new Date().getTime();
-        const newPhone = {...p, id: newId};
+        const newPhone = { ...p, id: newId };
         temp_user.phones = [...temp_user.phones, newPhone];
         // }
         setUser(temp_user);
     }
     const editSkillHandler = (skill) => {
         const id = skill.id;
-        let temp_user = {...user};
+        let temp_user = { ...user };
         if (id) {
             const existingSkillIndex = temp_user.skills.findIndex(skill => skill.id.toString() === id.toString());
             const updatedSkills = [...user.skills];
@@ -148,14 +195,14 @@ export const UserContextProvider = props => {
 
         } else {
             const newId = new Date().getTime();
-            const newSkill = {...skill, id: newId};
+            const newSkill = { ...skill, id: newId };
             temp_user.skills = [...temp_user.skills, newSkill];
             setUser(temp_user)
             // console.log(user.skills);
         }
     }
     const removeSkillHandler = (id) => {
-        let temp_user = {...user};
+        let temp_user = { ...user };
 
 
         temp_user.skills = temp_user.skills.filter(skill => skill.id.toString() !== id.toString());
@@ -163,12 +210,15 @@ export const UserContextProvider = props => {
         // console.log(temp_user.skills);
     }
     const setPhonesVisibilityHandler = (isVisible) => {
-        let temp_user = {...user};
+        let temp_user = { ...user };
         temp_user.phones.forEach((phone) => phone.visible = isVisible);
         setUser(temp_user);
         // console.log(temp_user.phones)
     }
     const userContextValue = {
+        value: user,
+        token,
+        setCurrentUser: setCurrentUserHandler,
         user: user,
         addPrevJob: addPrevJobHandler,
         removePrevJob: removePrevJobHandler,

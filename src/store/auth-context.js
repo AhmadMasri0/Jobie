@@ -22,15 +22,15 @@ export const AuthContextProvider = (props) => {
     const history = useHistory();
 
 
-    const loginHandler = (token) => {
-        setToken(true);
-        localStorage.setItem('userToken', true);
+    const loginHandler = (t) => {
+        setToken(t);
+        localStorage.setItem('userToken', t);
         // setIsLoggedIn(true);
         // history.replace('/');
 
     }
     const logoutHandler = () => {
-        setToken(false);
+        setToken('');
         localStorage.removeItem('userToken');
         // setIsLoggedIn(false);
         // history.replace('/login');

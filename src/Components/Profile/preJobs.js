@@ -19,8 +19,8 @@ const PreJobs = (props) => {
                     <AiFillEdit onClick={props.showOverlay} style={{ cursor: 'pointer' }} />
 
                 </div>
-                {user.prevJobs.length === 0 && <p><b>There are no previous works, add a new one now!</b></p>}
-                {user.prevJobs.length > 0 && <div className={`row ${classes['about-list']}`}>
+                {user.prevJobs && user.prevJobs.length === 0 && <p><b>There are no previous works, add a new one now!</b></p>}
+                {user.prevJobs && user.prevJobs.length > 0 && <div className={`row ${classes['about-list']}`}>
                     {user.prevJobs.map(job =>
                         <div className={`row ${classes.jobs} `} key={job.id}>
                             <div className={`col-lg-3 col-md-12 col-sm-12`}>
@@ -32,13 +32,13 @@ const PreJobs = (props) => {
                             <div className='col-lg-3 col-md-12 col-sm-12'>
                                 <GiPositionMarker className={classes.icon} />
                                 <p className={classes.business}>
-                                    {job.place}
+                                    {job.location.city}-{job.location.country}
                                 </p>
                             </div>
                             <div className='col-lg-3 col-md-12 col-sm-12'>
                                 <FaBusinessTime className={classes.icon} />
                                 <p className={classes.business}>
-                                    {job.duration}
+                                    {job.duration.start}-{job.duration.end}
                                 </p>
                             </div>
                             <div className='col-lg-3 col-md-12 col-sm-12'>

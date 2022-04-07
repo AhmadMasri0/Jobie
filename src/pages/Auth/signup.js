@@ -3,12 +3,17 @@ import { Link } from "react-router-dom";
 import { Image } from "react-bootstrap";
 import { Button, Input, Radio, Space } from "antd";
 import { EyeInvisibleOutlined, EyeTwoTone, LockOutlined, MailOutlined, UserOutlined } from "@ant-design/icons";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { useHistory } from 'react-router-dom';
 import axios from 'axios'
+import AuthContext from '../../store/auth-context';
+import UserContext from '../../store/user-context';
 const Signup = () => {
 
     const history = useHistory()
+    const authCtx = useContext(AuthContext);
+    const userCtx = useContext(UserContext);
+
     const [userType, setUserType] = useState('Business');//
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -41,31 +46,25 @@ const Signup = () => {
         };
         setIsLoading(true);
 
-        axios.post("http://localhost:2000/users", {sentData})
-        // fetch("http://localhost:2000/users", {
-        //     method: "POST",
-        //     mode: "cors",
-        //     headers: {
-        //         'Access-Control-Allow-Origin': 'http://localhost:3000',
-        //         "Content-Type": "application/json",
-        //         // "x-Trigger": 'CORS'
-        //     },
-        //     body: JSON.stringify(sentData)
-        // })
-        .then(res => {
+        axios.post("http://localhost:2000/users", sentData)
 
-            console.log(res)
-            if (res.ok) {
+            .then(res => {
+
+                console.log(res.data.token)
+                if (res.status === 200) 
+                {
+                    authCtx.login(res.data.token);
+                    userCtx.setCurrentUser(res.data.value, res.data.token);
+                    setIsLoading(false);
+                    history.replace('/');
+                } else {
+                    throw new Error('wrong');
+                }
+            }).catch(err => {
                 setIsLoading(false);
-                history.replace('/');
-            } else {
-                throw new Error('wrong');
-            }
-        }).catch(err => {
-            setIsLoading(false);
 
-            console.log(err)
-        });
+                console.log(err)
+            });
 
         // const data = await response.json();
         // setIsLoading(false);

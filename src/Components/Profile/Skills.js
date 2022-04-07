@@ -21,8 +21,8 @@ const Skills = props => {
                     }} style={{cursor: 'pointer'}}/>
 
                 </div>
-                {user.skills.length === 0 && <p><b>There are no skills, add a new one now!</b></p>}
-                {user.skills.length > 0 && <div className={`row ${classes['about-list']}`}>
+                {user.skills && user.skills.length === 0 && <p><b>There are no skills, add a new one now!</b></p>}
+                {user.skills && user.skills.length > 0 && <div className={`row ${classes['about-list']}`}>
                     {user.skills.map(skill =>
                         <div className={` col-lg-3 col-md-12 col-sm-12 ${classes.jobs} `} key={skill.id}>
                             <p className={classes.business}>
