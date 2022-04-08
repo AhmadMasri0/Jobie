@@ -1,11 +1,27 @@
-import {useContext} from "react";
+import { useContext } from "react";
 import UserContext from "../../store/user-context";
 import classes from "./Profile.module.css";
-import {AiFillEdit} from "react-icons/all";
+import { AiFillEdit } from "react-icons/all";
 
 const Skills = props => {
     const userCtx = useContext(UserContext);
     const user = userCtx.user;
+
+    if (user.skills && user.skills.length === 0) {
+        return <section>
+            <div className={`container ${classes.profile}`}>
+                <div className='row flex-row'>
+                    <p onClick={() => {
+                        props.showOverlay();
+                        props.showSkills();
+                    }} style={{ cursor: 'pointer', textAlign: 'center' }}>
+                        <b className={classes.noWorks}>Add a new skill now!</b>
+                    </p>
+                </div>
+            </div>
+        </section>
+    }
+
 
     return <section>
         <div className={`container ${classes.profile}`}>
@@ -18,7 +34,7 @@ const Skills = props => {
                     <AiFillEdit onClick={() => {
                         props.showOverlay();
                         props.showSkills();
-                    }} style={{cursor: 'pointer'}}/>
+                    }} style={{ cursor: 'pointer' }} />
 
                 </div>
                 {user.skills && user.skills.length === 0 && <p><b>There are no skills, add a new one now!</b></p>}

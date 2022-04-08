@@ -46,7 +46,7 @@ const Profile = () => {
     return <>
         <UserInfo showOverlay={showEditingOverlayHandler} user={user} />
         <PreJobs showOverlay={showOverlayHandler} hideOverlay={hideOverlayHandler}/>
-        {/* <Skills showOverlay={showOverlayHandler} showSkills={showSkillsHandler} hideOverlay={hideOverlayHandler}/> */}
+        <Skills showOverlay={showOverlayHandler} showSkills={showSkillsHandler} hideOverlay={hideOverlayHandler}/>
         {overlay && <Overlay hideOverlay={hideOverlayHandler} />}
         {overlay && !showSkillsModal && <EditingJobsModal overlay={setOverlay} hideOverlay={hideOverlayHandler} />}
         {overlay && showSkillsModal && <SkillsModal overlay={setOverlay} hideOverlay={hideOverlayHandler} />}

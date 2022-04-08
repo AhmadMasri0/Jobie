@@ -26,6 +26,15 @@ const SkillsModal = (props) => {
     const deleteSkillHandler = (id) => {
         userCtx.removeSkill(id);
     }
+
+    
+    if (user.skills && user.skills.length === 0) {
+        return <div className={`${classes.modal}`}>
+            <div className="row">
+                <EditSkills overlay={props.overlay} editing={false} />
+            </div>
+        </div>
+    }
     return <div className={`${classes.modal}`}>
         <div className="row">
             <Space direction={"horizontal"}>

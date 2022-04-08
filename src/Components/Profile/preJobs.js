@@ -20,8 +20,6 @@ const PreJobs = (props) => {
         </section>
     }
 
-
-    // return <p>fhd</p>
     return <section>
         <div className={`container ${classes.profile}`}>
             <div className='row flex-row'>
@@ -33,7 +31,7 @@ const PreJobs = (props) => {
                 </div>
                 <div className={`row ${classes['about-list']}`}>
                     {user.prevJobs.map(job =>
-                        <div className={`row ${classes.jobs} `} key={job.job.id}>
+                        <div className={`row ${classes.jobs} `} key={job.id}>
                             <div className={`col-lg-3 col-md-12 col-sm-12`}>
                                 <MdBusiness className={classes.icon} />
                                 <p className={classes.business}>
@@ -44,15 +42,12 @@ const PreJobs = (props) => {
                                 <GiPositionMarker className={classes.icon} />
                                 <p className={classes.business}>
                                     {job.job.location.city + '-' + job.job.location.country}
-                                    {/* {job.job.location ? job.job.location.city + '-' + job.job.location.country : ''} */}
                                 </p>
                             </div>
                             <div className='col-lg-3 col-md-12 col-sm-12'>
                                 <FaBusinessTime className={classes.icon} />
                                 <p className={classes.business}>
-                                    {new Date(job.job.duration.start).toLocaleDateString() + '-' + new Date(job.job.duration.end).toLocaleDateString() }
-                                {/* {job.job.duration ? job.job.duration.start + '-' + job.job.duration.end : ''} */}
-
+                                    {new Date(job.job.duration.start).toLocaleDateString() + '-' + new Date(job.job.duration.end).toLocaleDateString()}
                                 </p>
                             </div>
                             <div className='col-lg-3 col-md-12 col-sm-12'>

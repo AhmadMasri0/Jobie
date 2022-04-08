@@ -13,33 +13,24 @@ const EditJob = (props) => {
     const userCtx = useContext(UserContext);
     const user = userCtx.user;
     const [isLoading, setIsLoading] = useState(false);
-    const duration = props.job.duration;
-
-
-    const y1 = duration ? duration.split('-')[0].split('/')[0] : '2022';
-    const m1 = duration ? duration.split('-')[0].split('/')[1] : '3';
-    const y2 = duration ? duration.split('-')[1].split('(')[0].split('/')[0] : '2021';
-    const m2 = duration ? duration.split('-')[1].split('(')[0].split('/')[1] : '5';
-
-
     const enteredNam = useRef();
     const enteredCity = useRef();
     const enteredCountry = useRef();
     const enteredPosition = useRef();
     const enteredDuration = useRef();
 
-    let start, end;
-
     useEffect(() => {
-        start = props.job.duration ? props.job.duration.start : moment(`${y1}-${m1}-1`, dateFormat);
-        end = props.job.duration ? props.job.duration.end : moment(`${y2}-${m2}-1`, dateFormat);
-        enteredDuration.current.value = [start, end];
-    }, [])
 
+        enteredDuration.current.value = props.job && props.job.job ?
+            [moment(new Date(props.job.job.duration.start).toISOString().split('T')[0], dateFormat),
+            moment(new Date(props.job.job.duration.end).toISOString().split('T')[0], dateFormat)] : null;
+
+    }, [])
     const editJobs = () => {
+
+        setIsLoading(true)
         const s = new Date(enteredDuration.current.value[0]._d);
         const d = new Date(enteredDuration.current.value[1]._d);
-        // console.log();
         const job = {
             job: {
                 companyName: enteredNam.current.value,
@@ -54,12 +45,25 @@ const EditJob = (props) => {
                 }
             }
         }
-        // const rem = [job,{}];
-        user.prevJobs.push(job);
-        console.log(job);
+        let sentJob;
+        if (!props.editing) {
+            user.prevJobs.push(job);
+            sentJob = user.prevJobs;
+        }
+        else {
+            sentJob = user.prevJobs;
+            sentJob = sentJob.map((j) => {
+                if ((j._id == props.job._id)) {
+                    // if (!deleting)
+                    return job;
+                }
+                else return j;
+            })
+        }
+        console.log(sentJob);
 
         axios.patch(`http://localhost:2000/users/me`, {
-            prevJobs: user.prevJobs
+            prevJobs: sentJob
         }, {
             headers: {
                 'Content-Type': 'application/json',
@@ -70,9 +74,7 @@ const EditJob = (props) => {
 
                 setIsLoading(false);
                 if (res.status === 200) {
-                    // setBirthDate(res.data.BirthDate);
                     userCtx.setCurrentUser(res.data);
-                    // history.push('/profile');
                 } else {
 
                     throw new Error('wrong');
@@ -80,60 +82,79 @@ const EditJob = (props) => {
             })
             .catch(err => {
                 setIsLoading(false)
-
-                //error handling
             });
-        // props.onEditJob(job);
-
-
         props.overlay(false);
     }
     const deleteJob = () => {
-        props.onDeleteJob(props.job.id);
+
+        setIsLoading(true)
+
+        const sentJob = user.prevJobs.filter((j) => {
+            console.log(j)
+
+            if ((j._id != props.job._id)) {
+                return j;
+
+            }
+        })
+
+        axios.patch(`http://localhost:2000/users/me`, {
+            prevJobs: sentJob
+        }, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + userCtx.token
+            }
+        })
+            .then(res => {
+
+                setIsLoading(false);
+                if (res.status === 200) {
+                    userCtx.setCurrentUser(res.data);
+                } else {
+
+                    throw new Error('wrong');
+                }
+            })
+            .catch(err => {
+                setIsLoading(false)
+            });
         props.overlay(false);
+      
     }
     return <div>
         <div className={`row ${classes.customRow}`}>
             <div className={`${classes.customCol}`}>
                 <label>Business name</label>
                 <input ref={enteredNam} className={classes.customInput} type='text' placeholder={'Business name'}
-                    defaultValue={props.job.companyName} />
+                    defaultValue={props.job && props.job.job ? props.job.job.companyName : null} />
             </div>
             <div className={` ${classes.customCol}`}>
                 <label>City</label>
                 <input ref={enteredCity} className={classes.customInput} type='text' placeholder={'city'}
-                    defaultValue={props.job.place} />
+                    defaultValue={props.job && props.job.job ? props.job.job.location.city : null} />
             </div>
             <div className={` ${classes.customCol}`}>
                 <label>Country</label>
                 <input ref={enteredCountry} className={classes.customInput} type='text' placeholder={'country'}
-                    defaultValue={props.job.place} />
+                    defaultValue={props.job && props.job.job ? props.job.job.location.country : null} />
             </div>
             <div className={` ${classes.customCol}`}>
                 <label>Position</label>
                 <input ref={enteredPosition} className={classes.customInput} type='text' placeholder={'Position'}
-                    defaultValue={props.job.position} />
+                    defaultValue={props.job && props.job.job ? props.job.job.position : null} />
             </div>
             <div className={`${classes.customCol}`}>
                 <label>Duration</label>
                 <DatePicker.RangePicker
                     ref={enteredDuration}
                     className={classes.customInput}
-                    defaultPickerValue={[moment(`${y1}-${m1}-1`, dateFormat), moment(`${y2}-${m2}-1`, dateFormat)]}
-                    defaultValue={[moment(`${y1}-${m1}-1`, dateFormat), moment(`${y2}-${m2}-1`, dateFormat)]}
+                    defaultValue={props.job && props.job.job ? [moment(new Date(props.job.job.duration.start).toISOString().split('T')[0], dateFormat),
+                    moment(new Date(props.job.job.duration.end).toISOString().split('T')[0], dateFormat)] : null}
                     onCalendarChange={(e) => {
                         if (e) {
-                            // const s = moment(e[0]);
-                            // const end = moment(e[1]);
-                            // const years = moment.preciseDiff(s, end, true).years;
-                            // const months = moment.preciseDiff(s, end, true).months;
-                            // const ye1 = s.year() + '/' + s.month();
-                            // const ye2 = end.year() + '/' + end.month();
-                            // // console.log(ye1 + '-' + ye2 + '(' + years + 'years & ' + months + 'months)')
-                            enteredDuration.current.value = e //ye1 + '-' + ye2 + '(' + years + 'years & ' + months + 'months)';
+                            enteredDuration.current.value = e
                         } else enteredDuration.current.value = null
-                        // console.log('f',enteredDuration.current.value[0]._d);
-
                     }}
                     format={dateFormat}
                 />
@@ -143,7 +164,7 @@ const EditJob = (props) => {
             <Button loading={isLoading} className={` ${classes['custom-btn']}`} onClick={editJobs}
                 style={!props.editing ? { marginLeft: '38%' } : {}}>
                 {!props.editing ? 'Add' : 'Edit'}</Button>
-            {props.editing && <Button className={` ${classes['custom-btn']}`} loading={props.isLoading} onClick={deleteJob}>Delete job</Button>}
+            {props.editing && <Button className={` ${classes['custom-btn']}`} loading={isLoading} onClick={deleteJob}>Delete job</Button>}
         </div>
         <hr />
     </div>
