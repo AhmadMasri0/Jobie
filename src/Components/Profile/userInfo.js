@@ -2,7 +2,6 @@ import classes from "./Profile.module.css";
 import { useContext, useEffect, useState } from "react";
 import UserContext from "../../store/user-context";
 import { Link } from "react-router-dom";
-import axios from "axios";
 
 const UserInfo = (props) => {
     const userCtx = useContext(UserContext);
@@ -12,15 +11,8 @@ const UserInfo = (props) => {
     useEffect(() => {
         user = userCtx.user;
     }, [userCtx.user])
-    // console.log(user)
-    // const [user, setUser] = useState(userCtx.user);
     const [visible, setVisible] = useState(false);
-    const [name, setName] = useState();
-    const [gender, setGender] = useState();
-    const [city, setCity] = useState(JSON.stringify());
-    const [country, setCountry] = useState();
-    const [bio, setBio] = useState();
-    const [profession, setProfession] = useState();
+  
     // console.log(user.data);
 
     // useEffect(() => {

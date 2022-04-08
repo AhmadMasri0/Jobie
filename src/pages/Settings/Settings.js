@@ -43,7 +43,7 @@ const Settings = (props) => {
     return <div className={`container container-fluid ${classes.group}`}>
         <Divider orientation={"center"}><b>Settings</b></Divider>
         <Phones phones={phones} />
-        {/* <Password/> */}
+        <Password/>
         {/* <ChangingMail/> */}
         <BirthDate />
     </div>
