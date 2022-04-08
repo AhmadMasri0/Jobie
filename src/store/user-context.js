@@ -86,27 +86,46 @@ export const UserContextProvider = props => {
     const [token, setToken] = useState(initToken);
 
     useEffect(() => {
-        const id = JSON.parse(localStorage.getItem('user'))._id;
-        axios.get(`http://localhost:2000/users/${id}`).then(data => {
-            if (!data)
-                throw new Error('Wrong')
-            setUser(data.data);
-            // setToken(userCtx.token);
-            // setName(data.data ? data.data.name : null);
-            // setGender(data.data ? data.data.gender : 'male');
-            // setCity(data.data && data.data.location ? data.data.location.city : null)
-            // setCountry(data.data && data.data.location ? data.data.location.country : null)
-            // setProfession(data.data ? data.data.specialization : null);
-            // console.log(token)
-            // setBio(data.data ? data.data.bio : null);
-            // console.log(data.data);
-        }).catch(err => console.log(err))
+        const id = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user'))._id : null;
+        console.log('user')
+        if (id)
+            axios.get(`http://localhost:2000/users/${id}`).then(data => {
+                if (!data)
+                    throw new Error('Wrong')
+                setUser(data.data);
+                // console.log("img",data.data.image);
+                // setToken(userCtx.token);
+                // setName(data.data ? data.data.name : null);
+                // setGender(data.data ? data.data.gender : 'male');
+                // setCity(data.data && data.data.location ? data.data.location.city : null)
+                // setCountry(data.data && data.data.location ? data.data.location.country : null)
+                // setProfession(data.data ? data.data.specialization : null);
+                // console.log(token)
+                // setBio(data.data ? data.data.bio : null);
+                // console.log(data.data);
+            }).catch(err => console.log(err))
         // user = userCtx.user;
 
+        // axios.get(`http://localhost:2000/users/${id}/avatar`).then(data => {
+
+        //     if (!data)
+        //         throw new Error('Wrong')
+        //     console.log('img', data.data);
+        //     localStorage.setItem('img', data.data);
+        //     // console.log("img",data.data.image);
+        //     // setToken(userCtx.token);
+        //     // setName(data.data ? data.data.name : null);
+        //     // setGender(data.data ? data.data.gender : 'male');
+        //     // setCity(data.data && data.data.location ? data.data.location.city : null)
+        //     // setCountry(data.data && data.data.location ? data.data.location.country : null)
+        //     // setProfession(data.data ? data.data.specialization : null);
+        //     // console.log(token)
+        //     // setBio(data.data ? data.data.bio : null);
+        //     // console.log(data.data);
+        // }).catch(err => console.log(err))
     }, [])
 
     useEffect(() => {
-
         if (initUser) {
             setUser(initUser)
         } else setUser({})
@@ -116,8 +135,8 @@ export const UserContextProvider = props => {
     }, [])
     const setCurrentUserHandler = (value, token) => {
         localStorage.setItem('user', JSON.stringify(value));
-
         setUser(value);
+
         if (token) setToken(token);
     }
     const addPrevJobHandler = (job) => {

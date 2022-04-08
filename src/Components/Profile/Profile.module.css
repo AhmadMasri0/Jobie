@@ -4,6 +4,9 @@ img {
     border-style: none;
 }
 
+.noWorks:hover{
+    color: rgb(37, 37, 146)
+}
 h3 {
     font-size: 45px;
     font-weight: 700;

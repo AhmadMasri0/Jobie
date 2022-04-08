@@ -14,11 +14,11 @@ const Settings = (props) => {
     const [phones, setPhones] = useState([{}]);
     const [password, setPassword] = useState();
     const [emails, setEmails] = useState();
-    const [birthDate, setBirthDate] = useState();
+    // const [birthDate, setBirthDate] = useState();
 
     useEffect(() => {
         const id = JSON.parse(localStorage.getItem('user'))._id;
-        console.log();
+        // console.log();
         axios.get(`http://localhost:2000/users/${id}`, {
             headers: {
                 'content-type': 'multipart/form-data'
@@ -32,18 +32,20 @@ const Settings = (props) => {
 
             setPhones(data.data.phone);
 
-            // console.log(data.data);
         }).catch(err => console.log(err))
         // user = userCtx.user;
 
-    }, [userCtx.user])
+        // return function f() {
+        //     console.log('f' + birthDate);
+
+        // }();
+    }, [])
     return <div className={`container container-fluid ${classes.group}`}>
         <Divider orientation={"center"}><b>Settings</b></Divider>
         <Phones phones={phones} />
         {/* <Password/> */}
-            {/* <
-            ChangingMail/>
-            <BirthDate/> */}
+        {/* <ChangingMail/> */}
+        <BirthDate />
     </div>
 }
     ;

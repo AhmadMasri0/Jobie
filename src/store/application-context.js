@@ -22,7 +22,7 @@ const application = [
     ],
     details:
         {
-            Place: 'Rafedia-Nablus',
+            Place:  'Rafedia-Nablus',
             Experience: '3 years',
             JobType: 'Full-time',
             salary: 'N/A',

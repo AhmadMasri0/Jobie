@@ -8,6 +8,10 @@ const UserInfo = (props) => {
     const userCtx = useContext(UserContext);
 
     let user = userCtx.user;
+
+    useEffect(() => {
+        user = userCtx.user;
+    }, [userCtx.user])
     // console.log(user)
     // const [user, setUser] = useState(userCtx.user);
     const [visible, setVisible] = useState(false);
@@ -42,7 +46,10 @@ const UserInfo = (props) => {
     //     setUser(userCtx.user)
     // }, []);
 
+    const birth = new Date(user.dayOfBirth);
+    const d = birth.getFullYear() + '-' + (birth.getMonth() + 1) + '-' + birth.getUTCDate();
 
+    console.log(birth.getUTCDate());
     return <section>
         { user.bio &&
             <div className={`container  ${classes.profile}`} style={{ marginBottom: '20px', marginTop: '20px' }}>
@@ -69,7 +76,7 @@ const UserInfo = (props) => {
                                 <div className="col-lg-6 col-md-6 col-sm-3">
                                     <div className={classes.media}>
                                         <label htmlFor="birthday">Birthday</label>
-                                        <span>{user.birthday ? user.birthday : <Link to='/profile/settings'>add your birthdate</Link>}</span>
+                                        <span>{user.dayOfBirth ? d : <Link to='/profile/settings'>add your birthdate</Link>}</span>
                                     </div>
                                 </div>
                                 <div className="col-lg-6 col-md-6 col-sm-3">
@@ -78,12 +85,6 @@ const UserInfo = (props) => {
                                         <span>{user.gender}</span>
                                     </div>
                                 </div>
-                                {/*<div className="col-lg-6 col-md-6 col-sm-3">*/}
-                                {/*    <div className={classes.media}>*/}
-                                {/*        <label htmlFor="age">age</label>*/}
-                                {/*        <span>22</span>*/}
-                                {/*    </div>*/}
-                                {/*</div>*/}
                                 <div className="col-lg-6 col-md-6 col-sm-3">
                                     <div className={classes.media}>
                                         <label htmlFor="country">Country</label>

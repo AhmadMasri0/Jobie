@@ -23,6 +23,7 @@ const Signup = () => {
     const [isTouched, setIsTouched] = useState(false);
     const [isFormValid, setIsFormValid] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
         // console.log('f')
@@ -62,7 +63,7 @@ const Signup = () => {
                 }
             }).catch(err => {
                 setIsLoading(false);
-
+                setError('This email is already signed in.');
                 console.log(err)
             });
 
@@ -157,6 +158,8 @@ const Signup = () => {
                             <Radio value={'FreeLancer'}>Freelancer</Radio>
                         </Radio.Group>
                     </Space>
+                    {error && <p>{error}</p>}
+
                 </div>
                 <div className={classes.action}>
                     <Button loading={isLoading} className={classes.btn} disabled={!isFormValid || isLoading} shape="round" htmlType={'submit'}>

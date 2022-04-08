@@ -19,13 +19,14 @@ const EditProfile = () => {
     const [user, setUser] = useState();
     const [name, setName] = useState();
     const [token, setToken] = useState();
-    const [gender, setGender] = useState('male');
+    const [gender, setGender] = useState();
     const [city, setCity] = useState();
     const [country, setCountry] = useState();
     const [bio, setBio] = useState();
     const [profession, setProfession] = useState();
     const [image, setImage] = useState();
 
+    const imageBuffer = localStorage.getItem('img') ? localStorage.getItem('img').toString('base64') : null;
     // useEffect(() => {
     //     const settingName = (u) => {
     //         setName(u.name);
@@ -45,7 +46,7 @@ const EditProfile = () => {
             bio,
             specialization: profession,
             location: { city, country },
-            gender
+            gender: gender
         }, {
             headers: {
                 'Content-Type': 'application/json',
@@ -83,18 +84,22 @@ const EditProfile = () => {
                 throw new Error('Wrong')
             setUser(data.data);
             setToken(userCtx.token);
-            setName(data.data ? data.data.name : null);
+            setName(data.data.name);
             setGender(data.data ? data.data.gender : 'male');
             setCity(data.data && data.data.location ? data.data.location.city : null)
             setCountry(data.data && data.data.location ? data.data.location.country : null)
             setProfession(data.data ? data.data.specialization : null);
-            console.log(data)
+            console.log(data.data.gender)
             setBio(data.data ? data.data.bio : null);
-            const base64String = btoa(String.fromCharCode(...new Uint8Array(data.data.image)));
-            setImage(base64String);
+            // const base64String = btoa(String.fromCharCode(...new Uint8Array(data.data.image)));
+            // setImage(base64String);
             // console.log(data.data);
         }).catch(err => console.log(err))
         // user = userCtx.user;
+
+        return function fal(){
+            console.log(gender)
+        }()
 
     }, [])
 
@@ -114,14 +119,21 @@ const EditProfile = () => {
             }
         })
             .then(res => {
-                // console.log(res)
 
+                axios.get(`http://localhost:2000/users/${user._id}/avatar`).then(data => {
 
+                    if (!data)
+                        throw new Error('Wrong')
+                    console.log(data);
+                    setImage(data.data)
+                    // localStorage.setItem('img', data.data);
+
+                }).catch(err => console.log(err))
             })
             .catch(err => console.log(err));
         // setImage(fileList);
         // const file = event.target.value;
-        console.log(fileList[0].originFileObj);
+        // console.log(fileList[0].originFileObj);
         // handlerUpload(file);
     }
 
@@ -143,16 +155,21 @@ const EditProfile = () => {
                 .then(url => console.log(url))
         }))
     }
+
+
+    const imgSrc = image ? `data:image/png;base64,${image.toString('base64')}` : 'https://media.istockphoto.com/vectors/profile-placeholder-image-gray-silhouette-no-photo-vector-id1016744004?k=20&m=1016744004&s=612x612&w=0&h=Z4W8y-2T0W-mQM-Sxt41CGS16bByUo4efOIJuyNBHgI='
+
+    // console.log(typeof image)
     return <div className='container'>
         <div className={`row ${classes.firstRow} justify-content-md-center`}>
             <div className="col-lg-12 col-md-12 col-sm-12">
                 <div className={classes['about-avatar']} onClick={() => setVisible(true)}>
                     <img
-                //    src={`data:image/png;base64,${image}`}
-                        src={`https://media.istockphoto.com/vectors/profile-placeholder-image-gray-silhouette-no-photo-vector-id1016744004?k=20&m=1016744004&s=612x612&w=0&h=Z4W8y-2T0W-mQM-Sxt41CGS16bByUo4efOIJuyNBHgI=`}
+                        //    src={`data:image/png;base64,${image}`}
+                        src={{ imgSrc }}
                         // onClick={() => setVisible(true)} title=""
-                        alt={name} 
-                        />
+                        alt={name}
+                    />
                 </div>
                 <Upload
                     maxCount={1}
@@ -177,12 +194,12 @@ const EditProfile = () => {
                     <div className="col-lg-6 col-md-6 col-sm-12 justify-content col-xs-12">
                         <label htmlFor="username">Username</label>
                         <input type="text" placeholder={'Will Smith'} onChange={e => setName(e.target.value)}
-                            defaultValue={name} />
+                            value={name} />
                     </div>
                     <div className="col-lg-6 col-md-6 col-sm-12 justify-content col-xs-12">
                         <label htmlFor='gender'>Gender:</label>
                         <Space direction="horizontal" className={''}>
-                            <Radio.Group onChange={(e) => setGender(e.target.value)} name={'gender'} defaultValue={gender}
+                            <Radio.Group onChange={(e) => setGender(e.target.value)} name={'gender'} value={gender}
                             >
                                 <Space direction="horizontal">
                                     <Radio value={'male'}>Male</Radio>
@@ -197,12 +214,12 @@ const EditProfile = () => {
                     <div className="col-lg-6 col-md-6 col-sm-12 justify-content col-xs-12">
                         <label htmlFor="city">City</label>
                         <input type="text" placeholder={'Nablus'}
-                            onChange={e => setCity(e.target.value)} defaultValue={city} />
+                            onChange={e => setCity(e.target.value)} value={city} />
                     </div>
                     <div className="col-lg-6 col-md-6 col-sm-12 justify-content col-xs-12">
                         <label htmlFor="country">Country</label>
                         <input type="text" placeholder={'Palestine'}
-                            onChange={e => setCountry(e.target.value)} defaultValue={country} />
+                            onChange={e => setCountry(e.target.value)} value={country} />
                     </div>
                 </div>
                 <hr />
@@ -210,7 +227,7 @@ const EditProfile = () => {
                     <div className="col-lg-6 col-md-6 col-sm-12 justify-content col-xs-12">
                         <label htmlFor="profession">Profession</label>
                         <input type="text" onChange={e => setProfession(e.target.value)}
-                            placeholder={'Developer'} defaultValue={profession} />
+                            placeholder={'Developer'} value={profession} />
                     </div>
                     <div className="col-lg-6 col-md-6 col-sm-12 justify-content col-xs-12">
                         <label htmlFor="bio">Bio</label>

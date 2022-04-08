@@ -20,7 +20,8 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const [isEmailValid, setIsEmailValid] = useState('');
     const [isFormValid, setIsFormValid] = useState(false);
-
+    const [error, setError] = useState(null);
+    
     useEffect(() => {
         setIsFormValid(email.includes('@') && password.trim() !== '')
         // console.log(isFormValid);
@@ -49,6 +50,7 @@ const Login = () => {
                 }
             }).catch(err => {
                 setIsLoading(false);
+                setError('Check your email and password.')
 
                 console.log(err)
             });
@@ -90,6 +92,7 @@ const Login = () => {
                         className={classes.customInput}
                         iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
                     />
+                    {error && <p>{error}</p>}
                     <Checkbox className={classes.checkbox}>Remember me</Checkbox>
                 </div>
                 <div className={classes.action}>

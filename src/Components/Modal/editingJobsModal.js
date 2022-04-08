@@ -23,6 +23,7 @@ const EditingJobsModal = (props) => {
         userCtx.addPrevJob(job);
 
         setIsLoading(true);
+        
         fetch('',
             {
                 method: 'post',
@@ -63,30 +64,41 @@ const EditingJobsModal = (props) => {
 
         userCtx.removePrevJob(id);
     }
-    return <div className={`${classes.modal}`}>
-        <div className="row">
-            <div className={`col-lg-8 col-md-6 col-sm-8 ${classes.title}`}>
-                <h3>Previous jobs</h3>
-            </div>
-            <div className={`col-lg-4 col-md-6 col-sm-4 text-end ${classes.icons}`}>
 
-                {!addingJob && <CgAdd onClick={addJobHandler} style={{ cursor: 'pointer', color: 'black' }} />
-                }
-                {addingJob && <CgRemove onClick={removeJobHandler} style={{ cursor: 'pointer', color: 'black' }} />}
+    // if (user.prevJobs && user.prevJobs.length === 0) {
+        return <div className={`${classes.modal}`}>
+            <div className="row">
+                <EditJob overlay={props.overlay} editing={false} onEditJob={editJobHandler} job={{}} />
             </div>
-            {addingJob && <EditJob overlay={props.overlay} editing={false} onEditJob={editJobHandler} job={{}} />}
-
-            <div className={`row `}>
-                {user.prevJobs.map(job =>
-                    <EditJob overlay={props.overlay} editing={true}
-                        key={job.id}
-                        onDeleteJob={deleteJobHandler}
-                        onEditJob={editJobHandler}
-                        job={job}
-                        isLoading={isLoading} />)}
-            </div>
-
         </div>
-    </div>;
+    // }
+
+    // return <p>dg</p>
+
+    // return <div className={`${classes.modal}`}>
+    //     <div className="row">
+    //         <div className={`col-lg-8 col-md-6 col-sm-8 ${classes.title}`}>
+    //             <h3>Previous jobs</h3>
+    //         </div>
+    //         <div className={`col-lg-4 col-md-6 col-sm-4 text-end ${classes.icons}`}>
+
+    //             {!addingJob && <CgAdd onClick={addJobHandler} style={{ cursor: 'pointer', color: 'black' }} />
+    //             }
+    //             {addingJob && <CgRemove onClick={removeJobHandler} style={{ cursor: 'pointer', color: 'black' }} />}
+    //         </div>
+    //         {addingJob && <EditJob overlay={props.overlay} editing={false} onEditJob={editJobHandler} job={{}} />}
+
+    //         <div className={`row `}>
+    //             {user.prevJobs.map(job =>
+    //                 <EditJob overlay={props.overlay} editing={true}
+    //                     key={job.id}
+    //                     onDeleteJob={deleteJobHandler}
+    //                     onEditJob={editJobHandler}
+    //                     job={job}
+    //                     isLoading={isLoading} />)}
+    //         </div>
+
+    //     </div>
+    // </div>;
 }
 export default EditingJobsModal;

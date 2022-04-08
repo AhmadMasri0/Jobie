@@ -31,7 +31,7 @@ const Navigation = () => {
             }
         })
             .then(res => {
-                console.log(res)
+                // console.log(res)
                 if (res.status === 200) {
                     userCtx.setCurrentUser({});
                     authCtx.logout();

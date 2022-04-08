@@ -8,6 +8,20 @@ const PreJobs = (props) => {
     const userCtx = useContext(UserContext);
     const user = userCtx.user;
 
+    if (user.prevJobs && user.prevJobs.length === 0) {
+        return <section>
+            <div className={`container ${classes.profile}`}>
+                <div className='row flex-row'>
+                    <p onClick={props.showOverlay} style={{ cursor: 'pointer', textAlign: 'center' }}>
+                        <b className={classes.noWorks}>Add a new previous work now!</b>
+                    </p>
+                </div>
+            </div>
+        </section>
+    }
+
+
+    // return <p>fhd</p>
     return <section>
         <div className={`container ${classes.profile}`}>
             <div className='row flex-row'>
@@ -15,43 +29,42 @@ const PreJobs = (props) => {
                     <h3>Previous jobs</h3>
                 </div>
                 <div className={`col-lg-4 col-md-6 col-sm-4 text-end ${classes.icons}`}>
-
                     <AiFillEdit onClick={props.showOverlay} style={{ cursor: 'pointer' }} />
-
                 </div>
-                {user.prevJobs && user.prevJobs.length === 0 && <p><b>There are no previous works, add a new one now!</b></p>}
-                {user.prevJobs && user.prevJobs.length > 0 && <div className={`row ${classes['about-list']}`}>
+                <div className={`row ${classes['about-list']}`}>
                     {user.prevJobs.map(job =>
-                        <div className={`row ${classes.jobs} `} key={job.id}>
+                        <div className={`row ${classes.jobs} `} key={job.job.id}>
                             <div className={`col-lg-3 col-md-12 col-sm-12`}>
                                 <MdBusiness className={classes.icon} />
                                 <p className={classes.business}>
-                                    {job.companyName}
+                                    {job.job.companyName}
                                 </p>
                             </div>
                             <div className='col-lg-3 col-md-12 col-sm-12'>
                                 <GiPositionMarker className={classes.icon} />
                                 <p className={classes.business}>
-                                    {job.location.city}-{job.location.country}
+                                    {job.job.location.city + '-' + job.job.location.country}
+                                    {/* {job.job.location ? job.job.location.city + '-' + job.job.location.country : ''} */}
                                 </p>
                             </div>
                             <div className='col-lg-3 col-md-12 col-sm-12'>
                                 <FaBusinessTime className={classes.icon} />
                                 <p className={classes.business}>
-                                    {job.duration.start}-{job.duration.end}
+                                    {new Date(job.job.duration.start).toLocaleDateString() + '-' + new Date(job.job.duration.end).toLocaleDateString() }
+                                {/* {job.job.duration ? job.job.duration.start + '-' + job.job.duration.end : ''} */}
+
                                 </p>
                             </div>
                             <div className='col-lg-3 col-md-12 col-sm-12'>
                                 <TiBusinessCard className={classes.icon} />
                                 <p className={classes.business}>
-                                    {job.position}
+                                    {job.job.position}
                                 </p>
                             </div>
                             <hr />
                         </div>
                     )}
                 </div>
-                }
             </div>
         </div>
     </section>
