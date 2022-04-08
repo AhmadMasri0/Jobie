@@ -31,7 +31,7 @@ const PreJobs = (props) => {
                 </div>
                 <div className={`row ${classes['about-list']}`}>
                     {user.prevJobs.map(job =>
-                        <div className={`row ${classes.jobs} `} key={job.id}>
+                        <div className={`row ${classes.jobs} `} key={job._id}>
                             <div className={`col-lg-3 col-md-12 col-sm-12`}>
                                 <MdBusiness className={classes.icon} />
                                 <p className={classes.business}>

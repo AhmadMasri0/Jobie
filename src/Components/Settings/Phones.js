@@ -1,28 +1,13 @@
-import { Divider, Input, Select, Space, Switch, Typography } from "antd";
+import { Divider, Input, Select, Space, Spin, Switch, Typography } from "antd";
 import classes from "../../pages/Settings/settings.module.css";
 import { useContext, useEffect, useReducer, useState } from "react";
 import UserContext from "../../store/user-context";
 import Phone from "./Phone";
 import axios from "axios";
+import { useHistory } from "react-router-dom";
 
 
 let index = 0;
-// const reducer = (state, action) => {
-//     let phones = [...state];
-//     if (action.type === 'phoneType') {
-
-//     } else if (action.type === 'phoneValue') {
-//         const id = action.p.id;
-//         const value = action.p.value;
-//         const index = phones.findIndex(phone => phone.id.toString() === id.toString());
-//         phones[index] = { type: phones[index].type, value, id, visible: phones[index].visible }
-
-//     } else if (action.type === 'setPhones') {
-//         phones = action.p;
-//     }
-//     return phones;
-// }
-
 function onlyUnique(value, index, self) {
     return self.indexOf(value) === index;
 }
@@ -31,23 +16,19 @@ const Phones = props => {
 
     const userCtx = useContext(UserContext);
     const user = userCtx.user;
-    // const [Phones, dispatch] = useReducer(reducer, user.phones);
-    const [Phones, setPhones] = useState(props.phones);
+    const history = useHistory();
     const [items, setItems] = useState();
     const [name, setName] = useState('');
     const [isAddingPhoneVisible, setIsAddingPhoneVisible] = useState(false);
     const [newPhoneType, setNewPhoneType] = useState('');
-    const [newPhoneValue, setNewPhoneValue] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
-        // const p = user.phones;
-        const t = user.phone.map(phone => phone.type);
+        const t = (user.phone && user.phone.length > 0) ? user.phone.map(p => p.phoneNum.type) : [];
         setItems(t.filter(onlyUnique));
         return function d() {
-            setPhones(user.phone);
             console.log(items)
         }()
-        // dispatch({ type: 'setPhones', p });
     }, [user.phones]);
 
     const onNameChange = event => {
@@ -64,22 +45,28 @@ const Phones = props => {
         setIsAddingPhoneVisible(!isAddingPhoneVisible);
     }
 
-    const clickHandler = (isEditing, value) => {
+    const clickHandler = (isEditing, value, id) => {
 
-        let _id, p;
-        if (isEditing) {
+        let sentPhones;
 
+        setIsLoading(true);
+        const p = { phoneNum: { type: newPhoneType, number: value } };
+
+        if (!isEditing) {
+            user.phone.push(p);
+            sentPhones = user.phone;
         } else {
-            _id = Math.floor(Math.random() * 100000000000);
-            p = { type: newPhoneType, number: value, _id: _id };
-        }
-        let allPhones = Phones.filter((p) => JSON.stringify(p) !== JSON.stringify({}))
-        console.log(allPhones[0]);
-        allPhones.push(p);
-        console.log(allPhones);
+            sentPhones = user.phone;
+            sentPhones = sentPhones.map((j) => {
 
+                if ((j._id == id)) {
+                    j.phoneNum.number = value;
+                }
+                return j;
+            })
+        }
         axios.patch(`http://localhost:2000/users/me`, {
-            phone: allPhones
+            phone: sentPhones
         }, {
             headers: {
                 'Content-Type': 'application/json',
@@ -88,25 +75,55 @@ const Phones = props => {
             }
         })
             .then(res => {
-                // console.log('----------------',res.data)
-                // setIsLoading(false)
+                setIsLoading(false)
+                setIsAddingPhoneVisible(false)
 
                 if (res.status === 200) {
                     userCtx.setCurrentUser(res.data)
-                    setIsAddingPhoneVisible(false)
-                    setPhones(allPhones)
-                    // history.replace('/profile');
+                    history.push('/profile');
                 } else {
                     throw new Error('wrong');
                 }
             }).catch(err => {
-                // setIsLoading(false)
+                setIsLoading(false)
 
                 console.log(err)
             });
     };
 
-    // return <p>fgg</p>
+    const deletePhoneHandler = (id) => {
+
+        setIsLoading(true)
+
+        const sentPhones = user.phone.filter((j) => {
+
+            if ((j._id != id)) {
+                return j;
+            }
+        })
+
+        axios.patch(`http://localhost:2000/users/me`, {
+            phone: sentPhones
+        }, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + userCtx.token
+            }
+        })
+            .then(res => {
+
+                setIsLoading(false);
+                if (res.status === 200) {
+                    userCtx.setCurrentUser(res.data);
+                } else {
+
+                    throw new Error('wrong');
+                }
+            })
+            .catch(err => {
+                setIsLoading(false)
+            });
+    }
     return <>
         <Divider orientation={"left"} style={{ fontWeight: 'bold' }}>Phones</Divider>
         {/* <Divider orientation={'right'} style={{ fontWeight: 'normal', borderColor: 'transparent' }}>who can see my Phones? */}
@@ -151,22 +168,18 @@ const Phones = props => {
                 ))}
             </Select>
 
-            <Phone phone={{}} isEditing={false}
-                setNewPhoneValue={setNewPhoneValue}
-                setIsAddingPhoneVisible={setIsAddingPhoneVisible} setNewPhoneType={setNewPhoneType}
-                clickHandler={clickHandler} newPhoneType={newPhoneType} newPhoneValue={newPhoneValue}
-            />
+            <Phone phone={{}} isEditing={false} clickHandler={clickHandler} />
         </Space>}
 
-        {Phones.map(phone =>
-            <div className={`row`} key={phone.id}>
+        {user.phone && user.phone.length !== 0 && user.phone.map(phone =>
+            <div className={`row`} key={phone._id}>
                 <label className={` ${classes.phone}`}>
-                    {phone.type}:
+                    {phone.phoneNum && phone.phoneNum.type}:
                 </label>
                 <div style={{ border: '', maxWidth: '50%' }}>
-                    <Phone phone={phone} phones={Phones} isEditing={true} clickHandler={clickHandler} />
+                    <Phone phone={phone} id={phone._id} isEditing={true} clickHandler={clickHandler} />
                     <span style={{ color: 'darkblue', cursor: 'pointer', marginLeft: '2px' }} onClick={() => {
-                        userCtx.deletePhone(phone.id);
+                        deletePhoneHandler(phone._id);
                     }}>Delete</span>
                 </div>
             </div>

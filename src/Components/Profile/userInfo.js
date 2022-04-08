@@ -107,9 +107,9 @@ const UserInfo = (props) => {
                                 {user.phone.map(phone =>
                                     <div key={phone.id} className="col-lg-6 col-md-6 col-sm-4">
                                         <div className={classes.media}>
-                                            <label htmlFor="phone">{phone.type} number</label>
+                                            <label htmlFor="phone">{phone.phoneNum.type} number</label>
                                             <span>
-                                                <a href={`tel:${phone.number}`}>{phone.number ? phone.number : <Link to='/settings'>add a phone number</Link>} </a>
+                                                <a href={`tel:${phone.phoneNum.number}`}>{phone.phoneNum.number ? phone.phoneNum.number : <Link to='/settings'>add a phone number</Link>} </a>
                                             </span>
                                         </div>
                                     </div>

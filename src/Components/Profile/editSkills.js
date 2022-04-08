@@ -14,7 +14,7 @@ const EditSkills = (props) => {
 
     useEffect(() => {
 
-        enteredSkill.current.value = props.skill && props.skill.skill ? props.skill.skill : null;
+        enteredSkill.current.value = props.skill &&  props.skill.skill ? props.skill.skill : null;
            
     }, [])
 

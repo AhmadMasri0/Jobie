@@ -1,29 +1,24 @@
 import { Input } from "antd";
-import { useContext, useState } from "react";
+import { useEffect, useRef } from "react";
 import classes from "../../pages/Settings/settings.module.css";
-import UserContext from "../../store/user-context";
 
 
 const Phone = (props) => {
 
-    const phone = props.phone;
     const isEditing = props.isEditing;
-    const userCtx = useContext(UserContext);
-    // const [newPhoneType, setNewPhoneType] = useState('');
-    const [newPhoneValue, setNewPhoneValue] = useState('');
 
-    return <Input key={isEditing ? phone.number : ''} id={isEditing ? phone.id : ''} pattern={'^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\\s\\./0-9]*$'}
+    const enteredPhone = useRef();
+    useEffect(() => {
+        enteredPhone.current.value = (props.phone && props.phone.phoneNum) ? props.phone.phoneNum.number : null
+    }, [])
+    return <Input pattern={'^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\\s\\./0-9]*$'}
         controls={false}
+        ref={enteredPhone}
         className={isEditing ? classes.customPhone : ''}
         placeholder={!isEditing && 'Enter a valid number'}
-        defaultValue={phone.number}
+        defaultValue={props.phone && props.phone.phoneNum && props.phone.phoneNum.number}
         onChange={(e) => {
-            if(isEditing){
-                // const p = { number: e.target.value }
-            }else{
-                // const p = { number: e.target.value }
-                setNewPhoneValue(e.target.value);
-            }
+            enteredPhone.current.value = e.target.value;
         }}
         addonAfter={
             <label style={{
@@ -33,15 +28,7 @@ const Phone = (props) => {
                 paddingLeft: '0',
                 cursor: 'pointer',
             }} onClick={() => {
-                props.clickHandler(isEditing, newPhoneValue);
-                // if(isEditing){
-                    // userCtx.editPhones(props.phones);
-                // }else {
-                // userCtx.addPhone({ type: props.newPhoneType, value: props.newPhoneValue })
-                // props.setNewPhoneValue(null);
-                // props.setNewPhoneType(null);
-                // props.setIsAddingPhoneVisible(false);
-                // }
+                props.clickHandler(isEditing, enteredPhone.current.value, props.id);
             }}
             >{isEditing ? 'Edit' : 'Add'}</label>}
     />;
