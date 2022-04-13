@@ -7,25 +7,40 @@ import Skills from "../../Components/Profile/Skills";
 import SkillsModal from "../../Components/Modal/slillsModal";
 import axios from 'axios';
 import UserContext from '../../store/user-context';
+import { useParams } from 'react-router-dom';
 
 
 const Profile = () => {
 
     const [overlay, setOverlay] = useState(false);
     const [showSkillsModal, setShowSkillsModal] = useState(false);
-    const [user, setUser] = useState();
     const userCtx = useContext(UserContext);
+    const [user, setUser] = useState({});
+    const param = useParams();
+    const id = param.userId;
+    const [isAllowed, setIsAllowed] = useState(false);
 
-    // useEffect(() => {
-    //     const id = JSON.parse(localStorage.getItem('user'))._id;
-    //     axios.get(`http://localhost:2000/users/${id}`).then(data => {
-    //         if (!data)
-    //             throw new Error('Wrong')
-    //             userCtx.setCurrentUser(data.data, localStorage.getItem('userToken'))
-    //         setUser(data.data);
-    //         console.log(data)
-    //     }).catch(err => console.log(err))
-    // }, [])
+    useEffect(() => {
+
+
+        console.log(id, userCtx.user._id)
+        if (!id || id === userCtx.user._id) {
+            setIsAllowed(true);
+            setUser(userCtx.user);
+        }
+        else {
+            axios.get(`http://localhost:2000/users/${id}`).then(data => {
+                if (!data)
+                    throw new Error('Wrong')
+                setUser(data.data);
+                setIsAllowed(false);
+                console.log(data)
+            }).catch(err => console.log(err))
+
+        }
+
+    }, [userCtx.user]);
+
 
     const showOverlayHandler = () => {
         setOverlay(true);
@@ -44,9 +59,10 @@ const Profile = () => {
         setShowSkillsModal(true);
     }
     return <>
-        <UserInfo showOverlay={showEditingOverlayHandler} user={user} />
-        <PreJobs showOverlay={showOverlayHandler} hideOverlay={hideOverlayHandler}/>
-        <Skills showOverlay={showOverlayHandler} showSkills={showSkillsHandler} hideOverlay={hideOverlayHandler}/>
+        <UserInfo showOverlay={showEditingOverlayHandler} isAllowed={isAllowed} user={user} />
+        <PreJobs showOverlay={showOverlayHandler} hideOverlay={hideOverlayHandler} isAllowed={isAllowed} user={user} />
+        {user && user.userType !== 'Business' && <Skills showOverlay={showOverlayHandler} isAllowed={isAllowed} user={user}
+            showSkills={showSkillsHandler} hideOverlay={hideOverlayHandler} />}
         {overlay && <Overlay hideOverlay={hideOverlayHandler} />}
         {overlay && !showSkillsModal && <EditingJobsModal overlay={setOverlay} hideOverlay={hideOverlayHandler} />}
         {overlay && showSkillsModal && <SkillsModal overlay={setOverlay} hideOverlay={hideOverlayHandler} />}

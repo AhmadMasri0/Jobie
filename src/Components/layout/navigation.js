@@ -33,7 +33,7 @@ const Navigation = () => {
             .then(res => {
                 // console.log(res)
                 if (res.status === 200) {
-                    userCtx.setCurrentUser({});
+                    userCtx.setCurrentUser(null);
                     authCtx.logout();
                     history.replace('/login');
                 } else {

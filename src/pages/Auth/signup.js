@@ -18,6 +18,7 @@ const Signup = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [email, setEmail] = useState('');
+    const [gender, setGender] = useState('male');
     const [username, setUsername] = useState('');
     const [isConfirmed, setIsConfirmed] = useState(false);
     const [isTouched, setIsTouched] = useState(false);
@@ -43,18 +44,19 @@ const Signup = () => {
             email: email,
             password: password,
             userType: userType,
-            name: username
+            name: username, 
         };
+        if(userType !== 'Business')
+            sentData.gender = gender;
         setIsLoading(true);
 
         axios.post("http://localhost:2000/users", sentData)
 
             .then(res => {
 
-                console.log(res.data.token)
-                if (res.status === 200) 
-                {
-                    authCtx.login(res.data.token);
+                // console.log(res.data.token)
+                if (res.status === 200) {
+                    authCtx.login(res.data.token, res.data.value._id);
                     userCtx.setCurrentUser(res.data.value, res.data.token);
                     setIsLoading(false);
                     history.replace('/');
@@ -78,6 +80,10 @@ const Signup = () => {
         //     history.push('/');
         // }
 
+    }
+
+    const onChangeGenderHandler = (e) => {
+        setGender(e.target.value)
     }
 
     const userTypeHandler = (type) => {
@@ -105,22 +111,6 @@ const Signup = () => {
                         onChange={(e) => setEmail(e.target.value)}
                         prefix={<MailOutlined />} />
                 </div>
-                {/* <div className={classes.control}>
-                    <Space direction="horizontal">
-                        <label htmlFor='gender' style={{ marginLeft: '10px', paddingRight: '-10px' }}>Gender:</label>
-                        <Radio.Group className={`${classes.gender}  ${classes.customInput}`}
-                            onChange={changeGenderHandler} defaultValue={'male'}
-                            ref={genderRef}
-                            id={'gender'}
-                            name={'gender'} value={gender}>
-                            <Space direction="horizontal" style={{ marginLeft: '-25px' }}>
-                                <Radio value={'male'}>Male</Radio>
-                                <Radio value={'female'}>Female</Radio>
-                            </Space>
-                        </Radio.Group>
-
-                    </Space>
-                </div> */}
                 <div className={classes.control}>
                     <label htmlFor='password'>Password</label>
                     <Input.Password placeholder={'***'} name='password' id='password'
@@ -158,10 +148,24 @@ const Signup = () => {
                             <Radio value={'FreeLancer'}>Freelancer</Radio>
                         </Radio.Group>
                     </Space>
-                    {error && <p>{error}</p>}
-
                 </div>
+               {userType !== 'Business' && <div className={classes.control}>
+                    <Space direction="horizontal">
+                        <label htmlFor='gender' style={{ marginLeft: '10px', paddingRight: '-10px' }}>Gender:</label>
+                        <Radio.Group className={`${classes.gender} ${classes.customInput}`} onChange={onChangeGenderHandler}
+                            defaultValue={'male'}
+                            // ref={genderRef}
+                            id={'gender'}
+                            name={'gender'}>
+                            <Space direction="horizontal" style={{ marginLeft: '-25px' }}>
+                                <Radio value={'male'}>Male</Radio>
+                                <Radio value={'female'}>Female</Radio>
+                            </Space>
+                        </Radio.Group>
+                    </Space>
+                </div>}
                 <div className={classes.action}>
+                    {error && <p style={{ color: 'red' }}>{error}</p>}
                     <Button loading={isLoading} className={classes.btn} disabled={!isFormValid || isLoading} shape="round" htmlType={'submit'}>
                         Register
                     </Button>

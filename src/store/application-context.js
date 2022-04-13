@@ -3,16 +3,17 @@ import {createContext} from "react";
 const application = [
     {
     id: '1',
-    owner: 'Some business',
-    deadline: '20-03-2022',
-    location: 'Nablus-Rafedia',
-    title: 'Front-end developer',
-    description: 'Lorem ipsum dolor sit amet, in laoreet molestie his,' +
+    owner: 'Some business',//
+    deadline: '20-03-2022',//
+    location: 'Nablus-Rafedia',//
+    title: 'Front-end developer',//
+    description://
+     'Lorem ipsum dolor sit amet, in laoreet molestie his,' +
         ' te ius omnium iuvaret euismod, ei pro vide cibo. Te assum latine liberavisse ' +
         'his, meis fabulas ancillae est ne. Graeci eripuit interesset vel no, ne molestiae argumentum appellantur' +
         ' per. Ius no admodum dignissim. Impedit habemus democritum mei ut, dicit electram te nec. Solum verterem per' +
         ' ut, ut eos justo debet, eu eirmod placerat periculis vis. Cetero legendos an duo.',
-    requirements: [
+    requirements: [//
         'ghshdhshsdg',
         'ghshdhshsdg',
         'ghshdhshsdg',
@@ -20,7 +21,7 @@ const application = [
         'ghshdhshsdg',
         'ghshdhshsdg',
     ],
-    details:
+    details://
         {
             Place:  'Rafedia-Nablus',
             Experience: '3 years',
@@ -29,9 +30,9 @@ const application = [
             Degree: 'Bachelors'
         }
     ,
-    jobType: 'Full time',
-    email: 'example@example.com',
-    phone: '059828113',
+    jobType: 'Full time',//
+    email: 'example@example.com',//
+    phone: '059828113',//
     submitters: 0},
     {
     id: '2',

@@ -11,6 +11,7 @@ import Application from "./pages/Applications/application";
 import Notifications from "./pages/Notifications/Notifications";
 import Home from "./pages/Home/home";
 import AuthContext from "./store/auth-context";
+import NewApplication from './pages/Applications/newApplication';
 
 function App() {
     const authCxt = useContext(AuthContext);
@@ -40,12 +41,20 @@ function App() {
                     <EditProfile />
                 </Route>
                 }
+                <Route path='/profile/:userId' >
+                    <Profile />
+                </Route>
+
                 {authCxt.isLoggedIn && <Route path='/applications' exact>
                     <Applications />
                 </Route>
                 }
+                {authCxt.isLoggedIn && <Route path='/applications/newApp' exact>
+                    <NewApplication />
+                </Route>
+                }
                 {/* {authCxt.isLoggedIn && */}
-                 <Route path='/applications/:appId'>
+                <Route path='/applications/:appId'>
                     <Application />
                 </Route>
                 {/* } */}

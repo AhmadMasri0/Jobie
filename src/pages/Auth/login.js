@@ -38,11 +38,11 @@ const Login = () => {
 
             .then(res => {
 
-                console.log(res.data.user)
+                // console.log(res.data.user)
                 if (res.status === 200) 
                 {
-                    authCxt.login(res.data.token);
-                    userCxt.setCurrentUser(res.data.user)
+                    authCxt.login(res.data.token, res.data.user._id);
+                    userCxt.setCurrentUser(res.data.user);
                     setIsLoading(false);
                     history.replace('/');
                 } else {
@@ -92,7 +92,7 @@ const Login = () => {
                         className={classes.customInput}
                         iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
                     />
-                    {error && <p>{error}</p>}
+                    {error && <p style={{color: 'red'}}>{error}</p>}
                     <Checkbox className={classes.checkbox}>Remember me</Checkbox>
                 </div>
                 <div className={classes.action}>

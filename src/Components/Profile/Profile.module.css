@@ -160,12 +160,12 @@ h6 {
     color: #505979;
 }
 
-span a {
+span a, a {
     text-decoration: none;
     color: #000000;
 }
 
-span a:hover {
+span a:hover, a {
     color: rgba(18, 79, 170, 0.76);
 }
 

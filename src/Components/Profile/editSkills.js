@@ -24,13 +24,15 @@ const EditSkills = (props) => {
 
         const skill = {skill: enteredSkill.current.value};
 
+        // console.log('rhht0', userCtx.token)
+        const skills = user.skills || [{skill: {}}];
         let sentSkills;
         if (!props.editing) {
-            user.skills.push(skill);
-            sentSkills = user.skills;
+            skills.push(skill);
+            sentSkills = skills;
         }
         else {
-            sentSkills = user.skills;
+            sentSkills = skills;
             sentSkills = sentSkills.map((j) => {
                 if ((j._id == props.skill._id)) {
                     // if (!deleting)
@@ -39,7 +41,7 @@ const EditSkills = (props) => {
                 else return j;
             })
         }
-        console.log(sentSkills);
+        // console.log(skills);
 
         axios.patch(`http://localhost:2000/users/me`, {
             skills: sentSkills
@@ -53,6 +55,7 @@ const EditSkills = (props) => {
 
                 setIsLoading(false);
                 if (res.status === 200) {
+                    // console.log(res.data)
                     userCtx.setCurrentUser(res.data);
                 } else {
 
@@ -68,6 +71,8 @@ const EditSkills = (props) => {
     
         setIsLoading(true)
 
+        // console.log(user.skills)
+
         const sentSkills = user.skills.filter((j) => {
 
             if ((j._id != props.skill._id)) {
@@ -76,6 +81,7 @@ const EditSkills = (props) => {
             }
         })
 
+        // console.log(sentSkills)
         axios.patch(`http://localhost:2000/users/me`, {
             skills: sentSkills
         }, {
@@ -99,7 +105,7 @@ const EditSkills = (props) => {
             });
         props.overlay(false);
     }
-    console.log(props.skill)
+    // console.log('gdf',props.skill)
     return <div>
         <div className={`row ${classes.customRow}`}>
             <div className={`${classes.customCol}`}>

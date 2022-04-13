@@ -17,7 +17,8 @@ const Settings = (props) => {
     // const [birthDate, setBirthDate] = useState();
 
     useEffect(() => {
-        const id = JSON.parse(localStorage.getItem('user'))._id;
+        // const id = JSON.parse(localStorage.getItem('user'))._id;
+        const id = localStorage.getItem('id');
         // console.log();
         axios.get(`http://localhost:2000/users/${id}`, {
             headers: {
@@ -39,13 +40,13 @@ const Settings = (props) => {
         //     console.log('f' + birthDate);
 
         // }();
-    }, [])
+    }, [userCtx])
     return <div className={`container container-fluid ${classes.group}`}>
         <Divider orientation={"center"}><b>Settings</b></Divider>
         <Phones phones={phones} />
         <Password/>
         {/* <ChangingMail/> */}
-        <BirthDate />
+        {user && user.userType !== 'Business' && <BirthDate />}
     </div>
 }
     ;

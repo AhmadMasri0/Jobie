@@ -46,7 +46,7 @@ const BirthDate = () => {
     const changeBirthDateHandler = () => {
 
         setIsLoading(true);
-        console.log(new Date (birthDate));
+        // console.log(new Date (birthDate));
 
         axios.patch(`http://localhost:2000/users/me`, {
             dayOfBirth: new Date (birthDate)

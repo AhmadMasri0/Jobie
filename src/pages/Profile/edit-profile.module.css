@@ -63,7 +63,13 @@ img {
     color: #757eba;
 }
 
+@media (min-width: 992px) {
 
+.input {
+    width: 30%!important
+}
+    
+}
 @media (max-width: 991px) {
 
     label, textarea, input, .custom-btn {
@@ -117,7 +123,7 @@ textarea {
     border: 0 !important;
 }
 
-input {
+input, .input {
     /*align-content: flex-start;*/
     margin-bottom: 5%;
     text-align: center;
@@ -125,6 +131,10 @@ input {
     border: 0;
 }
 
+.input {
+    width: 30% !important;
+
+}
 
 .group {
     /*border: 1px solid;*/

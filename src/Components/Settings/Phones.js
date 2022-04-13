@@ -24,12 +24,12 @@ const Phones = props => {
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
-        const t = (user.phone && user.phone.length > 0) ? user.phone.map(p => p.phoneNum.type) : [];
+        const t = (user && user.phone && user.phone.length > 0) ? user.phone.map(p => p.phoneNum.type) : ['Mobile', 'Fax', 'Home'];
         setItems(t.filter(onlyUnique));
         return function d() {
-            console.log(items)
+            // console.log(items)
         }()
-    }, [user.phones]);
+    }, []);
 
     const onNameChange = event => {
         setName(event.target.value);
@@ -65,6 +65,7 @@ const Phones = props => {
                 return j;
             })
         }
+        // console.log(sentPhones)
         axios.patch(`http://localhost:2000/users/me`, {
             phone: sentPhones
         }, {
@@ -78,9 +79,11 @@ const Phones = props => {
                 setIsLoading(false)
                 setIsAddingPhoneVisible(false)
 
-                if (res.status === 200) {
+                if (res.status === 200 || res.ok) {
+                    setIsAddingPhoneVisible(false)
+                    HTMLFormControlsCollection.log('dsg')
                     userCtx.setCurrentUser(res.data)
-                    history.push('/profile');
+                    // history.push('/profile');
                 } else {
                     throw new Error('wrong');
                 }
@@ -171,7 +174,7 @@ const Phones = props => {
             <Phone phone={{}} isEditing={false} clickHandler={clickHandler} />
         </Space>}
 
-        {user.phone && user.phone.length !== 0 && user.phone.map(phone =>
+        {user && user.phone && user.phone.length !== 0 && user.phone.map(phone =>
             <div className={`row`} key={phone._id}>
                 <label className={` ${classes.phone}`}>
                     {phone.phoneNum && phone.phoneNum.type}:

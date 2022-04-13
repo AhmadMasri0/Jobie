@@ -1,18 +1,64 @@
 import 'antd/dist/antd.css';
 import classes from './applications.module.css';
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import ApplicationContext from "../../store/application-context";
 import './applications.module.css';
 import AppCard from "../../Components/Application/AppCard";
 import { Input, Select } from "antd";
+import UserContext from '../../store/user-context';
+import { Button } from 'antd';
+import { useHistory } from 'react-router-dom';
+import axios from 'axios';
 
 const Applications = () => {
 
     const [filter, setFilter] = useState('');
     const [value, setValue] = useState('');
-
+    const history = useHistory();
+    const userCtx = useContext(UserContext);
+    const user = userCtx.user;
     const appCtx = useContext(ApplicationContext);
+    const [applications, setApplications] = useState([]);
 
+    useEffect(() => {
+
+        if (user._id) {
+            // let field = ''
+            let url = "http://localhost:2000/forms?search=owner:" + user._id;
+            // console.log(userCtx.token)
+            if (user.userType !== 'Business')
+                url = "http://localhost:2000/response/me" + '';
+
+
+            // console.log(url)
+            axios.get(url, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + userCtx.token
+                }
+            })
+                .then(res => {
+                    // console.log(res.data.token)
+                    if (res.status === 200) {
+
+                        setApplications(res.data);
+                        if (user.userType != 'Business') {
+                            let forms = [];
+                            // console.log(user.userType)
+                            res.data.forEach(d => {
+                                forms.push(d.form);
+                            })
+                            console.log(forms)
+                        }
+                    } else {
+                        throw new Error('wrong');
+                    }
+                }).catch(err => {
+                    // console.log(err)
+                });
+        }
+
+    }, [user])
     const searchValueHandler = (e) => {
         const v = e.target.value;
         setValue(v);
@@ -25,14 +71,27 @@ const Applications = () => {
         return <p><b>No applications found.</b></p>
     }
 
-    const applications = (appCtx.map((app) => {
+    let content = (applications.map((app) => {
         if (!app[filter])
-            return <AppCard key={app.id} app={app} />
+            return <AppCard key={app._id} app={app} />
         if (app[filter].toLowerCase().toString().includes(value.toLowerCase().toString()))
-            return <AppCard key={app.id} app={app} />
+            return <AppCard key={app._id} app={app} />
     }));
 
     return <>
+
+        {user && user.userType === 'Business' &&
+            <div className={` ${classes.cardsGroup} d-flex justify-content-center`} style={{ border: '', marginBottom: '' }}>
+                {/* <div className={'row'} style={{ border: 'solid', marginBottom: '' }} > */}
+                {/* <div> */}
+                <Button className={` ${classes['custom-btn']}`} //style={{ maxWidth: '100%', marginBottom: '' }}
+                    onClick={() => history.push('/applications/newApp')}
+                    type='button'>Add a new application</Button>
+                {/* </div> */}
+                {/* </div> */}
+            </div>
+        }
+
         <div className={`container ${classes.cardsGroup} d-flex justify-content-end`} style={{ border: '', marginBottom: '30px' }}>
             <div className={'row'} style={{ border: '', marginBottom: '10px' }} >
                 <Input defaultValue={value} placeholder={'Searching for...'}
@@ -50,8 +109,9 @@ const Applications = () => {
             </div>
         </div>
         <div className={`container ${classes.cardsGroup}`} >
-            {applications.length > 0 && applications}
-            {applications.length == 0 && <p><b>No applications found.</b></p>}
+            {/* {applications.length > 0 && applications}
+            {applications.length == 0 && <p><b>No applications found.</b></p>} */}
+            {content}
         </div>
     </>
 }

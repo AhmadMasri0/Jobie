@@ -1,20 +1,94 @@
 import { useParams } from 'react-router-dom'
 import classes from "./applications.module.css";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import ApplicationContext from "../../store/application-context";
 import { Divider } from "antd";
-import { Button } from "react-bootstrap";
+import { Button } from 'antd';
 import AuthContext from '../../store/auth-context';
+import UserContext from '../../store/user-context';
+import axios from 'axios';
+import Skills from '../../Components/Profile/Skills';
+import { useHistory } from 'react-router-dom';
 
 const Application = () => {
 
-    const authCxt = useContext(AuthContext);
+    const history = useHistory();
+    const userCtx = useContext(UserContext);
+    const user = userCtx.user;
     const param = useParams()
     const appCtx = useContext(ApplicationContext);
-    const application = appCtx.find(app => app.id.toString() === param.appId);
+    const [application, setApplication] = useState({});
+    const [isLoading, setIsLoading] = useState(false);
 
-    // console.log(authCxt.token)
+    // console.log(param)
 
+    useEffect(() => {
+        // setIsLoading(true);
+
+        axios.get("http://localhost:2000/forms/" + param.appId, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + userCtx.token
+            }
+        })
+            .then(res => {
+
+                // console.log(res.data)
+                if (res.status === 200) {
+
+                    setApplication(res.data[0]);
+                    // console.log(res.data)
+                    // setIsLoading(false);
+                } else {
+                    throw new Error('wrong');
+                }
+            }).catch(err => {
+                // setIsLoading(false);
+                // console.log(err)
+            });
+    }, []);
+    const applyingHandler = () => {
+        // Skills
+
+        console.log(user)
+        if (user) {
+            const sentResponse = {
+                owner: user._id,
+                form: application._id,
+                name: user.name,
+                email: user.email,
+                gender: user.gender,
+                phone: user.phone,
+                specialization: user.specialization,
+                location: user.location,
+                skills: user.skills
+            };
+            setIsLoading(true);
+            axios.post(`http://localhost:2000/response`, sentResponse, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + userCtx.token
+                }
+            })
+                .then(res => {
+                    // console.log('----------------',res.data)
+                    setIsLoading(false)
+
+                    if (res.status === 200) {
+                        history.replace('/');
+                    } else {
+                        throw new Error('wrong');
+                    }
+                }).catch(err => {
+                    setIsLoading(false)
+                    console.log(err)
+                });
+            // console.log(sentResponse)
+        }else {
+            history.push('/login')
+        }
+    }
+    const date = application.deadline && new Date(application.deadline).toLocaleDateString();
     return <div className={`container ${classes.cardsGroup}`} style={{ backgroundColor: '#FFFFFFBA' }}>
         <div className={'d-flex justify-content-lg-center justify-content-md-start ms-md-4 me-sm-5 justify-content-sm-center'}>
             <h3>
@@ -25,7 +99,7 @@ const Application = () => {
         </div>
         <div className={'d-flex justify-content-lg-start justify-content-md-center justify-content-sm-center'}>
             <b style={{ color: 'darkred' }}>
-                Applying is available until {application.deadline}
+                Applying is available until {date}
                 <hr className={classes.hr} />
             </b>
         </div>
@@ -40,7 +114,7 @@ const Application = () => {
         <div className={'d-flex justify-content-lg-start justify-content-sm-center me-sm-5 '}>
 
             <ul style={{ marginLeft: '10%', listStyle: 'none' }}>
-                {application.requirements.map(req =>
+                {application.requirements && application.requirements.map(req =>
                     <li key={req} style={{ marginBottom: '10px', border: '' }}>
                         <b>- {req}</b>
                     </li>
@@ -51,7 +125,7 @@ const Application = () => {
         <div className={'row justify-content-lg-start'}
         // style={{backgroundColor: 'rgba(255,255,255,0.5)', borderRadius: '20px'}}
         >
-            {Object.entries(application.details).map(([k, v]) =>
+            {application.details && Object.entries(application.details).map(([k, v]) =>
                 <div key={k} className={'col-lg-4 col-md-6 col-sm-12'}>
                     <label className={'text-lg-center'}>{k}: </label>
                     <span style={{ marginLeft: '5px' }}>
@@ -59,6 +133,18 @@ const Application = () => {
                     </span>
                 </div>
             )}
+            <div className={'col-lg-4 col-md-6 col-sm-12'}>
+                <label className={'text-lg-center'}>Job type</label>
+                <span style={{ marginLeft: '5px' }}>
+                    {application.jobType}
+                </span>
+            </div>
+            <div className={'col-lg-4 col-md-6 col-sm-12'}>
+                <label className={'text-lg-center'}>Location</label>
+                <span style={{ marginLeft: '5px' }}>
+                    {application.location && (application.location.city + '-' + application.location.country)}
+                </span>
+            </div>
             <div className={'ms-5 container'}>
                 <b>
                     If you have any question, contact us:
@@ -76,8 +162,8 @@ const Application = () => {
                 </div>
             </div>
         </div>
-        {!authCxt.token && <div className={'d-flex justify-content-center'}>
-            <Button className={`float-md-none ${classes['custom-btn']}`}
+        {(!user || user.userType !== 'Business') && <div className={'d-flex justify-content-center'}>
+            <Button loading={isLoading} className={`float-md-none ${classes['custom-btn']}`} onClick={applyingHandler}
                 type='button'>Apply</Button>
         </div>}
     </div>
