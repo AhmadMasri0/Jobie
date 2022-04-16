@@ -91,7 +91,8 @@ const BirthDate = () => {
             <label className={` ${classes.phone}`}>
             </label>
             <div style={{ border: '', maxWidth: '50%' }}>
-                <DatePicker className={classes.customPhone} placeholder={'2000-07-13'} value={birthDate ? moment(birthDate, dateFormat) : null}
+                <DatePicker className={classes.customPhone} placeholder={'2000-07-13'} 
+                value={birthDate ? moment(birthDate, dateFormat) : null}
                     onChange={(e) => {
                         //  console.log(d)
 

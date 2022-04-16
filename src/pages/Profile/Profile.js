@@ -8,6 +8,7 @@ import SkillsModal from "../../Components/Modal/slillsModal";
 import axios from 'axios';
 import UserContext from '../../store/user-context';
 import { useParams } from 'react-router-dom';
+import FeedBack from '../../Components/Profile/feedback';
 
 
 const Profile = () => {
@@ -19,22 +20,28 @@ const Profile = () => {
     const param = useParams();
     const id = param.userId;
     const [isAllowed, setIsAllowed] = useState(false);
+    const [isAllowedToFeedback, setIsAllowedToFeedback] = useState(false);
 
     useEffect(() => {
 
 
-        console.log(id, userCtx.user._id)
+        if (userCtx.user.userType === 'Business')
+            setIsAllowedToFeedback(true);
+        // console.log(id, userCtx.user._id)
         if (!id || id === userCtx.user._id) {
             setIsAllowed(true);
             setUser(userCtx.user);
+            // setIsAllowedToFeedback(false)
         }
         else {
+
             axios.get(`http://localhost:2000/users/${id}`).then(data => {
                 if (!data)
                     throw new Error('Wrong')
+
                 setUser(data.data);
                 setIsAllowed(false);
-                console.log(data)
+                // console.log(data)
             }).catch(err => console.log(err))
 
         }
@@ -63,6 +70,7 @@ const Profile = () => {
         <PreJobs showOverlay={showOverlayHandler} hideOverlay={hideOverlayHandler} isAllowed={isAllowed} user={user} />
         {user && user.userType !== 'Business' && <Skills showOverlay={showOverlayHandler} isAllowed={isAllowed} user={user}
             showSkills={showSkillsHandler} hideOverlay={hideOverlayHandler} />}
+        {user && user.userType === 'FreeLancer' && <FeedBack isAllowed={isAllowedToFeedback} user={user} />}
         {overlay && <Overlay hideOverlay={hideOverlayHandler} />}
         {overlay && !showSkillsModal && <EditingJobsModal overlay={setOverlay} hideOverlay={hideOverlayHandler} />}
         {overlay && showSkillsModal && <SkillsModal overlay={setOverlay} hideOverlay={hideOverlayHandler} />}

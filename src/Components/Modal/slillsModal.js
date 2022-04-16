@@ -1,63 +1,74 @@
 import classes from './modal.module.css';
-import {CgAdd, CgRemove} from "react-icons/all";
-import {useContext, useState} from "react";
+import { useContext, useState } from "react";
 import UserContext from "../../store/user-context";
-import EditSkills from "../Profile/editSkills";
-import {Space} from "antd";
+import axios from 'axios';
+import { Button, Select } from 'antd';
+
+
+const OPTIONS = ['Problem solving', 'critical thinking', 'Communications skills',
+    'Teamwork', 'Organizations skills', 'Emotional Intelligence', 'Leadership experience',
+    'Responsibility', 'Attention to detail', 'Creativity', 'Decision making',
+    'Multitasking', 'Positivity', 'Time management', 'Self-motivation', 'Multilingualism',
+    'management', 'Commitment to deadlines', 'Verbal and presentation skills',
+    'Data analysis', 'Microsoft Office Pack', 'Big Data Analysis & SQL', 'Research & Data analysis'
+];
+
 
 const SkillsModal = (props) => {
 
     const userCtx = useContext(UserContext);
     const user = userCtx.user;
+    const [selectedItems, setSelectedItems] = useState(user.skills ? user.skills : []);
+    const [isLoading, setIsLoading] = useState(false);
 
-    const [addingSkill, setAddingSkill] = useState(false);
+    const editSkill = () => {
 
-    const addSkillHandler = () => {
-        setAddingSkill(true);
+        setIsLoading(true)
+        axios.patch(`http://localhost:2000/users/me`, {
+            skills: selectedItems
+        }, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + userCtx.token
+            }
+        })
+            .then(res => {
 
+                setIsLoading(false);
+                if (res.status === 200) {
+                    userCtx.setCurrentUser(res.data);
+                } else {
+
+                    throw new Error('wrong');
+                }
+            })
+            .catch(err => {
+                setIsLoading(false)
+            });
+        props.overlay(false);
     }
-    const removeSkillHandler = () => {
-        setAddingSkill(false);
+    const skillsChangeHandler = (items) => {
+        setSelectedItems(items);
     }
 
-    const editSkillHandler = (skill) => {
-        userCtx.editSkill(skill);
-    }
-    const deleteSkillHandler = (id) => {
-        userCtx.removeSkill(id);
-    }
+    const filteredOptions = OPTIONS.filter(o => !selectedItems.includes(o));
 
-    
-    if (!user.skills || (user.skills && user.skills.length === 0)) {
-        return <div className={`${classes.modal}`}>
-            <div className="row">
-                <EditSkills overlay={props.overlay} editing={false} />
-            </div>
-        </div>
-    }
     return <div className={`${classes.modal}`}>
-        <div className="row">
-            <Space direction={"horizontal"}>
-                <div className={`col-lg-8 col-md-6 col-sm-8 ${classes.title}`}>
-                    <h3>Skills</h3>
-                </div>
-                <div className={`col-lg-4 col-md-6 col-sm-4  ${classes.icons}`}>
-                    {!addingSkill && <CgAdd onClick={addSkillHandler} style={{cursor: 'pointer', color: 'black'}}/>
-                    }
-                    {addingSkill &&
-                    <CgRemove onClick={removeSkillHandler} style={{cursor: 'pointer', color: 'black'}}/>}
-                </div>
-            </Space>
-            {addingSkill && <EditSkills overlay={props.overlay} editing={false} onEditSkill={editSkillHandler} skill={{}}/>}
-
-            <div className={`row `}>
-                {user.skills.map(skill => <EditSkills overlay={props.overlay} editing={true}
-                                                      key={skill.id}
-                                                      onDeleteSkill={deleteSkillHandler}
-                                                      onEditSkill={editSkillHandler}
-                                                      skill={skill}/>)}
+        <div className={`row ${classes.customRow}`}>
+            <div>
+                <label style={{ marginTop: '170px' }}>Skills</label>
+                <Select className={classes.customInput} mode="multiple" placeholder="Choose your skills"
+                    value={selectedItems} onChange={skillsChangeHandler}>
+                    {filteredOptions.map(item => (
+                        <Select.Option key={item} value={item}>
+                            {item}
+                        </Select.Option>
+                    ))}
+                </Select>
+                <Button loading={isLoading} className={`${classes['custom-btn']}`} onClick={editSkill}>
+                    Update skills
+                </Button>
             </div>
-
         </div>
     </div>;
 }

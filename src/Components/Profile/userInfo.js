@@ -10,33 +10,36 @@ const UserInfo = (props) => {
     const user = props.user;
     const param = useParams();
     const id = param.userId;
+    const [image, setImage] = useState({})
     // const [isAllowed, setIsAllowed] = useState(false);
     const isAllowed = props.isAllowed;
 
     // console.log(param);
 
     // let user = userCtx.user;
+    useEffect(() => {
 
-    // useEffect(() => {
 
+        // console.log(id, userCtx.user._id)
+        // if (!id || id === userCtx.user._id) {
+        //     setIsAllowed(true);
+        //     setUser(userCtx.user);
+        // }
+        // else {
+        // console.log(`http://localhost:2000/users/${userCtx.user._id}/avatar`)
 
-    //     console.log(id, userCtx.user._id)
-    //     if (!id || id === userCtx.user._id) {
-    //         setIsAllowed(true);
-    //         setUser(userCtx.user);
-    //     }
-    //     else {
-    //         axios.get(`http://localhost:2000/users/${id}`).then(data => {
-    //             if (!data)
-    //                 throw new Error('Wrong')
-    //             setUser(data.data);
-    //             setIsAllowed(false);
-    //             console.log(data)
-    //         }).catch(err => console.log(err))
+        axios.get(`http://localhost:2000/users/${userCtx.user._id}/avatar`).then(data => {
+            if (!data)
+                throw new Error('Wrong')
+            setImage(data.data)
+            // console.log(data)
+            // setUser(data.data);
+            // setIsAllowed(false);
+        }).catch(err => console.log(err))
 
-    //     }
+        // }
 
-    // }, [userCtx.user])
+    }, [])
     const [visible, setVisible] = useState(false);
 
     // console.log(user.data);
@@ -69,6 +72,11 @@ const UserInfo = (props) => {
         birth = new Date(user.dayOfBirth);
         d = birth.getFullYear() + '-' + (birth.getMonth() + 1) + '-' + birth.getUTCDate();
     }
+    // const buf =  Buffer.from(image + '', 'utf-8')
+    // const buffer = new Buffer.from("I'm a string!", 'base64');
+    // console.log(typeof image)
+    // const img = `data:image/jpg;base64,${image.toString('base64')}`;
+    const img = `data:image/jpg;base64,${image.toString('base64')}`;
     // console.log(birth.getUTCDate());
     return <section>
         {/* {user && user.bio && */}
@@ -79,7 +87,9 @@ const UserInfo = (props) => {
                         <div className={classes['about-avatar']}>
                             <img
                                 // src={require(`../../images/${user.image ? user.image : ''}`)}
-                                src={`https://media.istockphoto.com/vectors/profile-placeholder-image-gray-silhouette-no-photo-vector-id1016744004?k=20&m=1016744004&s=612x612&w=0&h=Z4W8y-2T0W-mQM-Sxt41CGS16bByUo4efOIJuyNBHgI=`}
+                                // src={{ uri: `data:image/png;base64,${image.toString('base64')}` }}
+                                src={`data:image/png;base64,${image.toString('base64')}`}
+                                // src={`https://media.istockphoto.com/vectors/profile-placeholder-image-gray-silhouette-no-photo-vector-id1016744004?k=20&m=1016744004&s=612x612&w=0&h=Z4W8y-2T0W-mQM-Sxt41CGS16bByUo4efOIJuyNBHgI=`}
                                 onClick={() => setVisible(true)} title=""
                                 alt={user.name} />
                         </div>
@@ -93,11 +103,11 @@ const UserInfo = (props) => {
                     <div className={classes['about-text']}>
                         <p><b>{user && user.bio ? user.bio : <Link to='/profile/edit-profile'>add a bio</Link>}</b></p>
                         <div className={`row ${classes['about-list']}`}>
-                            {user && user.userType !== 'Business' &&
+                            {user && user.userType !== 'Business' && user.dayOfBirth &&
                                 <div className="col-lg-6 col-md-6 col-sm-3">
                                     <div className={classes.media}>
                                         <label htmlFor="birthday">Birthday</label>
-                                        <span>{user.dayOfBirth ? d : <Link to='/settings'>add your birthdate</Link>}</span>
+                                        <span>{d}</span>
                                     </div>
                                 </div>}
                             {user && user.userType !== 'Business' &&
@@ -107,18 +117,20 @@ const UserInfo = (props) => {
                                         <span>{user.gender}</span>
                                     </div>
                                 </div>}
-                            <div className="col-lg-6 col-md-6 col-sm-3">
-                                <div className={classes.media}>
-                                    <label htmlFor="country">Country</label>
-                                    <span>{user.location && user.location.country ? user.location.country : <Link to='/profile/edit-profile'>add a country</Link>}</span>
-                                </div>
-                            </div>
-                            <div className="col-lg-6 col-md-6 col-sm-4">
-                                <div className={classes.media}>
-                                    <label>City</label>
-                                    <span>{user.location && user.location.city ? user.location.city : <Link to='/profile/edit-profile'>add a city</Link>}</span>
-                                </div>
-                            </div>
+                            {user.location && user.location.country &&
+                                <div className="col-lg-6 col-md-6 col-sm-3">
+                                    <div className={classes.media}>
+                                        <label htmlFor="country">Country</label>
+                                        <span>{user.location.country}</span>
+                                    </div>
+                                </div>}
+                            {user.location && user.location.city &&
+                                <div className="col-lg-6 col-md-6 col-sm-4">
+                                    <div className={classes.media}>
+                                        <label>City</label>
+                                        <span>{user.location.city}</span>
+                                    </div>
+                                </div>}
                             <div className="col-lg-6 col-md-6 col-sm-6">
                                 <div className={classes.media}>
                                     <label htmlFor="email">E-mail</label>
@@ -143,12 +155,12 @@ const UserInfo = (props) => {
             {/*<br/>*/}
         </div>
         {/* } */}
-        {user && !user.bio &&
+        {/* {(!user.location || !user.bio || !user.specialization) && 
             <div className={`container  ${classes.profile}`} style={{ marginBottom: '20px', marginTop: '20px' }}>
                 <div className='row align-items-center flex-row'>
                     <p>It seems that your account is new,<Link to='/profile/edit-profile'>complete your account now!</Link></p>
                 </div>
-            </div>}
+            </div>} */}
     </section>;
 }
 export default UserInfo;

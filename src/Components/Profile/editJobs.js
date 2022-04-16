@@ -18,10 +18,12 @@ const EditJob = (props) => {
     const enteredCountry = useRef();
     const enteredPosition = useRef();
     const enteredDuration = useRef();
-    const [country, setCountry] = useState();
+    const [country, setCountry] = useState('');
 
     useEffect(() => {
 
+        // console.log(props.job.job.location.country);
+        setCountry(props.job && props.job.job ? props.job.job.location.country : null);
         enteredDuration.current.value = props.job && props.job.job ?
             [moment(new Date(props.job.job.duration.start).toISOString().split('T')[0], dateFormat),
             moment(new Date(props.job.job.duration.end).toISOString().split('T')[0], dateFormat)] : null;
@@ -387,7 +389,7 @@ const EditJob = (props) => {
                     <option value="Zaire">Zaire</option>
                     <option value="Zambia">Zambia</option>
                     <option value="Zimbabwe">Zimbabwe</option>
-                
+
                 </Select>
                 {/* <input ref={enteredCountry} className={classes.customInput} type='text' placeholder={'country'}
                     defaultValue={props.job && props.job.job ? props.job.job.location.country : null} /> */}

@@ -4,7 +4,7 @@ import { useContext, useEffect, useState } from "react";
 import ApplicationContext from "../../store/application-context";
 import './applications.module.css';
 import AppCard from "../../Components/Application/AppCard";
-import { Input, Select } from "antd";
+import { Input, Select, Spin } from "antd";
 import UserContext from '../../store/user-context';
 import { Button } from 'antd';
 import { useHistory } from 'react-router-dom';
@@ -19,9 +19,11 @@ const Applications = () => {
     const user = userCtx.user;
     const appCtx = useContext(ApplicationContext);
     const [applications, setApplications] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
 
+        // setIsLoading(true);
         if (user._id) {
             // let field = ''
             let url = "http://localhost:2000/forms?search=owner:" + user._id;
@@ -39,22 +41,25 @@ const Applications = () => {
             })
                 .then(res => {
                     // console.log(res.data.token)
-                    if (res.status === 200) {
+                    setIsLoading(false);
 
+                    if (res.status === 200) {
                         setApplications(res.data);
                         if (user.userType != 'Business') {
                             let forms = [];
-                            // console.log(user.userType)
+                            console.log(res.data)
                             res.data.forEach(d => {
                                 forms.push(d.form);
                             })
                             console.log(forms)
                         }
                     } else {
+                        setIsLoading(false);
                         throw new Error('wrong');
                     }
                 }).catch(err => {
-                    // console.log(err)
+                    setIsLoading(false);
+                    console.log(err)
                 });
         }
 
@@ -85,7 +90,7 @@ const Applications = () => {
                 {/* <div className={'row'} style={{ border: 'solid', marginBottom: '' }} > */}
                 {/* <div> */}
                 <Button className={` ${classes['custom-btn']}`} //style={{ maxWidth: '100%', marginBottom: '' }}
-                    onClick={() => history.push('/applications/newApp')}
+                    onClick={() => history.push('/applications/app')}
                     type='button'>Add a new application</Button>
                 {/* </div> */}
                 {/* </div> */}
@@ -108,11 +113,14 @@ const Applications = () => {
                 </Select>
             </div>
         </div>
-        <div className={`container ${classes.cardsGroup}`} >
-            {/* {applications.length > 0 && applications}
+        {/* <Spin loading={isLoading}> */}
+
+            <div className={`container ${classes.cardsGroup}`} >
+                {/* {applications.length > 0 && applications}
             {applications.length == 0 && <p><b>No applications found.</b></p>} */}
-            {content}
-        </div>
+                {content}
+            </div>
+        {/* </Spin> */}
     </>
 }
 

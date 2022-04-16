@@ -93,7 +93,7 @@ const Login = () => {
                         iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
                     />
                     {error && <p style={{color: 'red'}}>{error}</p>}
-                    <Checkbox className={classes.checkbox}>Remember me</Checkbox>
+                    {/* <Checkbox className={classes.checkbox}>Remember me</Checkbox> */}
                 </div>
                 <div className={classes.action}>
                     <Button loading={isLoading} disabled={!isFormValid} className={classes.btn} shape="round" onClick={loginHandler}>

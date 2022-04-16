@@ -49,7 +49,11 @@ function App() {
                     <Applications />
                 </Route>
                 }
-                {authCxt.isLoggedIn && <Route path='/applications/newApp' exact>
+                {authCxt.isLoggedIn && <Route path='/applications/app' exact>
+                    <NewApplication />
+                </Route>
+                }
+                  {authCxt.isLoggedIn && <Route path='/applications/app/:id' exact>
                     <NewApplication />
                 </Route>
                 }

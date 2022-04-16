@@ -12,11 +12,9 @@ import { ApplicationContextProvider } from "./store/application-context";
 ReactDOM.render(
     <AuthContextProvider>
         <UserContextProvider>
-            <ApplicationContextProvider>
                 <BrowserRouter>
                     <App />
                 </BrowserRouter>
-            </ApplicationContextProvider>
         </UserContextProvider>
     </AuthContextProvider>
     ,

@@ -117,6 +117,7 @@ const EditProfile = () => {
     const uploadImageHandler = ({ fileList }) => {
 
         let formData = new FormData();
+        console.log(fileList[0].originFileObj)
         formData.append('avatar', fileList[0].originFileObj);
 
 
@@ -128,11 +129,16 @@ const EditProfile = () => {
         })
             .then(res => {
 
-                axios.get(`http://localhost:2000/users/${user._id}/avatar`).then(data => {
+                axios.get(`http://localhost:2000/users/${user._id}/avatar`, {
+                    headers: {
+                        'content-type': 'multipart/form-data',  
+                        'Authorization': 'Bearer ' + token
+                    }
+                }).then(data => {
 
                     if (!data)
                         throw new Error('Wrong')
-                    // console.log(data);
+                    console.log(data);
                     setImage(data.data)
                     // localStorage.setItem('img', data.data);
 
