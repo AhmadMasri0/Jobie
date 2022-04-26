@@ -46,6 +46,8 @@ const FeedBack = (props) => {
             feedbacker
         }
 
+        const t = [...feedbacks, feedback];
+        console.log(feedback)
         axios.post(`http://localhost:2000/feedback`, feedback, {
 
             headers: {
@@ -58,7 +60,8 @@ const FeedBack = (props) => {
 
             setText(null)
             setRate(2)
-            console.log(data)
+            setFeedbacks(t);
+            // console.log(data)
         }).catch(err => console.log(err))
     }
     let content;

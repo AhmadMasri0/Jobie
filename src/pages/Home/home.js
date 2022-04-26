@@ -11,17 +11,36 @@ const Home = props => {
 
     const userCtx = useContext(UserContext);
     const [filter, setFilter] = useState('applications');
-    const [value, setValue] = useState('');
-    const [shownData, setShownData] = useState([]);
+    // const [value, setValue] = useState('');
+    // const [shownData, setShownData] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [applications, setApplication] = useState([]);
     const [users, setUsers] = useState([]);
+    const [title, setTitle] = useState(null);
+    const [place, setPlace] = useState(null);
+    const [profession, setProfession] = useState(null);
+
     useEffect(() => {
         setIsLoading(true);
         // console.log('entered')
-        let url = "http://localhost:2000/forms"
+        let url = "http://localhost:2000/forms?"
         if (filter !== 'applications')
-            url = "http://localhost:2000/users?search=userType:" + filter;
+            url = "http://localhost:2000/users?userType=" + filter + '&';
+
+
+        if (title && title !== '') {
+            if (filter === 'applications')
+                url = url + 'title=' + title + '&';
+            else
+                url = url + 'name=' + title + '&';
+        }
+        if (profession && profession !== '') {
+            url = url + 'specialization=' + profession + '&';
+        }
+        if (place && place !== '') {
+            url = url + 'place=' + place + '&';
+        }
+        // console.log(url)
         axios.get(url, {
             headers: {
                 'Content-Type': 'application/json',
@@ -48,13 +67,13 @@ const Home = props => {
                 // console.log(err)
             });
 
-    }, [filter]);
+    }, [filter, title, place, profession]);
 
-    const searchValueHandler = (e) => {
-        const v = e.target.value;
-        setValue(v);
-        // console.log(value)
-    }
+    // const searchValueHandler = (e) => {
+    //     const v = e.target.value;
+    //     setValue(v);
+    //     // console.log(value)
+    // }
     const filterChangeHandler = (e) => {
         setFilter(e)
     }
@@ -71,10 +90,10 @@ const Home = props => {
         }
         else if (applications)
             content = (applications.map((app) => {
-                if (app && !app[filter])
-                    return <AppCard key={app._id} app={app} />
-                if (app[filter].toLowerCase().toString().includes(value.toLowerCase().toString()))
-                    return <AppCard key={app._id} app={app} />
+                // if (app && !app[filter])
+                return <AppCard key={app._id} app={app} />
+                // if (app[filter].toLowerCase().toString().includes(value.toLowerCase().toString()))
+                // return <AppCard key={app._id} app={app} />
             }));
     } else {
         if (users && !users.length) {
@@ -86,37 +105,38 @@ const Home = props => {
                 </div>
         } else if (users) {
             content = (users.map((user) => {
-                if (user && !user[filter])
-                    return <UserCard key={user._id} user={user} />
-                if (user[filter].toLowerCase().toString().includes(value.toLowerCase().toString()))
-                    return <UserCard key={user._id} user={user} />
+                // if (user && !user[filter])
+                return <UserCard key={user._id} user={user} />
+                // if (user[filter].toLowerCase().toString().includes(value.toLowerCase().toString()))
+                // return <UserCard key={user._id} user={user} />
             }));
         }
 
     }
+
     return <>
         <div className={`container ${classes.cardsGroup} d-flex justify-content-end`} style={{ border: '', marginBottom: '30px' }}>
             <div className={'row'} style={{ border: '', marginBottom: '10px' }} >
                 <div className={'col-sm-6 col-lg-3 col-md-3  text-center'}>
                     <p style={{ textAlign: 'center', marginBottom: '-1px' }}>Title</p>
                     {/*<br/>*/}
-                    <Input defaultValue={value} placeholder={'some title'}
-                        style={{ width: '150px', borderRadius: '10px' }}
-                        onChange={searchValueHandler} />
+                    <Input value={title} placeholder={'some title'} 
+                        style={{ width: '150px', borderRadius: '10px', backgroundColor: '' }}
+                        onChange={(e) => setTitle(e.target.value)} />
                 </div>
                 <div className={'col-sm-6 col-lg-3 col-md-3  text-center'}>
                     <p style={{ textAlign: 'center', marginBottom: '-1px' }}>Profession</p>
                     {/*<br/>*/}
-                    <Input defaultValue={value} placeholder={'some profession'}
+                    <Input value={profession} placeholder={'some profession'}
                         style={{ width: '150px', borderRadius: '10px' }}
-                        onChange={searchValueHandler} />
+                        onChange={(e) => setProfession(e.target.value)} />
                 </div>
                 <div className={'col-sm-6 col-lg-3 col-md-3  text-center'}>
                     <p style={{ textAlign: 'center', marginBottom: '-1px' }}>Place</p>
                     {/*<br/>*/}
-                    <Input defaultValue={value} placeholder={'some place'}
+                    <Input value={place} placeholder={'some place'}
                         style={{ width: '150px', borderRadius: '10px' }}
-                        onChange={searchValueHandler} />
+                        onChange={(e) => setPlace(e.target.value)} />
                 </div>
                 <div className={'col-sm-6 col-lg-3 col-md-3  text-center'}>
                     <p style={{ textAlign: 'center', marginBottom: '-1px' }}>Searching for?</p>

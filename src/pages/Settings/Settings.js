@@ -40,7 +40,9 @@ const Settings = (props) => {
         //     console.log('f' + birthDate);
 
         // }();
-    }, [userCtx])
+    }, [userCtx]);
+
+    
     return <div className={`container container-fluid ${classes.group}`}>
         <Divider orientation={"center"}><b>Settings</b></Divider>
         <Phones phones={phones} />

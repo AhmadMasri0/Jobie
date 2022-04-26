@@ -5,8 +5,10 @@
     left: 20% !important;
     height: 80%;
     background-color: #cbd3e7;
+    /* background-color: white; */
     border-radius: 20px;
-    background-image: linear-gradient( #E0E1DD, rgba(34, 67, 177, 0.65));
+
+    /* background-image: linear-gradient( #E0E1DD, rgba(34, 67, 177, 0.65)); */
     background-repeat: no-repeat;
     background-size: 100% 100%;
     z-index: 200;

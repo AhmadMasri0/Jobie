@@ -56,14 +56,13 @@ input::placeholder{
 .action button, .btn {
     font: inherit;
     padding: 0.2rem 1.5rem;
-    color: #15275c !important;
-    background-color: #ffffff !important;
+    color: #ffffff !important;
+    background-color: #0E2882 !important; 
 }
 
 .action button:hover, .btn {
-    color: rgba(14, 40, 130, 0.85);
     color: #ffffff !important;
-    background-color: #15275c !important;
+    background-color: hsl(224, 24%, 44%) !important;
 }
 
 span a {
@@ -109,7 +108,8 @@ input:disabled {
 
 .img {
     width: 100% !important;
-    heigth: 50% !important;
+    /* height: 60% !important; */
+    /* max-height: 100% !important; */
     margin-left: 23%;
     margin-top: 20%;
 }

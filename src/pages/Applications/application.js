@@ -1,13 +1,10 @@
 import { useParams } from 'react-router-dom'
 import classes from "./applications.module.css";
 import { useContext, useEffect, useState } from "react";
-import ApplicationContext from "../../store/application-context";
-import { Divider, Spin } from "antd";
+import { Divider } from "antd";
 import { Button } from 'antd';
-import AuthContext from '../../store/auth-context';
 import UserContext from '../../store/user-context';
 import axios from 'axios';
-import Skills from '../../Components/Profile/Skills';
 import { useHistory } from 'react-router-dom';
 
 const Application = () => {
@@ -20,7 +17,8 @@ const Application = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [isLoading1, setIsLoading1] = useState(false);
     const [isEditor, setIsEditor] = useState(false);
-    // console.log(param)
+
+    // console.log(user)
 
     useEffect(() => {
         setIsLoading(true);
@@ -35,8 +33,10 @@ const Application = () => {
                 // console.log(res.data)
                 if (res.status === 200) {
 
-                    setApplication(res.data[0]);
-                    console.log(res.data)
+                    const t = res.data.value;
+                    t.submitters = res.data.submitters;
+                    setApplication(t);
+                    // console.log(t)
                     setIsLoading(false);
                 } else {
                     throw new Error('wrong');
@@ -48,15 +48,15 @@ const Application = () => {
     }, []);
 
     useEffect(() => {
-        console.log(application.owner === user._id)
+        // console.log(application.owner === user._id)
         if (application.owner === user._id)
             setIsEditor(true);
+        else
+            setIsEditor(false);
     }, [application])
     const applyingHandler = () => {
-        // Skills
 
-        console.log(user)
-        if (user) {
+        if (user && !(Object.keys(user).length === 0 && user.constructor === Object)) {
             const sentResponse = {
                 owner: user._id,
                 form: application._id,
@@ -66,9 +66,11 @@ const Application = () => {
                 phone: user.phone,
                 specialization: user.specialization,
                 location: user.location,
-                skills: user.skills
+                skills: user.skills,
+                field: user.specialization
             };
             setIsLoading(true);
+            // console.log(sentResponse)
             axios.post(`http://localhost:2000/response`, sentResponse, {
                 headers: {
                     'Content-Type': 'application/json',
@@ -90,7 +92,7 @@ const Application = () => {
                 });
             // console.log(sentResponse)
         } else {
-            history.push('/login')
+            history.push('/applications/applying/' + param.appId)
         }
     }
 
@@ -123,8 +125,8 @@ const Application = () => {
     return <div>
         {isEditor && <div className={`container ${classes.cardsGroup}`} >
             <Button loading={isLoading1} disabled={!application.submitters} className={`float-start ${classes['custom-btn']}`}
-                style={{ marginLeft: '10px' }}
-                onClick={deleteApp} type='button'>Submitters: {application.submitters}</Button>
+                style={{ marginLeft: '10px' }} onClick={() => history.push('/responses/' + application._id)}
+                type='button'>Submitters: {application.submitters}</Button>
             <Button loading={isLoading1} className={`float-end ${classes['custom-btn']}`} style={{ marginLeft: '10px' }}
                 onClick={deleteApp} type='button'>Delete the application</Button>
             {/* <br /> */}
@@ -132,7 +134,7 @@ const Application = () => {
                 onClick={() => history.push('/applications/app/' + param.appId)} type='button'>Update the application</Button>
             <br />
         </div>}
-        <div className={`container ${classes.cardsGroup}`} style={{ backgroundColor: '#FFFFFFBA' }}>
+        <div className={`container ${classes.cardsGroup}`} style={{ backgroundColor: '#FFFFFFBA', border: 'solid #0E2882' }}>
 
             <div className={'d-flex justify-content-lg-center justify-content-md-start ms-md-4 me-sm-5 justify-content-sm-center'}>
                 <h3>
@@ -181,6 +183,12 @@ const Application = () => {
                     <label className={'text-lg-center'}>Job type</label>
                     <span style={{ marginLeft: '5px' }}>
                         {application.jobType}
+                    </span>
+                </div>
+                <div className={'col-lg-4 col-md-6 col-sm-12'}>
+                    <label className={'text-lg-center'}>Job field</label>
+                    <span style={{ marginLeft: '5px' }}>
+                        {application.field}
                     </span>
                 </div>
                 <div className={'col-lg-4 col-md-6 col-sm-12'}>

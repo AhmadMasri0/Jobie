@@ -1,9 +1,11 @@
 .navBar {
-    background-color: rgba(14, 40, 130, 0.85);;
+    background-color: #0E2882
+     /* rgba(14, 40, 130, 0.85);; */
 
 }
 .img{
-    width: 70px;
-    height: 40px;
+    width: 100px !important;
+    max-width: 100%;
+    height: 60px;
 }
 

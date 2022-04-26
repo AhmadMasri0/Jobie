@@ -1,6 +1,7 @@
-
 img {
     max-width: 100%;
+    width: 100%;
+    display: flex;
     vertical-align: middle;
     border-style: none;
 }
@@ -19,11 +20,13 @@ img {
     textarea {
         width: 60% !important;
     }
+
     .group {
         text-align: center;
     }
+
     label {
-        text-align: center!important;
+        text-align: center !important;
     }
 }
 
@@ -43,7 +46,7 @@ img {
 .about-avatar {
     width: 30%;
     border: 0 solid;
-    margin-left: 37%;
+    margin-left: 35%;
     margin-top: 5%;
     border-radius: 50%;
     overflow: hidden;
@@ -55,7 +58,7 @@ img {
 
 .span {
     margin-bottom: 30px;
-    margin-left: 47%;
+    margin-left: 45%;
     cursor: pointer;
 }
 
@@ -65,14 +68,20 @@ img {
 
 @media (min-width: 992px) {
 
-.input {
-    width: 30%!important
+
+
+    .input {
+        width: 30% !important
+    }
+
 }
-    
-}
+
 @media (max-width: 991px) {
 
-    label, textarea, input, .custom-btn {
+    label,
+    textarea,
+    input,
+    .custom-btn {
         margin: 10px;
     }
 
@@ -92,8 +101,8 @@ img {
 }
 
 .custom-btn {
-    color: #15275c !important;
-    background-color: #ffffff !important;
+    color: #ffffff !important;
+    background-color: #0E2882 !important; 
     width: 50%;
     border: 0 solid !important;
     margin-bottom: -20px !important;
@@ -104,9 +113,12 @@ img {
 
 .custom-btn:hover {
     color: #ffffff !important;
-    background-color: #15275c !important;
+    background-color: hsl(224, 24%, 44%) !important;
 }
 
+.customInput{
+    border: solid 0.5 #0E2882;
+}
 
 label {
     text-align: left;
@@ -123,12 +135,13 @@ textarea {
     border: 0 !important;
 }
 
-input, .input {
+input,
+.input {
     /*align-content: flex-start;*/
     margin-bottom: 5%;
     text-align: center;
     border-radius: 5px;
-    border: 0;
+    /* border: 0; */
 }
 
 .input {
@@ -136,14 +149,20 @@ input, .input {
 
 }
 
+.textarea textarea{
+    border: solid 0.9px #0E2882!important
+}
+
 .group {
     /*border: 1px solid;*/
     /*text-align: center;*/
+    border: solid #0E2882;
     padding: 5% 2%;
     border-radius: 20px;
     background-color: rgba(255, 255, 255, 0.73);
     margin-bottom: 20px;
 }
+
 .ant-image-preview-operations {
     display: none !important;
 }

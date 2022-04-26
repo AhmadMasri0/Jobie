@@ -69,7 +69,7 @@ const Login = () => {
     }
     return <div className={`row ${classes.main}`}>
         <div className={`col-lg-4 col-md-6 col-sm-12 col-xs-12 ${classes.leftSide}`}>
-            <Image className={`${classes.img}`} src={require('../../images/jobie.png')} />
+            <Image className={`${classes.img}`} src={require('../../images/Jobie5.png')} />
         </div>
         <div className={`col-lg-8 col-md-6 col-sm-12 col-xs-12${classes.rightSide}`}>
             <form className={classes.form} onSubmit={submitHandler}>

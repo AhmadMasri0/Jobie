@@ -1,12 +1,10 @@
 import classes from "./edit-profile.module.css";
 import { Container } from "react-bootstrap";
 import { Button, Select } from "antd";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import UserContext from "../../store/user-context";
 import { useHistory } from 'react-router-dom';
 import { Radio, Space, Upload, Spin } from "antd";
-import storage from "../../firebase";
-import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import TextArea from "antd/es/input/TextArea";
 import axios from "axios";
 
@@ -15,31 +13,48 @@ const EditProfile = () => {
 
     const history = useHistory();
     const [isLoading, setIsLoading] = useState(false);
-    const [visible, setVisible] = useState(false);
     const userCtx = useContext(UserContext);
     const [user, setUser] = useState(userCtx.user);
-    const [name, setName] = useState();
-    const [token, setToken] = useState();
-    const [gender, setGender] = useState();
-    const [city, setCity] = useState();
-    const [country, setCountry] = useState();
-    const [bio, setBio] = useState();
-    const [profession, setProfession] = useState();
+    const [name, setName] = useState(user.name);
+    const token = userCtx.token;
+    const [gender, setGender] = useState(user.gender);
+    const [city, setCity] = useState(user.location ? user.location.city : '');
+    const [country, setCountry] = useState(user.location ? user.location.country : '');
+    const [bio, setBio] = useState(user.bio);
+    const [profession, setProfession] = useState(user.specialization);
     const [image, setImage] = useState();
 
-    // const imageBuffer = localStorage.getItem('img') ? localStorage.getItem('img').toString('base64') : null;
-    // useEffect(() => {
-    //     const settingName = (u) => {
-    //         setName(u.name);
-    //     }
-    //     setUser(userCtx.user);
-    //     return function settingName() {
-    //         setName(user.name)
-    //     }
-    // })
-    console.log('f',image)
+    useEffect(() => {
+        setUser(userCtx.user)
+
+        return function f(){
+            setBio(user.bio);
+            setCity(user.location ? user.location.city : '');
+            setCountry(user.location ? user.location.country : '');
+            setGender(user.gender);
+            setProfession(user.specialization);
+            setName(user.name);
+
+        }();
+    }, [userCtx.user, user])
+
+
+    useEffect(() => {
+
+        axios.get(`http://localhost:2000/users/${user._id}/avatar`, {
+            headers: {
+                'content-type': 'multipart/form-data',
+                'Authorization': 'Bearer ' + token
+            }
+        }).then(data => {
+            if (!data)
+                throw new Error('Wrong')
+            setImage(data.data)
+
+        }).catch(err => console.log(err))
+    }, [user])
+
     const submitHandler = () => {
-        // console.log(token)
         setIsLoading(true);
 
         const sentData = {
@@ -52,15 +67,13 @@ const EditProfile = () => {
         if (user.userType !== 'Business')
             sentData.gender = gender;
 
-        console.log(token)
         axios.patch(`http://localhost:2000/users/me`, sentData, {
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + userCtx.token
+                'Authorization': 'Bearer ' + token
             }
         })
             .then(res => {
-                // console.log('----------------',res.data)
                 setIsLoading(false)
 
                 if (res.status === 200) {
@@ -76,40 +89,6 @@ const EditProfile = () => {
 
 
     }
-    useEffect(() => {
-        const id = localStorage.getItem('id');
-        // console.log(id);
-        axios.get(`http://localhost:2000/users/${id}`, {
-            headers: {
-                'content-type': 'multipart/form-data'
-            }
-        }).then(data => {
-
-            if (!data)
-                throw new Error('Wrong')
-            setUser(data.data);
-            setToken(userCtx.token);
-            setName(data.data.name);
-            setImage(data.data.image)
-            setGender(data.data ? data.data.gender : 'male');
-            setCity(data.data && data.data.location ? data.data.location.city : null)
-            setCountry(data.data && data.data.location ? data.data.location.country : null)
-            setProfession(data.data ? data.data.specialization : null);
-            // console.log(data.data)
-            setBio(data.data ? data.data.bio : null);
-
-            // const base64String = btoa(String.fromCharCode(...new Uint8Array(data.data.image)));
-            // setImage(base64String);
-            // console.log(data.data);
-        }).catch(err => console.log(err))
-        // user = userCtx.user;
-
-        return function fal() {
-            // console.log(gender)
-        }()
-
-    }, [])
-
     const cancelHandler = () => {
         history.push('/profile');
     }
@@ -117,13 +96,10 @@ const EditProfile = () => {
     const uploadImageHandler = ({ fileList }) => {
 
         let formData = new FormData();
-        console.log(fileList[0].originFileObj)
         formData.append('avatar', fileList[0].originFileObj);
-
-
         axios.post(`http://localhost:2000/users/me/avatar`, formData, {
             headers: {
-                'content-type': 'multipart/form-data',  
+                'content-type': 'multipart/form-data',
                 'Authorization': 'Bearer ' + token
             }
         })
@@ -131,84 +107,44 @@ const EditProfile = () => {
 
                 axios.get(`http://localhost:2000/users/${user._id}/avatar`, {
                     headers: {
-                        'content-type': 'multipart/form-data',  
+                        'content-type': 'multipart/form-data',
                         'Authorization': 'Bearer ' + token
                     }
                 }).then(data => {
 
                     if (!data)
                         throw new Error('Wrong')
-                    console.log(data);
                     setImage(data.data)
-                    // localStorage.setItem('img', data.data);
 
                 }).catch(err => console.log(err))
             })
             .catch(err => console.log(err));
-        // setImage(fileList);
-        // const file = event.target.value;
-        // console.log(fileList[0].originFileObj);
-        // handlerUpload(file);
     }
 
-    const handlerUpload = (file) => {
-        const metadata = {
-            contentType: 'image/png'
-        };
-        if (!file)
-            return;
-        const storageRef = ref(storage, 'images/' + file.name);
-        const uploadTask = uploadBytesResumable(storageRef, file, metadata);
-        uploadTask.on('state_changed', (snapshot => {
-            const prog = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-            // console.log(prog);
-        }, err => {
-            // console.log(err)
-        }, () => {
-            getDownloadURL(uploadTask.snapshot.ref)
-                .then(url => console.log(url))
-        }))
-    }
 
-    // image ? `data:image/png;base64,${image.toString('base64')}` :
-    const imgSrc =  image ? `data:image/png;base64,${image.toString('base64')}` : 'https://media.istockphoto.com/vectors/profile-placeholder-image-gray-silhouette-no-photo-vector-id1016744004?k=20&m=1016744004&s=612x612&w=0&h=Z4W8y-2T0W-mQM-Sxt41CGS16bByUo4efOIJuyNBHgI='
+    const imgSrc = image ? `data:image/png;base64,${image}` : 'https://media.istockphoto.com/vectors/profile-placeholder-image-gray-silhouette-no-photo-vector-id1016744004?k=20&m=1016744004&s=612x612&w=0&h=Z4W8y-2T0W-mQM-Sxt41CGS16bByUo4efOIJuyNBHgI='
 
-    // console.log(typeof image)
     return <div className='container'>
-        <div className={`row ${classes.firstRow} justify-content-md-center`}>
+        <div className={`row ${classes.firstRow} justify-content-md`}>
             <div className="col-lg-12 col-md-12 col-sm-12">
-                <div className={classes['about-avatar']} onClick={() => setVisible(true)}>
-                    <img
-                        //    src={`data:image/png;base64,${image.toString('base64')}` }
-                        src={imgSrc}
-                        // onClick={() => setVisible(true)} title=""
-                        alt={name}
-                    />
+                <div className={classes['about-avatar']}>
+                    <img src={imgSrc} alt={name} />
                 </div>
-                <Upload
-                    maxCount={1}
-                    setName="avatar"
-                    showUploadList={false}
-                    action={'http://localhost:2000/users/me/avatar'}
-                    listType={'picture'}
-                    className={classes.span}
-                    customRequest={uploadImageHandler}
-                    accept={'image/*'}
-                    beforeUpload={() => false}
-                    onChange={uploadImageHandler}
-                // onChange={({fileList}) => setImage(fileList[0].originFileObj)}
-                >
+                <Upload maxCount={1} setName="avatar" showUploadList={false} action={'http://localhost:2000/users/me/avatar'}
+                    listType={'picture'} className={classes.span} customRequest={uploadImageHandler} accept={'image/*'}
+                    beforeUpload={() => false} onChange={uploadImageHandler}  >
                     Edit profile picture
                 </Upload>
             </div>
         </div>
-        <Spin spinning={isLoading}>
+        <Spin spinning={isLoading} >
             <Container className={`container-fluid ${classes.group}`}>
                 <div className={`row`}>
-                    <div className={`${user && user.userType === 'Business' ? 'col-lg-12 col-md-12' : 'col-lg-6 col-md-6'}justify-content   col-sm-12 col-xs-12`} style={{ border: '' }} >
+                    <div className={`${user && user.userType === 'Business' ? 'col-lg-12 col-md-12' :
+                        'col-lg-6 col-md-6'}justify-content col-sm-12 col-xs-12`} >
                         <div style={user && user.userType === 'Business' ? { marginLeft: '25%' } : {}}>
                             <label htmlFor="username" className={classes.input}>Username</label>
-                            <input type="text" placeholder={'Will Smith'} onChange={e => setName(e.target.value)}  //className={`${user && user.type === 'Business' ? 'float-center' : 'justify-content'}`}
+                            <input type="text" placeholder={'Will Smith'} onChange={e => setName(e.target.value)}  className={classes.customInput}
                                 value={name} />
                         </div>
                     </div>
@@ -229,13 +165,11 @@ const EditProfile = () => {
                 <div className='row'>
                     <div className="col-lg-6 col-md-6 col-sm-12 justify-content col-xs-12">
                         <label htmlFor="city" className={classes.input}>City</label>
-                        <input type="text" placeholder={'Nablus'} className={classes.input}
+                        <input type="text" placeholder={'Nablus'} className={`${classes.input} ${classes.customInput}`}
                             onChange={e => setCity(e.target.value)} value={city} />
                     </div>
                     <div className="col-lg-6 col-md-6 col-sm-12 justify-content col-xs-12">
                         <label htmlFor="country" className={classes.input}>Country</label>
-                        {/* <input type="text" placeholder={'Palestine'} className={classes.input}
-                            onChange={e => setCountry(e.target.value)} value={country} /> */}
                         <Select showSearch onChange={(e) => setCountry(e)} className={classes.input} placeholder={'country'}
                             value={country}
                             id="country" name="country">
@@ -494,13 +428,13 @@ const EditProfile = () => {
                 <div className='row'>
                     <div className="col-lg-6 col-md-6 col-sm-12 justify-content col-xs-12">
                         <label htmlFor="profession" className={classes.input}>Profession</label>
-                        <input type="text" onChange={e => setProfession(e.target.value)} className={classes.input}
+                        <input type="text" onChange={e => setProfession(e.target.value)} className={`${classes.input} ${classes.customInput}`}
                             placeholder={'Developer'} value={profession} />
                     </div>
                     <div className="col-lg-6 col-md-6 col-sm-12 justify-content col-xs-12">
                         <label htmlFor="bio" className={classes.input}>Bio</label>
-                        <TextArea showCount maxLength={300} style={{ height: 120, width: '75%' }} //className={classes.input}
-                            onChange={(e) => setBio(e.currentTarget.value)} className={'float-end '}
+                        <TextArea showCount maxLength={300} style={{ height: 120, width: '75%' }}  className={`float-end ${classes.textarea}`}
+                            onChange={(e) => setBio(e.currentTarget.value)} 
                             name="bio" id="" placeholder="talk briefly about yourself" value={bio} />
                     </div>
                 </div>

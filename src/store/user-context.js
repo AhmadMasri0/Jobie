@@ -18,18 +18,12 @@ export const UserContextProvider = props => {
 
     useEffect(() => {
         const id = localStorage.getItem('id');
-        console.log('user')
         if (id)
             axios.get(`http://localhost:2000/users/${id}`).then(data => {
                 if (!data)
                     throw new Error('Wrong')
 
-                // if (!data.data.tokens)
-                    // throw new Error();
-
                 setUser(data.data);
-                // console.log("img", data.data );
-
             }).catch(err => {
                 authCtx.logout();
             })

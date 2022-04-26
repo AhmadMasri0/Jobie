@@ -1,10 +1,9 @@
 import 'antd/dist/antd.css';
 import classes from './applications.module.css';
 import { useContext, useEffect, useState } from "react";
-import ApplicationContext from "../../store/application-context";
 import './applications.module.css';
 import AppCard from "../../Components/Application/AppCard";
-import { Input, Select, Spin } from "antd";
+import { Input, Select, Skeleton, Spin } from "antd";
 import UserContext from '../../store/user-context';
 import { Button } from 'antd';
 import { useHistory } from 'react-router-dom';
@@ -17,22 +16,22 @@ const Applications = () => {
     const history = useHistory();
     const userCtx = useContext(UserContext);
     const user = userCtx.user;
-    const appCtx = useContext(ApplicationContext);
     const [applications, setApplications] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
 
-        // setIsLoading(true);
+        setIsLoading(true);
         if (user._id) {
-            // let field = ''
-            let url = "http://localhost:2000/forms?search=owner:" + user._id;
+            let url = "http://localhost:2000/forms?owner=" + user._id + '&';
             // console.log(userCtx.token)
             if (user.userType !== 'Business')
-                url = "http://localhost:2000/response/me" + '';
+                url = "http://localhost:2000/response/me?" + '';
 
 
-            // console.log(url)
+            if (filter) {
+                url = url + `${filter}=${value}`;
+            }
             axios.get(url, {
                 headers: {
                     'Content-Type': 'application/json',
@@ -40,19 +39,19 @@ const Applications = () => {
                 }
             })
                 .then(res => {
-                    // console.log(res.data.token)
                     setIsLoading(false);
 
                     if (res.status === 200) {
-                        setApplications(res.data);
+                        let forms = [];
+
+                        // console.log(res.data)
                         if (user.userType != 'Business') {
-                            let forms = [];
-                            console.log(res.data)
-                            res.data.forEach(d => {
-                                forms.push(d.form);
-                            })
-                            console.log(forms)
-                        }
+                            res.data.forEach((f) => {
+                                forms.push(f.form);
+                            });
+                            setApplications(forms)
+                        } else setApplications(res.data);
+
                     } else {
                         setIsLoading(false);
                         throw new Error('wrong');
@@ -63,37 +62,37 @@ const Applications = () => {
                 });
         }
 
-    }, [user])
+    }, [user, value])
     const searchValueHandler = (e) => {
         const v = e.target.value;
         setValue(v);
-        // console.log(value)
     }
     const filterChangeHandler = (e) => {
         setFilter(e)
     }
-    if (!appCtx.length) {
-        return <p><b>No applications found.</b></p>
-    }
 
-    let content = (applications.map((app) => {
-        if (!app[filter])
+    let content;
+    if (applications && !applications.length) {
+        content =
+            <div className={'row'} style={{ border: '', marginBottom: '10px' }} >
+                <div className={'col-12  text-center'}>
+                    <p><b>No applications found.</b></p>
+                </div>
+            </div>
+    }
+    else
+        content = (applications.map((app) => {
             return <AppCard key={app._id} app={app} />
-        if (app[filter].toLowerCase().toString().includes(value.toLowerCase().toString()))
-            return <AppCard key={app._id} app={app} />
-    }));
+        }));
 
     return <>
 
         {user && user.userType === 'Business' &&
             <div className={` ${classes.cardsGroup} d-flex justify-content-center`} style={{ border: '', marginBottom: '' }}>
-                {/* <div className={'row'} style={{ border: 'solid', marginBottom: '' }} > */}
-                {/* <div> */}
-                <Button className={` ${classes['custom-btn']}`} //style={{ maxWidth: '100%', marginBottom: '' }}
+
+                <Button className={` ${classes['custom-btn']}`}
                     onClick={() => history.push('/applications/app')}
                     type='button'>Add a new application</Button>
-                {/* </div> */}
-                {/* </div> */}
             </div>
         }
 
@@ -109,18 +108,15 @@ const Applications = () => {
                     <Select.Option value={'location'}>Place</Select.Option>
                     <Select.Option value={'title'}>subject</Select.Option>
                     <Select.Option value={'jobType'}>Job type</Select.Option>
-                    <Select.Option value={'owner'}>business name</Select.Option>
                 </Select>
             </div>
         </div>
-        {/* <Spin loading={isLoading}> */}
 
-            <div className={`container ${classes.cardsGroup}`} >
-                {/* {applications.length > 0 && applications}
-            {applications.length == 0 && <p><b>No applications found.</b></p>} */}
+        <div className={`container ${classes.cardsGroup}`} >
+            <Skeleton loading={isLoading} style={{ color: 'blue' }} active>
                 {content}
-            </div>
-        {/* </Spin> */}
+            </Skeleton>
+        </div>
     </>
 }
 

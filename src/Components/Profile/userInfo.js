@@ -6,102 +6,53 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 
 const UserInfo = (props) => {
-    const userCtx = useContext(UserContext);
     const user = props.user;
     const param = useParams();
     const id = param.userId;
-    const [image, setImage] = useState({})
-    // const [isAllowed, setIsAllowed] = useState(false);
-    const isAllowed = props.isAllowed;
+    const [image, setImage] = useState(props.image)
 
-    // console.log(param);
-
-    // let user = userCtx.user;
+    // console.log(user)
     useEffect(() => {
-
-
-        // console.log(id, userCtx.user._id)
-        // if (!id || id === userCtx.user._id) {
-        //     setIsAllowed(true);
-        //     setUser(userCtx.user);
-        // }
-        // else {
-        // console.log(`http://localhost:2000/users/${userCtx.user._id}/avatar`)
-
-        axios.get(`http://localhost:2000/users/${userCtx.user._id}/avatar`).then(data => {
+        let i = id;
+        if (!id)
+            i = user._id;
+        axios.get(`http://localhost:2000/users/${i}/avatar`).then(data => {
             if (!data)
                 throw new Error('Wrong')
             setImage(data.data)
-            // console.log(data)
-            // setUser(data.data);
-            // setIsAllowed(false);
+            // console.log(data.data)
         }).catch(err => console.log(err))
 
-        // }
-
-    }, [])
-    const [visible, setVisible] = useState(false);
-
-    // console.log(user.data);
-
-    // useEffect(() => {
-    //     const id = JSON.parse(localStorage.getItem('user'))._id;
-    //     axios.get(`http://localhost:2000/users/${id}`).then(data => {
-    //         if (!data)
-    //             throw new Error('Wrong')
-    //         // setName(data.data ? data.data.name : null);
-    //         // setGender(data.data ? data.data.gender : 'male');
-    //         // setCity(data.data && data.data.location ? data.data.location.city : null)
-    //         // setCountry(data.data && data.data.location ? data.data.location.country : null)
-    //         // setProfession(data.data ? data.data.specialization : null);
-    //         // setBio(data.data ? data.data.bio : null);
-
-    //         // userCtx.setCurrentUser(data.data, localStorage.getItem('userToken'))
-    //         // setUser(data.data);
-    //         // console.log(data)
-    //     }).catch(err => console.log(err))
-    // }, [])
-
-    // useEffect(() => {
-    //     console.log(props)
-    //     setUser(userCtx.user)
-    // }, []);
+    }, [user])
 
     let birth, d;
     if (user) {
         birth = new Date(user.dayOfBirth);
         d = birth.getFullYear() + '-' + (birth.getMonth() + 1) + '-' + birth.getUTCDate();
     }
-    // const buf =  Buffer.from(image + '', 'utf-8')
-    // const buffer = new Buffer.from("I'm a string!", 'base64');
-    // console.log(typeof image)
-    // const img = `data:image/jpg;base64,${image.toString('base64')}`;
-    const img = `data:image/jpg;base64,${image.toString('base64')}`;
-    // console.log(birth.getUTCDate());
+
+    let img = `https://media.istockphoto.com/vectors/profile-placeholder-image-gray-silhouette-no-photo-vector-id1016744004?k=20&m=1016744004&s=612x612&w=0&h=Z4W8y-2T0W-mQM-Sxt41CGS16bByUo4efOIJuyNBHgI=`;
+    if (image) {
+
+        img = `data:image/png;base64,${image}`;
+    }
     return <section>
-        {/* {user && user.bio && */}
         <div className={`container  ${classes.profile}`} style={{ marginBottom: '20px', marginTop: '20px' }}>
             <div className='row align-items-center flex-row'>
                 {
                     <div className="col-lg-6">
                         <div className={classes['about-avatar']}>
-                            <img
-                                // src={require(`../../images/${user.image ? user.image : ''}`)}
-                                // src={{ uri: `data:image/png;base64,${image.toString('base64')}` }}
-                                src={`data:image/png;base64,${image.toString('base64')}`}
-                                // src={`https://media.istockphoto.com/vectors/profile-placeholder-image-gray-silhouette-no-photo-vector-id1016744004?k=20&m=1016744004&s=612x612&w=0&h=Z4W8y-2T0W-mQM-Sxt41CGS16bByUo4efOIJuyNBHgI=`}
-                                onClick={() => setVisible(true)} title=""
-                                alt={user.name} />
+                            <img src={img} alt={user.name} />
                         </div>
                         <h3 style={{ marginLeft: '30%' }}>{user.name}</h3>
-                        {<h6 className={`${classes['theme-color']} lead`} style={{ marginLeft: '33%' }}>
-                            <p> {user.specialization ? user.specialization : <Link to='/profile/edit-profile'>add a profession</Link>}</p>
+                        {user.specialization && <h6 className={`${classes['theme-color']} lead`} style={{ marginLeft: '33%' }}>
+                            <p> {user.specialization}</p>
                         </h6>}
                     </div>
                 }
                 <div className="col-lg-6">
                     <div className={classes['about-text']}>
-                        <p><b>{user && user.bio ? user.bio : <Link to='/profile/edit-profile'>add a bio</Link>}</b></p>
+                        {user && user.bio && <p><b> {user.bio} </b></p>}
                         <div className={`row ${classes['about-list']}`}>
                             {user && user.userType !== 'Business' && user.dayOfBirth &&
                                 <div className="col-lg-6 col-md-6 col-sm-3">
@@ -152,15 +103,8 @@ const UserInfo = (props) => {
                     </div>
                 </div>
             </div>
-            {/*<br/>*/}
         </div>
-        {/* } */}
-        {/* {(!user.location || !user.bio || !user.specialization) && 
-            <div className={`container  ${classes.profile}`} style={{ marginBottom: '20px', marginTop: '20px' }}>
-                <div className='row align-items-center flex-row'>
-                    <p>It seems that your account is new,<Link to='/profile/edit-profile'>complete your account now!</Link></p>
-                </div>
-            </div>} */}
+
     </section>;
 }
 export default UserInfo;

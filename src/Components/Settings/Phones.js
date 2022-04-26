@@ -23,6 +23,7 @@ const Phones = props => {
     const [newPhoneType, setNewPhoneType] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
+    // console.log(user.phone)
     useEffect(() => {
         const t = (user && user.phone && user.phone.length > 0) ? user.phone.map(p => p.phoneNum.type) : ['Mobile', 'Fax', 'Home'];
         setItems(t.filter(onlyUnique));
@@ -81,8 +82,8 @@ const Phones = props => {
 
                 if (res.status === 200 || res.ok) {
                     setIsAddingPhoneVisible(false)
-                    HTMLFormControlsCollection.log('dsg')
                     userCtx.setCurrentUser(res.data)
+                    // console.log(res.data)
                     // history.push('/profile');
                 } else {
                     throw new Error('wrong');
@@ -92,14 +93,15 @@ const Phones = props => {
 
                 console.log(err)
             });
+        setIsAddingPhoneVisible(false)
     };
 
     const deletePhoneHandler = (id) => {
 
         setIsLoading(true)
 
-        const sentPhones = user.phone.filter((j) => {
 
+        const sentPhones = user.phone.filter((j) => {
             if ((j._id != id)) {
                 return j;
             }
@@ -179,8 +181,9 @@ const Phones = props => {
                 <label className={` ${classes.phone}`}>
                     {phone.phoneNum && phone.phoneNum.type}:
                 </label>
-                <div style={{ border: '', maxWidth: '50%' }}>
-                    <Phone phone={phone} id={phone._id} isEditing={true} clickHandler={clickHandler} />
+                <div style={{ border: '   border: solid 0.5px #0E2882', maxWidth: '50%' }}>
+                    <Phone phone={phone} id={phone._id} isEditing={true} clickHandler={clickHandler}
+                        style={{ border: 'solid 0.5px #0E2882', borderRadius: '10px' }} />
                     <span style={{ color: 'darkblue', cursor: 'pointer', marginLeft: '2px' }} onClick={() => {
                         deletePhoneHandler(phone._id);
                     }}>Delete</span>

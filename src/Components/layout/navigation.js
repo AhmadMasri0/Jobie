@@ -35,11 +35,11 @@ const Navigation = () => {
                 if (res.status === 200) {
                     userCtx.setCurrentUser(null);
                     authCtx.logout();
-                    history.replace('/login');
                 } else {
                     throw new Error('wrong');
                 }
-            }).catch(err => {
+            }).then(() => history.replace('/login'))
+            .catch(err => {
                 console.log(err)
             });
 
@@ -71,15 +71,15 @@ const Navigation = () => {
         <Container className=''>
             <Navbar.Brand>
                 <NavLink to={'/'} className={`nav-link`} exact>
-                    <Image className={classes.img} src={require('../../images/logo.png')} />
+                    <Image className={classes.img} src={require('../../images/jobie3.png')} />
                 </NavLink>
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse id="responsive-navbar-nav">
                 <Nav className="me-auto">
-                    {isSearchVisible &&
+                    {/* {isSearchVisible &&
                         <Input prefix={<SearchOutlined />} style={{ borderRadius: '20px' }} placeholder={'Search'}
-                            size="small" />}
+                            size="small" />} */}
                 </Nav>
                 <Nav>
                     {isLoggedIn &&

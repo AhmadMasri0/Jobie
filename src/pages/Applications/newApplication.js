@@ -7,9 +7,8 @@ import { useHistory } from "react-router-dom";
 import UserContext from "../../store/user-context";
 import classes from "./applications.module.css";
 import { useParams } from 'react-router-dom'
-
+import "./applications.module.css";
 const dateFormat = 'YYYY-MM-DD';
-
 
 function disabledDate(current) {
     // Can not select days before today and today
@@ -35,6 +34,7 @@ const NewApplication = () => {
     const [country, setCountry] = useState();
     const [email, setEmail] = useState();
     const [phone, setPhone] = useState();
+    const [field, setField] = useState();
     const [addingReq, setAddingReq] = useState(false);
     const [addingDet, setAddingDet] = useState(false);
     const [application, setApplication] = useState({});
@@ -52,10 +52,10 @@ const NewApplication = () => {
                 .then(res => {
 
                     if (res.status === 200) {
-                        // console.log(res.data)
-                        const app = res.data[0];
+                        // console.log(res.data.value)
+                        const app = res.data.value;
                         setRequirements(app.requirements)
-                        setDetails(app.details)
+                        setDetails(app.details || {})
                         setDescription(app.description)
                         setDeadline(app.deadline)
                         setJobType(app.jobType)
@@ -64,6 +64,7 @@ const NewApplication = () => {
                         setCountry(app.location.country)
                         setEmail(app.email)
                         setPhone(app.phone)
+                        setField(app.field)
                     } else {
                         throw new Error('wrong');
                     }
@@ -83,7 +84,8 @@ const NewApplication = () => {
 
     const addingDetailHandler = () => {
         const temp = details;
-        temp[newTitle] = newVale;
+        // console.log(newTitle)
+        temp.newTitle = newVale;
         setDetails(temp);
         setAddingDet(false)
     }
@@ -98,14 +100,15 @@ const NewApplication = () => {
             location: { city, country },
             email,
             phone,
-            details
+            details,
+            field
         }
         if (requirements.length > 0)
             sentForm.requirements = requirements;
 
         if (details && !(Object.keys(details).length === 0 && details.constructor === Object))
             sentForm.details = details;
-        console.log(sentForm)
+        // console.log(sentForm)
 
         setIsLoading(true);
         const config = {
@@ -138,8 +141,14 @@ const NewApplication = () => {
             });
     }
 
+    const changeDetailHAndler = (key, value) => {
+
+        const temp = details;
+        temp[key] = value;
+        setDetails(temp);
+    }
     return <>
-        <div className={`container ${classes.cardsGroup}`} style={{ backgroundColor: '#FFFFFFBA' }}>
+        <div className={`container ${classes.cardsGroup}`} style={{ backgroundColor: '#FFFFFFBA', border: 'solid #0E2882' }}>
             <div className={'row'}>
                 <Space style={{ border: '' }} className={`justify-content-center`}>
                     <label className={`${classes.label}`}>Title</label>
@@ -151,12 +160,12 @@ const NewApplication = () => {
                         format={dateFormat} onChange={(e) => setDeadline(e._d)} />
                 </Space>
             </div>
-            <Divider orientation={'center'} style={{ fontWeight: 'bold', borderColor: '' }} >Description</Divider>
+            <Divider orientation={'center'} style={{ fontWeight: 'bold', borderColor: '#0E2882' }} >Description</Divider>
             <div className={'row justify-content-center'} style={{ marginTop: '40px', border: '' }}>
-                <TextArea className="" maxLength={500} showCount placeholder="Please type a brief description about the job" value={description}
-                    style={{ height: 200, width: '80%', borderRadius: '15px' }} onChange={(e) => setDescription(e.target.value)} />
+                <TextArea className={`${classes.textarea}`} maxLength={500} showCount placeholder="Please type a brief description about the job" value={description}
+                    style={{ height: 200, width: '80%', border: '', borderRadius: '15px', backgroundColor: '' }} onChange={(e) => setDescription(e.target.value)} />
             </div>
-            <Divider orientation={"left"} style={{ fontWeight: "bold" }}>Requirements</Divider>
+            <Divider orientation={"left"} style={{ fontWeight: "bold", borderColor: '#0E2882' }}>Requirements</Divider>
             <div className={'row'}>
                 <div>
                     <Button className={`float-end ${classes['custom-btn']}`} onClick={() => setAddingReq(true)}>Add a requirement</Button>
@@ -174,7 +183,7 @@ const NewApplication = () => {
                     {requirements.map((req) => <p className={`${classes.customInput}`} style={{ width: '30%', marginLeft: '10%' }}>-{req}</p>)}
                 </space>
             </div>
-            <Divider orientation={"left"} style={{ fontWeight: "bold" }}>Details</Divider>
+            <Divider orientation={"left"} style={{ fontWeight: "bold", borderColor: '#0E2882' }}>Details</Divider>
             <div className={'row'}>
                 <div>
                     <Button className={`float-end ${classes['custom-btn']}`} onClick={() => setAddingDet(true)}>Add details</Button>
@@ -457,15 +466,22 @@ const NewApplication = () => {
 
                         </Select>
                     </Col>
+                    <Col >
+                        <label className={`${classes.label}`} style={{ textAlign: 'center' }}>Job field</label>
+                        <Input className={`${classes.customInput}`} style={{ textAlign: 'center' }} placeholder={'field'}
+                            onChange={(e) => setField(e.target.value)} value={field} defaultValue={field} />
+                    </Col>
                     {details && Object.entries(details).map(([key, value]) => <Col >
                         <label className={`${classes.label}`} style={{ textAlign: 'center' }}>{key}</label>
-                        <Input className={`${classes.customInput}`} style={{ textAlign: 'center' }} value={value} placeholder={key} />
+                        <Input className={`${classes.customInput}`} style={{ textAlign: 'center' }}
+                            onChange={(e) => changeDetailHAndler(key, e.target.value)}
+                            defaultValue={value} placeholder={key} />
                     </Col>)
                     }
 
                 </Row>
             </div>
-            <Divider orientation={"left"} style={{ fontWeight: "bold" }}>Contacts</Divider>
+            <Divider orientation={"left"} style={{ fontWeight: "bold", borderColor: '#0E2882' }}>Contacts</Divider>
 
             <div className={'row'}>
                 <Space className={`justify-content-center`}>

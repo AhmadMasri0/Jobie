@@ -21,13 +21,13 @@ const Profile = () => {
     const id = param.userId;
     const [isAllowed, setIsAllowed] = useState(false);
     const [isAllowedToFeedback, setIsAllowedToFeedback] = useState(false);
-
     useEffect(() => {
 
 
+        console.log('g')
         if (userCtx.user.userType === 'Business')
             setIsAllowedToFeedback(true);
-        // console.log(id, userCtx.user._id)
+        // console.log(userCtx.user)
         if (!id || id === userCtx.user._id) {
             setIsAllowed(true);
             setUser(userCtx.user);
@@ -38,11 +38,12 @@ const Profile = () => {
             axios.get(`http://localhost:2000/users/${id}`).then(data => {
                 if (!data)
                     throw new Error('Wrong')
-
                 setUser(data.data);
                 setIsAllowed(false);
                 // console.log(data)
-            }).catch(err => console.log(err))
+            }).catch(err => {
+                console.log(err)
+            })
 
         }
 

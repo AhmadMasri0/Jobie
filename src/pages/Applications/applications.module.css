@@ -1,9 +1,15 @@
 .cardsGroup {
     border-radius: 20px;
-    /*background-color: rgba(255, 255, 255, 0.73);*/
+    /* background-image:  linear-gradient(to right, rgba(34, 67, 177, 0.65), #E0E1DD); */
+
+    /* background-color: rgba(255, 255, 255, 0.73); */
     margin-bottom: 20px!important;
     margin-top: 20px;
     padding: 19px !important;
+}
+
+.textarea textarea{
+    border: solid #0E2882!important
 }
 
 
@@ -17,9 +23,10 @@
 
 
 .custom-btn {
-    color: #15275c !important;
-    background-color: #ffffff !important;
-    width: 30% !important;
+    color: #ffffff !important;
+    background-color: #0E2882 !important; 
+    /* #ffffff !important; */
+    width: 20% !important;
     /* margin-left: 15%; */
     border: 0 solid !important;
     margin-top:  10px !important;
@@ -29,7 +36,7 @@
 
 .custom-btn:hover {
     color: #ffffff !important;
-    background-color: #15275c !important;
+    background-color: hsl(224, 24%, 44%) !important;
 }
 
 .customInput {
@@ -51,7 +58,7 @@
     height: 30px;
 }
 
-.custom-btn {
+/* .custom-btn {
     color: #15275c !important;
     background-color: #ffffff !important;
     width: 20% !important;
@@ -59,13 +66,13 @@
     /*margin-bottom: -20px !important;*/
     /*margin-top: 5%;*/
     /*margin-left: 19%;*/
-    border-radius: 13px !important;
-}
+    /* border-radius: 13px !important; */
+/* } */ 
 
-.custom-btn:hover {
+/* .custom-btn:hover {
     color: #ffffff !important;
     background-color: #15275c !important;
-}
+} */
 
 p a{
     color: rgba(16, 15, 15, 0.78);

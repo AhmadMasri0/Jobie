@@ -15,6 +15,7 @@ const Phone = (props) => {
         controls={false}
         ref={enteredPhone}
         className={isEditing ? classes.customPhone : ''}
+        style={{ border: 0 }}
         placeholder={!isEditing && 'Enter a valid number'}
         defaultValue={props.phone && props.phone.phoneNum && props.phone.phoneNum.number}
         onChange={(e) => {

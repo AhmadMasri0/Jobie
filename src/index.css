@@ -6,7 +6,9 @@ body, html {
     sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background-image:  linear-gradient(to right, rgba(34, 67, 177, 0.65), #E0E1DD);
+
+    background-color: rgba(249, 249, 249, 0.747) !important;
+    /* background-image:  linear-gradient(to right, rgba(34, 67, 177, 0.65), #E0E1DD); */
     background-repeat: no-repeat;
     background-size: 100% 100%;
     overflow-x: hidden;
@@ -14,9 +16,14 @@ body, html {
 
 }
 
+.ant-input-wrapper, .ant-input-group{
+        border-radius: 10% !important;
+}
+
 .ant-select .ant-select-selector{
     /*border-radius: 0 5px 5px 0!important;*/
     border-radius: 10px!important;
+    border: solid 1px #0E2882;
 }
 
 /* .ant-space-item .ant-input{
