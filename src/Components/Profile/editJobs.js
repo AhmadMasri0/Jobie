@@ -1,5 +1,5 @@
 import classes from "../Modal/modal.module.css";
-import { Button, Select } from "antd";
+import { Button, Select, Input } from "antd";
 import { useContext, useEffect, useRef, useState } from "react";
 import { DatePicker } from "antd";
 import moment from "moment";
@@ -20,6 +20,8 @@ const EditJob = (props) => {
     const enteredDuration = useRef();
     const [country, setCountry] = useState('');
 
+    // if(enteredNam && enteredNam.current)
+    // console.log(enteredNam.current.value)
     useEffect(() => {
 
         // console.log(props.job.job.location.country);
@@ -27,11 +29,14 @@ const EditJob = (props) => {
         enteredDuration.current.value = props.job && props.job.job ?
             [moment(new Date(props.job.job.duration.start).toISOString().split('T')[0], dateFormat),
             moment(new Date(props.job.job.duration.end).toISOString().split('T')[0], dateFormat)] : null;
+        enteredCity.current.value = props.job && props.job.job ? props.job.job.location.city : null;
+        enteredNam.current.value = props.job && props.job.job ? props.job.job.companyName : null;
+        enteredPosition.current.value = props.job && props.job.job ? props.job.job.position : null;
 
     }, [])
     const editJobs = () => {
 
-        // console.log(enteredCountry)
+        // console.log(enteredNam)
         setIsLoading(true)
         const s = new Date(enteredDuration.current.value[0]._d);
         const d = new Date(enteredDuration.current.value[1]._d);
@@ -49,6 +54,7 @@ const EditJob = (props) => {
                 }
             }
         }
+        // console.log(job)
         let sentJob;
         if (!props.editing) {
             user.prevJobs.push(job);
@@ -130,13 +136,15 @@ const EditJob = (props) => {
         <div className={`row ${classes.customRow}`}>
             <div className={`${classes.customCol}`}>
                 <label>Business name</label>
-                <input ref={enteredNam} className={classes.customInput} type='text' placeholder={'Business name'}
-                    defaultValue={props.job && props.job.job ? props.job.job.companyName : null} />
+                <Input ref={enteredNam} className={classes.customInput} type='text' placeholder={'Business name'}
+                    defaultValue={props.job && props.job.job ? props.job.job.companyName : null}
+                    onChange={(e) => enteredNam.current.value = e.target.value} />
             </div>
             <div className={` ${classes.customCol}`}>
                 <label>City</label>
-                <input ref={enteredCity} className={classes.customInput} type='text' placeholder={'city'}
-                    defaultValue={props.job && props.job.job ? props.job.job.location.city : null} />
+                <Input ref={enteredCity} className={classes.customInput} type='text' placeholder={'city'}
+                    defaultValue={props.job && props.job.job ? props.job.job.location.city : null} 
+                    onChange={(e) => enteredCity.current.value = e.target.value}  />
             </div>
             <div className={` ${classes.customCol}`}>
                 <label>Country</label>
@@ -396,8 +404,9 @@ const EditJob = (props) => {
             </div>
             <div className={` ${classes.customCol}`}>
                 <label>Position</label>
-                <input ref={enteredPosition} className={classes.customInput} type='text' placeholder={'Position'}
-                    defaultValue={props.job && props.job.job ? props.job.job.position : null} />
+                <Input ref={enteredPosition} className={classes.customInput} type='text' placeholder={'Position'}
+                    defaultValue={props.job && props.job.job ? props.job.job.position : null} 
+                    onChange={(e) => enteredPosition.current.value = e.target.value} />
             </div>
             <div className={`${classes.customCol}`}>
                 <label>Duration</label>

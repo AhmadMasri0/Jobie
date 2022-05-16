@@ -21,7 +21,7 @@ const Application = () => {
     // console.log(user)
 
     useEffect(() => {
-        setIsLoading(true);
+        // setIsLoading(true);
         axios.get("http://localhost:2000/forms/" + param.appId, {
             headers: {
                 'Content-Type': 'application/json',
@@ -49,7 +49,7 @@ const Application = () => {
 
     useEffect(() => {
         // console.log(application.owner === user._id)
-        if (application.owner === user._id)
+        if (user && application.owner === user._id)
             setIsEditor(true);
         else
             setIsEditor(false);
@@ -160,6 +160,11 @@ const Application = () => {
             <div className={'d-flex justify-content-lg-start justify-content-sm-center me-sm-5 '}>
 
                 <ul style={{ marginLeft: '10%', listStyle: 'none' }}>
+                    {application.requirements && application.requirements.length === 0 &&
+                        <li style={{ marginBottom: '10px', border: '' }}>
+                            <b>No requirements</b>
+                        </li>
+                    }
                     {application.requirements && application.requirements.map(req =>
                         <li key={req} style={{ marginBottom: '10px', border: '' }}>
                             <b>- {req}</b>

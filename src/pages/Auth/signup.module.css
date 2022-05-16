@@ -107,8 +107,8 @@ input:disabled {
 }
 
 .img {
-    width: 100% !important;
-    /* height: 60% !important; */
+    width: 90% !important;
+    max-height: 80% !important;
     /* max-height: 100% !important; */
     margin-left: 23%;
     margin-top: 20%;

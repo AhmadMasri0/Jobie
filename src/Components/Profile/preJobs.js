@@ -12,30 +12,10 @@ const PreJobs = (props) => {
 
     const param = useParams();
     const id = param.userId;
-    // const [isAllowed, setIsAllowed] = useState(false);
     const isAllowed = props.isAllowed;
 
-    // useEffect(() => {
 
-
-    //     console.log(id, userCtx.user._id)
-    //     if (!id || id === userCtx.user._id) {
-    //         setIsAllowed(true);
-    //         setUser(userCtx.user);
-    //     }
-    //     else {
-    //         axios.get(`http://localhost:2000/users/${id}`).then(data => {
-    //             if (!data)
-    //                 throw new Error('Wrong')
-    //             setUser(data.data);
-    //             setIsAllowed(false);
-    //             console.log(data)
-    //         }).catch(err => console.log(err))
-
-    //     }
-
-    // }, [userCtx.user]);
-
+    if(props.isLoading) return <></>;
     if (user && user.prevJobs && (user.prevJobs.length === 0) && !isAllowed) return <p></p>;
 
     if (user && user.prevJobs && user.prevJobs.length === 0) {

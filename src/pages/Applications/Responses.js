@@ -101,11 +101,9 @@ const Responses = () => {
                         {response.Skills.length > 0 &&
                             <div className="col-lg-12 col-md-12 col-sm-12 justify-content-start col-xs-12">
                                 <label htmlFor='gender' className={`float-start ${classes.input}`} style={{ textAlign: 'start', marginRight: '-20%', border: '' }}>Skills:</label>
-                                {/* <span> */}
                                 {response.Skills.map(s =>
                                     <p style={{ marginLeft: '20%' }}>{s}</p>
                                 )}
-                                {/* </span> */}
                             </div>
                         }
                         <Divider orientation={"right"} style={{ fontWeight: 'normal', borderColor: 'transparent' }} >

@@ -29,7 +29,7 @@ function App() {
     const [show, setShow] = useState(false);
     const [notification, setNotification] = useState({ title: 'hgghgh', body: 'bghh' });
     const [isTokenFound, setTokenFound] = useState(false);
-    getToken1(setTokenFound);
+    // getToken1(setTokenFound);
 
     // requestFirebaseNotificationPermission()
     //     .then((firebaseToken) => {

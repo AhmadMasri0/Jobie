@@ -44,7 +44,7 @@ const Applications = () => {
                     if (res.status === 200) {
                         let forms = [];
 
-                        // console.log(res.data)
+                        console.log(res.data);
                         if (user.userType != 'Business') {
                             res.data.forEach((f) => {
                                 forms.push(f.form);
@@ -101,8 +101,8 @@ const Applications = () => {
                 <Input defaultValue={value} placeholder={'Searching for...'}
                     style={{ width: '150px', borderRadius: '10px', marginBottom: '-30px' }}
                     onChange={searchValueHandler} />
-                <Select placeholder={'Choose a filter'}
-                    style={{ width: '170px', borderRadius: '20px', marginBottom: '-30px' }}
+                <Select placeholder={'Choose a filter'} allowClear
+                    style={{ width: '170px', borderRadius: '20px', marginBottom: '-30px', paddingRight: '5px' }}
                     onChange={filterChangeHandler}>
 
                     <Select.Option value={'location'}>Place</Select.Option>

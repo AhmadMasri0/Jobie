@@ -7,11 +7,11 @@ import UserContext from "../../store/user-context";
 import classes from "./Profile.module.css";
 
 const customIcons = {
-    1: <FrownOutlined />,
-    2: <FrownOutlined />,
-    3: <MehOutlined />,
-    4: <SmileOutlined />,
-    5: <SmileOutlined />,
+    1: <FrownOutlined style={{ color: '  ' }} />,
+    2: <FrownOutlined style={{ color: '  ' }} />,
+    3: <MehOutlined style={{ color: '  ' }} />,
+    4: <SmileOutlined style={{ color: '  ' }} />,
+    5: <SmileOutlined style={{ color: '  ' }} />,
 };
 
 
@@ -25,6 +25,8 @@ const FeedBack = (props) => {
     const [text, setText] = useState('');
     const [rate, setRate] = useState(2);
     const textRef = useRef();
+    const [isEmpty, setIsEmpty] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
 
@@ -36,7 +38,16 @@ const FeedBack = (props) => {
             // console.log(data.data)
         }).catch(err => console.log(err))
 
-    }, [])
+    }, [feedbacks])
+
+    useEffect(() => {
+
+        if (text === '')
+            setIsEmpty(true)
+        else
+            setIsEmpty(false)
+    }, [text])
+
     const publishFeedbackHandler = () => {
 
         const feedback = {
@@ -46,6 +57,7 @@ const FeedBack = (props) => {
             feedbacker
         }
 
+        setIsLoading(true)
         const t = [...feedbacks, feedback];
         console.log(feedback)
         axios.post(`http://localhost:2000/feedback`, feedback, {
@@ -61,8 +73,12 @@ const FeedBack = (props) => {
             setText(null)
             setRate(2)
             setFeedbacks(t);
+            setIsLoading(false)
             // console.log(data)
-        }).catch(err => console.log(err))
+        }).catch(err => {
+            console.log(err)
+            setIsLoading(false)
+        })
     }
     let content;
 
@@ -74,7 +90,7 @@ const FeedBack = (props) => {
             <Card key={feedback._id} title={feedback.feedbacker.name}
                 extra={<Rate value={feedback.rate} style={{ color: '#ffffff71' }}
                     disabled character={({ index }) => customIcons[index + 1]} />}
-                style={{ borderRadius: '20px', marginBottom: '20px' }}
+                style={{ borderRadius: '20px', marginBottom: '20px'}}
                 headStyle={{ backgroundColor: "#0E2882", color: 'white', borderRadius: '20px' }}
                 bodyStyle={{ borderRadius: '25px' }}>
                 {feedback.Text}
@@ -90,12 +106,14 @@ const FeedBack = (props) => {
             <br />
             <br />
             {isAllowed && <div className={`container row row-flow ${classes['about-list']}`} style={{ border: '', alignContent: 'center' }}>
-                <TextArea value={text} maxLength={300} onChange={(e) => setText(e.target.value)} style={{ height: 120, width: '50%', marginLeft: '10%' }}
+                <TextArea value={text} maxLength={300} onChange={(e) => setText(e.target.value)} className={classes.TextArea}
+                    style={{ height: 120, width: '50%', marginLeft: '10%' }}
 
                     placeholder={'Add your feedback'} />
-                <Rate value={rate} style={{ color: 'blue', borderColor: 'black', border: '   ', width: '20% ' }} onChange={(e) => setRate(e)}
+                <Rate value={rate} style={{ color: '#98aff5', borderColor: 'black', border: '   ', width: '20% ' }} onChange={(e) => setRate(e)}
                     defaultValue={3} character={({ index }) => customIcons[index + 1]} />
-                <Button className={`${classes['custom-btn']}`} style={{ width: '20%', maxWidth: '30%' }} onClick={publishFeedbackHandler} >Add</Button>
+                <Button className={`${classes['custom-btn']}`} disabled={isEmpty} style={{ width: '20%', maxWidth: '30%' }}
+                    onClick={publishFeedbackHandler} isLoading={isLoading} >Add</Button>
             </div>}
             {content}
         </div>

@@ -4,24 +4,32 @@ import UserContext from "../../store/user-context";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import { Skeleton } from "antd";
 
 const UserInfo = (props) => {
     const user = props.user;
     const param = useParams();
     const id = param.userId;
     const [image, setImage] = useState(props.image)
+    const isLoading= props.isLoading;
 
-    // console.log(user)
+    // console.log(isLoading)
     useEffect(() => {
         let i = id;
+        // setIsLoading(true)
         if (!id)
             i = user._id;
         axios.get(`http://localhost:2000/users/${i}/avatar`).then(data => {
             if (!data)
                 throw new Error('Wrong')
             setImage(data.data)
+            // setIsLoading(false)
             // console.log(data.data)
-        }).catch(err => console.log(err))
+        }).catch(err => {
+            // setIsLoading(false)
+            console.log(err)
+        })
+        // setIsLoading(false)
 
     }, [user])
 
@@ -36,75 +44,75 @@ const UserInfo = (props) => {
 
         img = `data:image/png;base64,${image}`;
     }
-    return <section>
-        <div className={`container  ${classes.profile}`} style={{ marginBottom: '20px', marginTop: '20px' }}>
-            <div className='row align-items-center flex-row'>
-                {
-                    <div className="col-lg-6">
-                        <div className={classes['about-avatar']}>
-                            <img src={img} alt={user.name} />
-                        </div>
-                        <h3 style={{ marginLeft: '30%' }}>{user.name}</h3>
-                        {user.specialization && <h6 className={`${classes['theme-color']} lead`} style={{ marginLeft: '33%' }}>
-                            <p> {user.specialization}</p>
-                        </h6>}
-                    </div>
-                }
+    return <div className={`container  ${classes.profile}`} style={{ marginBottom: '20px', marginTop: '20px' }}>
+        {/* <Skeleton.Avatar loading={isLoading} style={{ color: 'blue' }} active paragraph={{ rows: 4 }}> */}
+        <div className='row align-items-center flex-row'>
+            {
                 <div className="col-lg-6">
-                    <div className={classes['about-text']}>
-                        {user && user.bio && <p><b> {user.bio} </b></p>}
-                        <div className={`row ${classes['about-list']}`}>
-                            {user && user.userType !== 'Business' && user.dayOfBirth &&
-                                <div className="col-lg-6 col-md-6 col-sm-3">
-                                    <div className={classes.media}>
-                                        <label htmlFor="birthday">Birthday</label>
-                                        <span>{d}</span>
-                                    </div>
-                                </div>}
-                            {user && user.userType !== 'Business' &&
-                                <div className="col-lg-6 col-md-6 col-sm-3">
-                                    <div className={classes.media}>
-                                        <label htmlFor="gender">Gender</label>
-                                        <span>{user.gender}</span>
-                                    </div>
-                                </div>}
-                            {user.location && user.location.country &&
-                                <div className="col-lg-6 col-md-6 col-sm-3">
-                                    <div className={classes.media}>
-                                        <label htmlFor="country">Country</label>
-                                        <span>{user.location.country}</span>
-                                    </div>
-                                </div>}
-                            {user.location && user.location.city &&
-                                <div className="col-lg-6 col-md-6 col-sm-4">
-                                    <div className={classes.media}>
-                                        <label>City</label>
-                                        <span>{user.location.city}</span>
-                                    </div>
-                                </div>}
-                            <div className="col-lg-6 col-md-6 col-sm-6">
+                    <div className={classes['about-avatar']}>
+                        <img src={img} alt={user.name} />
+                    </div>
+                    <h3 style={{ marginLeft: '30%' }}>{user.name}</h3>
+                    {user.specialization && <h6 className={`${classes['theme-color']} lead`} style={{ marginLeft: '33%' }}>
+                        <p> {user.specialization}</p>
+                    </h6>}
+                </div>
+            }
+            <div className="col-lg-6">
+                <div className={classes['about-text']}>
+                    {user && user.bio && <p><b> {user.bio} </b></p>}
+                    <div className={`row ${classes['about-list']}`}>
+                        {user && user.userType !== 'Business' && user.dayOfBirth &&
+                            <div className="col-lg-6 col-md-6 col-sm-3">
                                 <div className={classes.media}>
-                                    <label htmlFor="email">E-mail</label>
-                                    <span><a href={`mailto:${user.email}`}>{user.email}</a>
+                                    <label htmlFor="birthday">Birthday</label>
+                                    <span>{d}</span>
+                                </div>
+                            </div>}
+                        {user && user.userType !== 'Business' && !isLoading &&
+                            <div className="col-lg-6 col-md-6 col-sm-3">
+                                <div className={classes.media}>
+                                    <label htmlFor="gender">Gender</label>
+                                    <span>{user.gender}</span>
+                                </div>
+                            </div>}
+                        {user.location && user.location.country &&
+                            <div className="col-lg-6 col-md-6 col-sm-3">
+                                <div className={classes.media}>
+                                    <label htmlFor="country">Country</label>
+                                    <span>{user.location.country}</span>
+                                </div>
+                            </div>}
+                        {user.location && user.location.city &&
+                            <div className="col-lg-6 col-md-6 col-sm-4">
+                                <div className={classes.media}>
+                                    <label>City</label>
+                                    <span>{user.location.city}</span>
+                                </div>
+                            </div>}
+                       {!isLoading && <div className="col-lg-6 col-md-6 col-sm-6">
+                            <div className={classes.media}>
+                                <label htmlFor="email">E-mail</label>
+                                <span><a href={`mailto:${user.email}`}>{user.email}</a>
+                                </span>
+                            </div>
+                        </div>}
+                        {user.phone && user.phone.map(phone =>
+                            <div key={phone.id} className="col-lg-6 col-md-6 col-sm-4">
+                                <div className={classes.media}>
+                                    <label htmlFor="phone">{phone.phoneNum.type} number</label>
+                                    <span>
+                                        <a href={`tel:${phone.phoneNum.number}`}>{phone.phoneNum.number ? phone.phoneNum.number : <Link to='/settings'>add a phone number</Link>} </a>
                                     </span>
                                 </div>
                             </div>
-                            {user.phone && user.phone.map(phone =>
-                                <div key={phone.id} className="col-lg-6 col-md-6 col-sm-4">
-                                    <div className={classes.media}>
-                                        <label htmlFor="phone">{phone.phoneNum.type} number</label>
-                                        <span>
-                                            <a href={`tel:${phone.phoneNum.number}`}>{phone.phoneNum.number ? phone.phoneNum.number : <Link to='/settings'>add a phone number</Link>} </a>
-                                        </span>
-                                    </div>
-                                </div>
-                            )}
-                        </div>
+                        )}
                     </div>
                 </div>
             </div>
         </div>
+        {/* </Skeleton.Avatar> */}
 
-    </section>;
+    </div>
 }
 export default UserInfo;

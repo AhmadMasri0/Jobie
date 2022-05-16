@@ -85,7 +85,7 @@ const Applying = () => {
                 setIsLoading(false)
 
                 if (res.status === 200) {
-                    history.replace('/');
+                    history.replace('/applications');
                 } else {
                     throw new Error('wrong');
                 }

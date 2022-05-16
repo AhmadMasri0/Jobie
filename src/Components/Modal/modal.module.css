@@ -18,8 +18,8 @@
     overflow-x: hidden;
 }
 
-.modal:hover{
-overflow-y: scroll;
+.modal:hover {
+    overflow-y: scroll;
 }
 
 
@@ -31,30 +31,33 @@ overflow-y: scroll;
     width: 60%;
 }
 
-::placeholder{
+::placeholder {
     color: rgba(255, 255, 255, 0.38);
 
 }
-label{
+
+label {
     text-align: center;
     font-weight: bold;
     width: 65%;
 }
+
 .customRow {
     margin-left: 30% !important;
 
 }
 
-.customCol{
+.customCol {
     margin: 3px;
 }
+
 .custom-btn {
     color: #15275c !important;
     background-color: #ffffff !important;
     width: 30%;
     margin-left: 15%;
     border: 0 solid !important;
-    margin-top:  10px !important;
+    margin-top: 10px !important;
     border-radius: 13px !important;
 
 }
@@ -81,23 +84,32 @@ label{
 
 @media (min-width: 768px) {
     .modal {
-        width: 40rem;
-        left: calc((100% - 40rem) / 2);
+        /* width: 40rem; */
+        /* left: calc((100% - 40rem) / 2); */
     }
 }
 
 
 
 @media (max-width: 576px) {
-.title h3{
-    /*font-size: 12px;*/
-    /*border: solid;*/
-    width: 50%;
-    /*margin-left: 10%!important;*/
-}
-    .icons{
-        margin-left: 20%;
-        width: 10%!important;
+    .title h3 {
+        font-size: 18px;
+        padding: 0;
+        margin-left: -10px;
+        /*border: solid;*/
+        /* width: 50%; */
+        /*margin-left: 10%!important;*/
+    }
+
+
+    .tile {
+        padding: 0;
+    }
+
+    .icons {
+        margin-top: -30px;
+        /* margin-left: 20%;
+        width: 10%!important; */
         /*padding-right: 0;*/
         /*border: solid;*/
     }

@@ -15,19 +15,21 @@ const EditProfile = () => {
     const [isLoading, setIsLoading] = useState(false);
     const userCtx = useContext(UserContext);
     const [user, setUser] = useState(userCtx.user);
-    const [name, setName] = useState(user.name);
+    const [name, setName] = useState(user.name || '');
     const token = userCtx.token;
     const [gender, setGender] = useState(user.gender);
     const [city, setCity] = useState(user.location ? user.location.city : '');
     const [country, setCountry] = useState(user.location ? user.location.country : '');
-    const [bio, setBio] = useState(user.bio);
-    const [profession, setProfession] = useState(user.specialization);
+    const [bio, setBio] = useState(user.bio || '');
+    const [profession, setProfession] = useState(user.specialization || '');
     const [image, setImage] = useState();
+    const [isEmpty, setIsEmpty] = useState(true);
+    const [isImgLoading, setIsImgLoading] = useState(false);
 
     useEffect(() => {
         setUser(userCtx.user)
-
-        return function f(){
+        // console.log(userCtx.user)
+        return function f() {
             setBio(user.bio);
             setCity(user.location ? user.location.city : '');
             setCountry(user.location ? user.location.country : '');
@@ -41,6 +43,9 @@ const EditProfile = () => {
 
     useEffect(() => {
 
+        // console.log(userCtx.user)
+        // setIsImgLoading(false)
+
         axios.get(`http://localhost:2000/users/${user._id}/avatar`, {
             headers: {
                 'content-type': 'multipart/form-data',
@@ -52,7 +57,17 @@ const EditProfile = () => {
             setImage(data.data)
 
         }).catch(err => console.log(err))
-    }, [user])
+    }, [image])
+
+    useEffect(() => {
+
+        // console.log(typeof bio)
+        if (name === '' || city === '' || profession === '' || bio === '')
+            setIsEmpty(true)
+        else
+            setIsEmpty(false);
+
+    }, [name, city, profession, bio])
 
     const submitHandler = () => {
         setIsLoading(true);
@@ -95,6 +110,7 @@ const EditProfile = () => {
 
     const uploadImageHandler = ({ fileList }) => {
 
+        setIsImgLoading(true)
         let formData = new FormData();
         formData.append('avatar', fileList[0].originFileObj);
         axios.post(`http://localhost:2000/users/me/avatar`, formData, {
@@ -115,10 +131,15 @@ const EditProfile = () => {
                     if (!data)
                         throw new Error('Wrong')
                     setImage(data.data)
+                    setIsImgLoading(false)
 
-                }).catch(err => console.log(err))
+                }).catch(err => {
+                    console.log(err)
+                    setIsImgLoading(false)
+                })
             })
             .catch(err => console.log(err));
+        // setIsImgLoading(false)
     }
 
 
@@ -127,9 +148,11 @@ const EditProfile = () => {
     return <div className='container'>
         <div className={`row ${classes.firstRow} justify-content-md`}>
             <div className="col-lg-12 col-md-12 col-sm-12">
-                <div className={classes['about-avatar']}>
-                    <img src={imgSrc} alt={name} />
-                </div>
+                <Spin spinning={isImgLoading}>
+                    <div className={classes['about-avatar']}>
+                        <img src={imgSrc} alt={name} />
+                    </div>
+                </Spin>
                 <Upload maxCount={1} setName="avatar" showUploadList={false} action={'http://localhost:2000/users/me/avatar'}
                     listType={'picture'} className={classes.span} customRequest={uploadImageHandler} accept={'image/*'}
                     beforeUpload={() => false} onChange={uploadImageHandler}  >
@@ -144,7 +167,7 @@ const EditProfile = () => {
                         'col-lg-6 col-md-6'}justify-content col-sm-12 col-xs-12`} >
                         <div style={user && user.userType === 'Business' ? { marginLeft: '25%' } : {}}>
                             <label htmlFor="username" className={classes.input}>Username</label>
-                            <input type="text" placeholder={'Will Smith'} onChange={e => setName(e.target.value)}  className={classes.customInput}
+                            <input type="text" placeholder={'Will Smith'} onChange={e => setName(e.target.value)} className={classes.customInput}
                                 value={name} />
                         </div>
                     </div>
@@ -433,14 +456,14 @@ const EditProfile = () => {
                     </div>
                     <div className="col-lg-6 col-md-6 col-sm-12 justify-content col-xs-12">
                         <label htmlFor="bio" className={classes.input}>Bio</label>
-                        <TextArea showCount maxLength={300} style={{ height: 120, width: '75%' }}  className={`float-end ${classes.textarea}`}
-                            onChange={(e) => setBio(e.currentTarget.value)} 
+                        <TextArea showCount maxLength={300} style={{ height: 120, width: '75%' }} className={`float-end ${classes.textarea}`}
+                            onChange={(e) => setBio(e.currentTarget.value)}
                             name="bio" id="" placeholder="talk briefly about yourself" value={bio} />
                     </div>
                 </div>
                 <div className='row '>
                     <div className="col-lg-6 col-md-6 col-sm-12 justify-content col-xs-12">
-                        <Button className={classes['custom-btn']} type='button' onClick={submitHandler}>Save</Button>
+                        <Button className={classes['custom-btn']} disabled={isEmpty} type='button' onClick={submitHandler}>Save</Button>
                     </div>
                     <div className="col-lg-6 col-md-6 col-sm-12 justify-content col-xs-12">
                         <Button className={`float-md-none ${classes['custom-btn']}`} onClick={cancelHandler}

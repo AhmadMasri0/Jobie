@@ -92,7 +92,7 @@ const Navigation = () => {
                         </NavLink>
                     }
                     {isLoggedIn && <NavLink className='nav-link' to='/applications'>Applications</NavLink>}
-                    {isLoggedIn &&
+                    {/* {isLoggedIn &&
                         <NavLink to='/notifications' style={{ textDecoration: 'none' }}>
                             <Dropdown trigger={['click']} overlay={notifications} className="nav-link ant-dropdown-link"
                                 overlayStyle={{ width: '20%' }}>
@@ -100,7 +100,7 @@ const Navigation = () => {
                                     Notifications
                                 </a>
                             </Dropdown>
-                        </NavLink>}
+                        </NavLink>} */}
                     {!isLoggedIn && <NavLink className='nav-link' to='/login'>Sign in</NavLink>}
                     {isLoggedIn && <NavLink className='nav-link' to='/logout' onClick={logoutHandler}>Logout</NavLink>}
                 </Nav>

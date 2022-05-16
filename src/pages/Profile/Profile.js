@@ -21,35 +21,41 @@ const Profile = () => {
     const id = param.userId;
     const [isAllowed, setIsAllowed] = useState(false);
     const [isAllowedToFeedback, setIsAllowedToFeedback] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+
     useEffect(() => {
 
+        setIsLoading(true)
 
-        console.log('g')
+        // console.log('g')
         if (userCtx.user.userType === 'Business')
             setIsAllowedToFeedback(true);
         // console.log(userCtx.user)
         if (!id || id === userCtx.user._id) {
             setIsAllowed(true);
             setUser(userCtx.user);
+
             // setIsAllowedToFeedback(false)
         }
         else {
 
+            setIsLoading(true)
             axios.get(`http://localhost:2000/users/${id}`).then(data => {
                 if (!data)
                     throw new Error('Wrong')
                 setUser(data.data);
                 setIsAllowed(false);
+                setIsLoading(false)
                 // console.log(data)
             }).catch(err => {
+                setIsLoading(false)
                 console.log(err)
             })
 
         }
+        setIsLoading(false)
 
     }, [userCtx.user]);
-
-
     const showOverlayHandler = () => {
         setOverlay(true);
     }
@@ -67,11 +73,11 @@ const Profile = () => {
         setShowSkillsModal(true);
     }
     return <>
-        <UserInfo showOverlay={showEditingOverlayHandler} isAllowed={isAllowed} user={user} />
-        <PreJobs showOverlay={showOverlayHandler} hideOverlay={hideOverlayHandler} isAllowed={isAllowed} user={user} />
-        {user && user.userType !== 'Business' && <Skills showOverlay={showOverlayHandler} isAllowed={isAllowed} user={user}
+       {!isLoading &&  <UserInfo showOverlay={showEditingOverlayHandler} isAllowed={isAllowed} user={user} isLoading={isLoading}/>}
+       {!isLoading && <PreJobs showOverlay={showOverlayHandler} hideOverlay={hideOverlayHandler} isAllowed={isAllowed} user={user} isLoading={isLoading} />}
+       {!isLoading && user && user.userType !== 'Business' && <Skills showOverlay={showOverlayHandler} isAllowed={isAllowed} user={user}  isLoading={isLoading}
             showSkills={showSkillsHandler} hideOverlay={hideOverlayHandler} />}
-        {user && user.userType === 'FreeLancer' && <FeedBack isAllowed={isAllowedToFeedback} user={user} />}
+        {!isLoading && user && user.userType === 'FreeLancer' && <FeedBack isAllowed={isAllowedToFeedback} user={user} />}
         {overlay && <Overlay hideOverlay={hideOverlayHandler} />}
         {overlay && !showSkillsModal && <EditingJobsModal overlay={setOverlay} hideOverlay={hideOverlayHandler} />}
         {overlay && showSkillsModal && <SkillsModal overlay={setOverlay} hideOverlay={hideOverlayHandler} />}

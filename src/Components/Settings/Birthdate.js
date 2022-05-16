@@ -42,11 +42,11 @@ const BirthDate = () => {
     }, [])
 
     // console.log( birthDate);
-
     const changeBirthDateHandler = () => {
 
         setIsLoading(true);
-        // console.log(new Date (birthDate));
+        console.log(new Date(birthDate));
+        console.log(userCtx.token);
 
         axios.patch(`http://localhost:2000/users/me`, {
             dayOfBirth: new Date (birthDate)

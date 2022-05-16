@@ -38,6 +38,7 @@ const NewApplication = () => {
     const [addingReq, setAddingReq] = useState(false);
     const [addingDet, setAddingDet] = useState(false);
     const [application, setApplication] = useState({});
+    const [isEmpty, setIsEmpty] = useState(true);
     const requirement = useRef();
 
     useEffect(() => {
@@ -79,13 +80,14 @@ const NewApplication = () => {
         temp.push(requirement.current.state.value);
         setRequirements(temp);
         setAddingReq(false)
+        setIsEmpty(true)
         // console.log(temp)
     }
 
     const addingDetailHandler = () => {
         const temp = details;
         // console.log(newTitle)
-        temp.newTitle = newVale;
+        temp[newTitle] = newVale;
         setDetails(temp);
         setAddingDet(false)
     }
@@ -147,6 +149,12 @@ const NewApplication = () => {
         temp[key] = value;
         setDetails(temp);
     }
+    const checkValue = (e) => {
+
+        if (e.target.value.toString() === '') {
+            setIsEmpty(true);
+        } else setIsEmpty(false);
+    }
     return <>
         <div className={`container ${classes.cardsGroup}`} style={{ backgroundColor: '#FFFFFFBA', border: 'solid #0E2882' }}>
             <div className={'row'}>
@@ -173,11 +181,14 @@ const NewApplication = () => {
 
                 <br />
                 {addingReq && <space className={` justify-content-start`}>
-                    <Input ref={requirement} className={`${classes.customInput}`} style={{ width: '30%', marginLeft: '10%' }}
-                        placeholder={'type a requirement'} />
+                    <Input ref={requirement} className={`${classes.customInput}`} onChange={checkValue}
+                        style={{ width: '30%', marginLeft: '10%' }} placeholder={'type a requirement'} />
                     <span style={{ color: 'darkblue', cursor: 'pointer', marginLeft: '2px', marginRight: '5px' }}
-                        onClick={addingRequirementHandler}>Add</span>|
-                    <span style={{ color: 'darkblue', cursor: 'pointer', marginLeft: '7px' }} onClick={() => setAddingReq(false)}>Cancel</span>
+                        onClick={!isEmpty ? addingRequirementHandler : () => { }} >Add</span>|
+                    <span style={{ color: 'darkblue', cursor: 'pointer', marginLeft: '7px' }} onClick={() => {
+                        setAddingReq(false)
+                        setIsEmpty(true)
+                    }}>Cancel</span>
                 </space>}
                 <space className={` justify-content-start`}>
                     {requirements.map((req) => <p className={`${classes.customInput}`} style={{ width: '30%', marginLeft: '10%' }}>-{req}</p>)}
@@ -486,7 +497,7 @@ const NewApplication = () => {
             <div className={'row'}>
                 <Space className={`justify-content-center`}>
                     <b>Phone: </b>
-                    <Input className={`${classes.customInput}`} value={phone} placeholder={'0599121311'}
+                    <Input className={`${classes.customInput}`} value={phone} placeholder={'05xxxxxxxx'}
                         onChange={(e) => setPhone(e.target.value)} ></Input>
 
                     <b>E-mail: </b>
