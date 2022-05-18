@@ -22,6 +22,7 @@ const Applications = () => {
     useEffect(() => {
 
         setIsLoading(true);
+        console.log(user)
         if (user._id) {
             let url = "http://localhost:2000/forms?owner=" + user._id + '&';
             // console.log(userCtx.token)
@@ -32,6 +33,7 @@ const Applications = () => {
             if (filter) {
                 url = url + `${filter}=${value}`;
             }
+            console.log(filter)
             axios.get(url, {
                 headers: {
                     'Content-Type': 'application/json',
@@ -105,7 +107,7 @@ const Applications = () => {
                     style={{ width: '170px', borderRadius: '20px', marginBottom: '-30px', paddingRight: '5px' }}
                     onChange={filterChangeHandler}>
 
-                    <Select.Option value={'location'}>Place</Select.Option>
+                    <Select.Option value={'place'}>Place</Select.Option>
                     <Select.Option value={'title'}>subject</Select.Option>
                     <Select.Option value={'jobType'}>Job type</Select.Option>
                 </Select>
