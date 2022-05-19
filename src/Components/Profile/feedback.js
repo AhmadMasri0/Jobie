@@ -19,6 +19,7 @@ const FeedBack = (props) => {
 
     const userCtx = useContext(UserContext);
     const isAllowed = props.isAllowed;
+    const [allowedBusiness, setAllowedBusiness] = useState()
     const freelancer = props.user;
     const feedbacker = userCtx.user;
     const [feedbacks, setFeedbacks] = useState([]);
@@ -27,7 +28,6 @@ const FeedBack = (props) => {
     const textRef = useRef();
     const [isEmpty, setIsEmpty] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
-
     useEffect(() => {
 
         axios.get(`http://localhost:2000/feedback/` + freelancer._id).then(data => {
@@ -48,6 +48,22 @@ const FeedBack = (props) => {
             setIsEmpty(false)
     }, [text])
 
+    useEffect(() => {
+
+        // console.log(feedbacker.name.toLowerCase())
+
+        for (let p of freelancer.prevJobs) {
+            console.log(p.job.companyName)
+            if (p.job.companyName === feedbacker.name) {
+                setAllowedBusiness(true);
+                break;
+            }
+        }
+        // freelancer.prevJobs.forEach(p => {
+
+        // });
+
+    }, [])
     const publishFeedbackHandler = () => {
 
         const feedback = {
@@ -90,7 +106,7 @@ const FeedBack = (props) => {
             <Card key={feedback._id} title={feedback.feedbacker.name}
                 extra={<Rate value={feedback.rate} style={{ color: '#ffffff71' }}
                     disabled character={({ index }) => customIcons[index + 1]} />}
-                style={{ borderRadius: '20px', marginBottom: '20px'}}
+                style={{ borderRadius: '20px', marginBottom: '20px' }}
                 headStyle={{ backgroundColor: "#0E2882", color: 'white', borderRadius: '20px' }}
                 bodyStyle={{ borderRadius: '25px' }}>
                 {feedback.Text}
@@ -105,7 +121,7 @@ const FeedBack = (props) => {
             </div>
             <br />
             <br />
-            {isAllowed && <div className={`container row row-flow ${classes['about-list']}`} style={{ border: '', alignContent: 'center' }}>
+            {isAllowed && allowedBusiness && <div className={`container row row-flow ${classes['about-list']}`} style={{ border: '', alignContent: 'center' }}>
                 <TextArea value={text} maxLength={300} onChange={(e) => setText(e.target.value)} className={classes.TextArea}
                     style={{ height: 120, width: '50%', marginLeft: '10%' }}
 

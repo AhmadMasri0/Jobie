@@ -111,6 +111,7 @@ const EditProfile = () => {
     const uploadImageHandler = ({ fileList }) => {
 
         setIsImgLoading(true)
+        console.log(token)
         let formData = new FormData();
         formData.append('avatar', fileList[0].originFileObj);
         axios.post(`http://localhost:2000/users/me/avatar`, formData, {

@@ -23,7 +23,7 @@ const Profile = () => {
     const [isAllowedToFeedback, setIsAllowedToFeedback] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
-    useEffect(() => {
+    useEffect(() => { 
 
         setIsLoading(true)
 

@@ -41,7 +41,7 @@ const AppCard = (props) => {
             <Image src={img} preview={false} style={{ width: '100px', height: '100px', borderRadius: '50%', border: '' }} />
             <p style={{display: 'inline-block', marginTop: '35px', marginLeft: '5px' , position: 'absolute'}}>
                 <b style={{ marginTop: '-50%' }}>
-                    {app.owner.name}offers a <span
+                    {app.owner.name} offers a <span
                         style={{ fontWeight: 'bolder' }}>{app.jobType}</span> job
                     in {app.location.city}-{app.location.country}
                 </b>
