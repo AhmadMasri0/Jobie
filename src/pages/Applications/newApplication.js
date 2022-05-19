@@ -40,6 +40,7 @@ const NewApplication = () => {
     const [application, setApplication] = useState({});
     const [isEmpty, setIsEmpty] = useState(true);
     const requirement = useRef();
+    const [isDisabled, setIsDisabled] = useState(true);
 
     useEffect(() => {
 
@@ -75,6 +76,13 @@ const NewApplication = () => {
                 });
         }
     }, [])
+
+    useEffect(() => {
+        if (deadline && description && jobType && city && email && phone && field && description && country)
+            setIsDisabled(false)
+        else
+            setIsDisabled(true)
+    }, [deadline, description, jobType, city, country, email, phone, field, jobType])
     const addingRequirementHandler = () => {
         const temp = requirements;
         temp.push(requirement.current.state.value);
@@ -509,7 +517,7 @@ const NewApplication = () => {
 
             <div className={`d-flex justify-content-center`}>
                 <Button loading={isLoading} className={` ${classes['custom-btn']}`} type='button'
-                    onClick={publishHandler}>{id ? 'Update' : 'Publish'}</Button>
+                    onClick={publishHandler} disabled={isDisabled}>{id ? 'Update' : 'Publish'}</Button>
                 <Button className={` ${classes['custom-btn']}`} style={{ marginLeft: '10px' }} type='button'
                     onClick={() => history.push('/applications')}>Cancel</Button>
             </div>

@@ -179,26 +179,26 @@ const Application = () => {
                 {application.details && Object.entries(application.details).map(([k, v]) =>
                     <div key={k} className={'col-lg-4 col-md-6 col-sm-12'}>
                         <label className={'text-lg-center'}>{k}: </label>
-                        <span style={{ marginLeft: '5px' }}>
+                        <span style={{ marginLeft: '-50px' }} className={'text-lg-start'}>
                             {v}
                         </span>
                     </div>
                 )}
-                <div className={'col-lg-4 col-md-6 col-sm-12'}>
-                    <label className={'text-lg-center'}>Job type</label>
-                    <span style={{ marginLeft: '5px' }}>
+                <div className={'col-lg-3 col-md-6 col-sm-12'}>
+                    <label className={'text-lg-center'}>Job type:</label>
+                    <span style={{ marginLeft: '-50px' }} className={'text-lg-start'}>
                         {application.jobType}
                     </span>
                 </div>
-                <div className={'col-lg-4 col-md-6 col-sm-12'}>
-                    <label className={'text-lg-center'}>Job field</label>
-                    <span style={{ marginLeft: '5px' }}>
+                <div className={'col-lg-5 col-md-6 col-sm-12'}>
+                    <label className={'text-lg-center'}>Job field:</label>
+                    <span style={{ marginLeft: '-50px' }} className={'text-lg-start'}>
                         {application.field}
                     </span>
                 </div>
                 <div className={'col-lg-4 col-md-6 col-sm-12'}>
-                    <label className={'text-lg-center'}>Location</label>
-                    <span style={{ marginLeft: '5px' }}>
+                    <label className={'text-lg-center'}>Location:</label>
+                    <span style={{ marginLeft: '-50px' }} className={'text-lg-start'}>
                         {application.location && (application.location.city + '-' + application.location.country)}
                     </span>
                 </div>
