@@ -107,7 +107,7 @@ const Phones = props => {
             }
         })
 
-        console.log(sentPhones)
+        // console.log(sentPhones)
 
         axios.patch(`http://localhost:2000/users/me`, {
             phone: sentPhones

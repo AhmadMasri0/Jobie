@@ -74,6 +74,8 @@ const NewApplication = () => {
                     // setIsLoading(false);
                     // console.log(err)
                 });
+        }else {
+            setEmail(userCtx.user.email)
         }
     }, [])
 
@@ -82,6 +84,7 @@ const NewApplication = () => {
             setIsDisabled(false)
         else
             setIsDisabled(true)
+
     }, [deadline, description, jobType, city, country, email, phone, field, jobType])
     const addingRequirementHandler = () => {
         const temp = requirements;
@@ -118,7 +121,7 @@ const NewApplication = () => {
 
         if (details && !(Object.keys(details).length === 0 && details.constructor === Object))
             sentForm.details = details;
-        // console.log(sentForm)
+        // console.log(userCtx.token)
 
         setIsLoading(true);
         const config = {

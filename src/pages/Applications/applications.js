@@ -3,7 +3,7 @@ import classes from './applications.module.css';
 import { useContext, useEffect, useState } from "react";
 import './applications.module.css';
 import AppCard from "../../Components/Application/AppCard";
-import { Input, Select, Skeleton, Spin } from "antd";
+import { Input, Pagination, Select, Skeleton, Spin } from "antd";
 import UserContext from '../../store/user-context';
 import { Button } from 'antd';
 import { useHistory } from 'react-router-dom';
@@ -18,11 +18,13 @@ const Applications = () => {
     const user = userCtx.user;
     const [applications, setApplications] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
+    const [min, setMin] = useState(0)
+    const [max, setMax] = useState(5)
 
     useEffect(() => {
 
         setIsLoading(true);
-        console.log(user)
+        // console.log(user)
         if (user._id) {
             let url = "http://localhost:2000/forms?owner=" + user._id + '&';
             // console.log(userCtx.token)
@@ -33,7 +35,7 @@ const Applications = () => {
             if (filter) {
                 url = url + `${filter}=${value}`;
             }
-            console.log(filter)
+            // console.log(filter)
             axios.get(url, {
                 headers: {
                     'Content-Type': 'application/json',
@@ -46,7 +48,7 @@ const Applications = () => {
                     if (res.status === 200) {
                         let forms = [];
 
-                        console.log(res.data);
+                        // console.log(res.data);
                         if (user.userType != 'Business') {
                             res.data.forEach((f) => {
                                 forms.push(f.form);
@@ -71,6 +73,12 @@ const Applications = () => {
     }
     const filterChangeHandler = (e) => {
         setFilter(e)
+    }
+
+    const paginationHandler = (v) => {
+        console.log(v)
+        setMin((v-1) * 5)
+        setMax((v) * 5)
     }
 
     let content;
@@ -118,6 +126,8 @@ const Applications = () => {
             <Skeleton loading={isLoading} style={{ color: 'blue' }} active>
                 {content}
             </Skeleton>
+            {applications.length > 5 && <Pagination total={applications.length } pageSize={5} onChange={paginationHandler} />}
+
         </div>
     </>
 }

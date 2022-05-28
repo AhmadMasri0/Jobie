@@ -2,7 +2,7 @@
     width: 95%;
     max-width: 25rem;
     margin-left: 29%;
-    margin-top: 15%;
+    margin-top: 13%;
     margin-bottom: 10px;
 }
 
@@ -107,11 +107,11 @@ input:disabled {
 }
 
 .img {
-    width: 90% !important;
-    max-height: 80% !important;
+    width: 80% !important;
+    max-height: 70% !important;
     /* max-height: 100% !important; */
-    margin-left: 23%;
-    margin-top: 20%;
+    margin-left: 30%;
+    margin-top: 25%;
 }
 
 @media (max-width: 996px) {

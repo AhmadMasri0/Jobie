@@ -124,7 +124,7 @@ const Application = () => {
     const date = application.deadline && new Date(application.deadline).toLocaleDateString();
     return <div>
         {isEditor && <div className={`container ${classes.cardsGroup}`} >
-            <Button loading={isLoading1} disabled={!application.submitters} className={`float-start ${classes['custom-btn']}`}
+            <Button disabled={!application.submitters} className={`float-start ${classes['custom-btn']}`}
                 style={{ marginLeft: '10px' }} onClick={() => history.push('/responses/' + application._id)}
                 type='button'>Submitters: {application.submitters}</Button>
             <Button loading={isLoading1} className={`float-end ${classes['custom-btn']}`} style={{ marginLeft: '10px' }}

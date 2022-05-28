@@ -30,6 +30,8 @@ const FeedBack = (props) => {
     const [isLoading, setIsLoading] = useState(false);
     useEffect(() => {
 
+        // console.log(feedbacker.name)
+
         axios.get(`http://localhost:2000/feedback/` + freelancer._id).then(data => {
             if (!data)
                 throw new Error('Wrong')
@@ -54,7 +56,7 @@ const FeedBack = (props) => {
 
         for (let p of freelancer.prevJobs) {
             console.log(p.job.companyName)
-            if (p.job.companyName === feedbacker.name) {
+            if (feedbacker && p.job.companyName === feedbacker.name) {
                 setAllowedBusiness(true);
                 break;
             }
@@ -69,13 +71,12 @@ const FeedBack = (props) => {
         const feedback = {
             Text: text,
             rate,
-            freelancer,
-            feedbacker
+            freelancer
         }
 
         setIsLoading(true)
         const t = [...feedbacks, feedback];
-        console.log(feedback)
+        // console.log(feedback)
         axios.post(`http://localhost:2000/feedback`, feedback, {
 
             headers: {

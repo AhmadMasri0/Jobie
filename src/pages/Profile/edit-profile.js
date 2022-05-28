@@ -111,7 +111,7 @@ const EditProfile = () => {
     const uploadImageHandler = ({ fileList }) => {
 
         setIsImgLoading(true)
-        console.log(token)
+        // console.log(token)
         let formData = new FormData();
         formData.append('avatar', fileList[0].originFileObj);
         axios.post(`http://localhost:2000/users/me/avatar`, formData, {
@@ -464,7 +464,7 @@ const EditProfile = () => {
                 </div>
                 <div className='row '>
                     <div className="col-lg-6 col-md-6 col-sm-12 justify-content col-xs-12">
-                        <Button className={classes['custom-btn']} disabled={isEmpty} type='button' onClick={submitHandler}>Save</Button>
+                        <Button className={classes['custom-btn']} type='button' onClick={submitHandler}>Save</Button>
                     </div>
                     <div className="col-lg-6 col-md-6 col-sm-12 justify-content col-xs-12">
                         <Button className={`float-md-none ${classes['custom-btn']}`} onClick={cancelHandler}

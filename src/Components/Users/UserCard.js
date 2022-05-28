@@ -13,7 +13,7 @@ const UserCard = (props) => {
 
     useEffect(() => {
         let i = user._id;
-        console.log(i);
+        // console.log(i);
         axios.get(`http://localhost:2000/users/${i}/avatar`).then(data => {
             if (!data)
                 throw new Error('Wrong')

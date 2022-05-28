@@ -27,8 +27,7 @@ const Profile = () => {
 
         setIsLoading(true)
 
-        // console.log('g')
-        if (userCtx.user.userType === 'Business')
+        if (userCtx.user && userCtx.user.userType === 'Business')
             setIsAllowedToFeedback(true);
         // console.log(userCtx.user)
         if (!id || id === userCtx.user._id) {

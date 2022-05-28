@@ -45,8 +45,8 @@ const BirthDate = () => {
     const changeBirthDateHandler = () => {
 
         setIsLoading(true);
-        console.log(new Date(birthDate));
-        console.log(userCtx.token);
+        // console.log(new Date(birthDate));
+        // console.log(userCtx.token);
 
         axios.patch(`http://localhost:2000/users/me`, {
             dayOfBirth: new Date (birthDate)
@@ -104,7 +104,7 @@ const BirthDate = () => {
         <div className="row">
             <div className={'d-flex justify-content-center'}>
                 <Button className={` ${classes['custom-btn']}`} shape="round" onClick={changeBirthDateHandler} loading={isLoading}>
-                    Change birthDate
+                    Change birthdate
                 </Button>
             </div>
         </div>

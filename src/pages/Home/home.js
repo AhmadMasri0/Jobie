@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import ApplicationContext from "../../store/application-context";
 import AppCard from "../../Components/Application/AppCard";
 import classes from "../Applications/applications.module.css";
-import { Input, Select, Skeleton } from "antd";
+import { Input, Select, Skeleton, Pagination } from "antd";
 import UserContext from "../../store/user-context";
 import axios from "axios";
 import UserCard from "../../Components/Users/UserCard";
@@ -18,6 +18,9 @@ const Home = props => {
     const [place, setPlace] = useState(null);
     const [profession, setProfession] = useState(null);
     const [flag, setFlag] = useState(false);
+    const [min, setMin] = useState(0)
+    const [max, setMax] = useState(5)
+
     useEffect(() => {
         setIsLoading(true);
         let url = "http://localhost:2000/forms?"
@@ -80,6 +83,13 @@ const Home = props => {
 
     const filterChangeHandler = (e) => {
         setFilter(e)
+        setMin(0)
+        setMax(5)
+    }
+    const paginationHandler = (v) => {
+        console.log(v)
+        setMin((v - 1) * 5)
+        setMax((v) * 5)
     }
     let content;
 
@@ -88,25 +98,25 @@ const Home = props => {
         if (filter === 'applications')
             t = applications;
         else t = users
+        if (userCtx.user && !(Object.keys(userCtx.user).length === 0 && userCtx.user.constructor === Object)) {
+            t = t.sort((a, b) => {
+                if (filter === 'applications' ? (a.owner.name.toLowerCase() === userCtx.user.name.toLowerCase()) : (a.name.toLowerCase() === userCtx.user.name.toLowerCase()))
+                    return -1;
 
-        console.log(t)
-        t = t.sort((a, b) => {
+                if (filter === 'applications' && userCtx.user.specialization) {
+                    if (compare(a.field, userCtx.user.specialization) === -1)
+                        return -1
+                    if (compare(a.title, userCtx.user.specialization) === -1)
+                        return -1
+                }
+                if (filter !== 'applications' && a.specialization && userCtx.user.specialization)
+                    if (compare(a.specialization, userCtx.user.specialization) === -1)
+                        return -1
 
-            if (filter === 'applications' ? (a.owner.name.toLowerCase() === userCtx.user.name.toLowerCase()) : (a.name.toLowerCase() === userCtx.user.name.toLowerCase()))
-                return -1;
-
-            if (filter === 'applications' && userCtx.user.specialization) {
-                if (compare(a.field, userCtx.user.specialization) === -1)
-                    return -1
-                if (compare(a.title, userCtx.user.specialization) === -1)
-                    return -1
-            }
-            if (filter !== 'applications' && a.specialization && userCtx.user.specialization)
-                if (compare(a.specialization, userCtx.user.specialization) === -1)
-                    return -1
-            return 1;
-        })
-        console.log(t)
+                return 1;
+            })
+        }
+        // console.log(t)
         if (filter === 'applications')
             setApplication(t)
         else
@@ -124,7 +134,7 @@ const Home = props => {
                 </div>
         }
         else if (applications)
-            content = (applications.map((app) => {
+            content = (applications.slice(min, max).map((app) => {
                 return <AppCard key={app._id} app={app} />
             }));
     } else {
@@ -136,12 +146,14 @@ const Home = props => {
                     </div>
                 </div>
         } else if (users) {
-            content = (users.map((user) => {
+            content = (users.slice(min, max).map((user) => {
                 return <UserCard key={user._id} user={user} />
             }));
         }
 
     }
+
+    console.log(typeof content)
 
     return <>
         <div className={`container ${classes.cardsGroup} d-flex justify-content-end`} style={{ border: '', marginBottom: '30px' }}>
@@ -187,7 +199,8 @@ const Home = props => {
             <Skeleton loading={isLoading} style={{ color: 'blue' }} active>
                 {content}
             </Skeleton>
-
+            {filter === 'applications' && applications.length > 5 && <Pagination total={ applications.length} pageSize={5} onChange={paginationHandler} />}
+            {filter !== 'applications' && users.length > 5 && <Pagination total={ users.length} pageSize={5} onChange={paginationHandler} />}
         </div>
     </>
 }

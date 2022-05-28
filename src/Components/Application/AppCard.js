@@ -14,7 +14,7 @@ const AppCard = (props) => {
 
     useEffect(() => {
         let i = app.owner._id;
-        console.log(i);
+        // console.log(i);
         axios.get(`http://localhost:2000/users/${i}/avatar`).then(data => {
             if (!data)
                 throw new Error('Wrong')
@@ -43,7 +43,7 @@ const AppCard = (props) => {
                 <b style={{ marginTop: '-50%' }}>
                     {app.owner.name} offers a <span
                         style={{ fontWeight: 'bolder' }}>{app.jobType}</span> job
-                    in {app.location.city}-{app.location.country}
+                    in {app.location && app.location.city}-{ app.location && app.location.country}
                 </b>
             </p>
         </div>
